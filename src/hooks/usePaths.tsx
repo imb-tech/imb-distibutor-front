@@ -151,7 +151,7 @@ export const useItems = () =>
                     },
                     {
                         label: "Agent",
-                        path: "/agent",
+                        path: "/agents",
                     },
                     {
                         label: "Logistlar",

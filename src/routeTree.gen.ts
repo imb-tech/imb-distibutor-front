@@ -42,8 +42,8 @@ const MainReportsDriversIndexLazyImport = createFileRoute(
 const MainReportsCarsIndexLazyImport = createFileRoute(
   '/_main/_reports/cars/',
 )()
-const MainReportsAgentIndexLazyImport = createFileRoute(
-  '/_main/_reports/agent/',
+const MainReportsAgentsIndexLazyImport = createFileRoute(
+  '/_main/_reports/agents/',
 )()
 
 // Create/Update Routes
@@ -146,11 +146,13 @@ const MainReportsCarsIndexLazyRoute = MainReportsCarsIndexLazyImport.update({
   import('./routes/_main/_reports/cars/index.lazy').then((d) => d.Route),
 )
 
-const MainReportsAgentIndexLazyRoute = MainReportsAgentIndexLazyImport.update({
-  path: '/agent/',
-  getParentRoute: () => MainRoute,
-} as any).lazy(() =>
-  import('./routes/_main/_reports/agent/index.lazy').then((d) => d.Route),
+const MainReportsAgentsIndexLazyRoute = MainReportsAgentsIndexLazyImport.update(
+  {
+    path: '/agents/',
+    getParentRoute: () => MainRoute,
+  } as any,
+).lazy(() =>
+  import('./routes/_main/_reports/agents/index.lazy').then((d) => d.Route),
 )
 
 // Populate the FileRoutesByPath interface
@@ -220,11 +222,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainWorkScheduleIndexLazyImport
       parentRoute: typeof MainImport
     }
-    '/_main/_reports/agent/': {
-      id: '/_main/_reports/agent/'
-      path: '/agent'
-      fullPath: '/agent'
-      preLoaderRoute: typeof MainReportsAgentIndexLazyImport
+    '/_main/_reports/agents/': {
+      id: '/_main/_reports/agents/'
+      path: '/agents'
+      fullPath: '/agents'
+      preLoaderRoute: typeof MainReportsAgentsIndexLazyImport
       parentRoute: typeof MainImport
     }
     '/_main/_reports/cars/': {
@@ -284,7 +286,7 @@ interface MainRouteChildren {
   MainRouteIndexLazyRoute: typeof MainRouteIndexLazyRoute
   MainSettingsIndexLazyRoute: typeof MainSettingsIndexLazyRoute
   MainWorkScheduleIndexLazyRoute: typeof MainWorkScheduleIndexLazyRoute
-  MainReportsAgentIndexLazyRoute: typeof MainReportsAgentIndexLazyRoute
+  MainReportsAgentsIndexLazyRoute: typeof MainReportsAgentsIndexLazyRoute
   MainReportsCarsIndexLazyRoute: typeof MainReportsCarsIndexLazyRoute
   MainReportsDriversIndexLazyRoute: typeof MainReportsDriversIndexLazyRoute
   MainReportsFreightForwardersIndexLazyRoute: typeof MainReportsFreightForwardersIndexLazyRoute
@@ -299,7 +301,7 @@ const MainRouteChildren: MainRouteChildren = {
   MainRouteIndexLazyRoute: MainRouteIndexLazyRoute,
   MainSettingsIndexLazyRoute: MainSettingsIndexLazyRoute,
   MainWorkScheduleIndexLazyRoute: MainWorkScheduleIndexLazyRoute,
-  MainReportsAgentIndexLazyRoute: MainReportsAgentIndexLazyRoute,
+  MainReportsAgentsIndexLazyRoute: MainReportsAgentsIndexLazyRoute,
   MainReportsCarsIndexLazyRoute: MainReportsCarsIndexLazyRoute,
   MainReportsDriversIndexLazyRoute: MainReportsDriversIndexLazyRoute,
   MainReportsFreightForwardersIndexLazyRoute:
@@ -319,7 +321,7 @@ export interface FileRoutesByFullPath {
   '/route': typeof MainRouteIndexLazyRoute
   '/settings': typeof MainSettingsIndexLazyRoute
   '/work-schedule': typeof MainWorkScheduleIndexLazyRoute
-  '/agent': typeof MainReportsAgentIndexLazyRoute
+  '/agents': typeof MainReportsAgentsIndexLazyRoute
   '/cars': typeof MainReportsCarsIndexLazyRoute
   '/drivers': typeof MainReportsDriversIndexLazyRoute
   '/freight-forwarders': typeof MainReportsFreightForwardersIndexLazyRoute
@@ -336,7 +338,7 @@ export interface FileRoutesByTo {
   '/route': typeof MainRouteIndexLazyRoute
   '/settings': typeof MainSettingsIndexLazyRoute
   '/work-schedule': typeof MainWorkScheduleIndexLazyRoute
-  '/agent': typeof MainReportsAgentIndexLazyRoute
+  '/agents': typeof MainReportsAgentsIndexLazyRoute
   '/cars': typeof MainReportsCarsIndexLazyRoute
   '/drivers': typeof MainReportsDriversIndexLazyRoute
   '/freight-forwarders': typeof MainReportsFreightForwardersIndexLazyRoute
@@ -355,7 +357,7 @@ export interface FileRoutesById {
   '/_main/route/': typeof MainRouteIndexLazyRoute
   '/_main/settings/': typeof MainSettingsIndexLazyRoute
   '/_main/work-schedule/': typeof MainWorkScheduleIndexLazyRoute
-  '/_main/_reports/agent/': typeof MainReportsAgentIndexLazyRoute
+  '/_main/_reports/agents/': typeof MainReportsAgentsIndexLazyRoute
   '/_main/_reports/cars/': typeof MainReportsCarsIndexLazyRoute
   '/_main/_reports/drivers/': typeof MainReportsDriversIndexLazyRoute
   '/_main/_reports/freight-forwarders/': typeof MainReportsFreightForwardersIndexLazyRoute
@@ -374,7 +376,7 @@ export interface FileRouteTypes {
     | '/route'
     | '/settings'
     | '/work-schedule'
-    | '/agent'
+    | '/agents'
     | '/cars'
     | '/drivers'
     | '/freight-forwarders'
@@ -390,7 +392,7 @@ export interface FileRouteTypes {
     | '/route'
     | '/settings'
     | '/work-schedule'
-    | '/agent'
+    | '/agents'
     | '/cars'
     | '/drivers'
     | '/freight-forwarders'
@@ -407,7 +409,7 @@ export interface FileRouteTypes {
     | '/_main/route/'
     | '/_main/settings/'
     | '/_main/work-schedule/'
-    | '/_main/_reports/agent/'
+    | '/_main/_reports/agents/'
     | '/_main/_reports/cars/'
     | '/_main/_reports/drivers/'
     | '/_main/_reports/freight-forwarders/'
@@ -457,7 +459,7 @@ export const routeTree = rootRoute
         "/_main/route/",
         "/_main/settings/",
         "/_main/work-schedule/",
-        "/_main/_reports/agent/",
+        "/_main/_reports/agents/",
         "/_main/_reports/cars/",
         "/_main/_reports/drivers/",
         "/_main/_reports/freight-forwarders/",
@@ -493,8 +495,8 @@ export const routeTree = rootRoute
       "filePath": "_main/work-schedule/index.lazy.tsx",
       "parent": "/_main"
     },
-    "/_main/_reports/agent/": {
-      "filePath": "_main/_reports/agent/index.lazy.tsx",
+    "/_main/_reports/agents/": {
+      "filePath": "_main/_reports/agents/index.lazy.tsx",
       "parent": "/_main"
     },
     "/_main/_reports/cars/": {

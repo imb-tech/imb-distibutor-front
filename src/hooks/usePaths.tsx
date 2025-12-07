@@ -115,54 +115,54 @@ export const useItems = () =>
             {
                 label: "Marshrut",
                 icon: <Route width={18} />, 
-                path: "/dashboard",
+                path: "/route",
             },
             {
                 label: "Buyurtmalar",
                 icon: <Split width={18} />, 
-                path: "/truck",
+                path: "/orders",
             },
             {
                 label: "Moliya",
                 icon: <TrendingUp width={18} />,
-                path: "/transport",
+                path: "/finance",
             },
             {
                 label: "Ish jadvali",
                 icon: <CalendarDays width={18} />, 
-                path: "/transport",
+                path: "/work-schedule",
             },
             {
                 label: "Hisobotlar",
                 icon: <ClipboardList width={18} />, 
-                path: "/transport",
+                path: "/reports",
                 items: [
                     {
                         label: "Avtomobillar",
-                        path: "/dashboard",
+                        path: "/cars",
                     },
                     {
                         label: "Haydovchilar",
-                        path: "/truck",
+                        path: "/drivers",
                     },
                     {
                         label: "Ekspeditorlar",
-                        path: "/transport",
+                        path: "/freight-forwarders",
                     },
                     {
                         label: "Agent",
-                        path: "/transport",
+                        path: "/agent",
                     },
                     {
                         label: "Logistlar",
-                        path: "/transport",
+                        path: "/logisticians",
                     },
                 ],
             },
             {
                 label: "Sozlamalar",
                 icon: <Settings width={18} />,
-                path: "/transport",
+                path: "/settings",
             },
         ],
         [],

@@ -1,5 +1,5 @@
 import { useLocation } from "@tanstack/react-router"
-import { ListOrdered, Truck } from "lucide-react"
+import { CalendarDays, ClipboardList, ListOrdered, Route, Settings, Split, TrendingUp, Truck } from "lucide-react"
 import { ReactNode, useMemo } from "react"
 
 export interface MenuItem {
@@ -113,18 +113,55 @@ export const useItems = () =>
     useMemo<MenuItem[]>(
         () => [
             {
-                label: "Bosh sahifa",
-                icon: <ListOrdered width={18} />,
+                label: "Marshrut",
+                icon: <Route width={18} />, 
                 path: "/dashboard",
             },
             {
-                label: "Reyslar",
-                icon: <Truck width={18} />,
+                label: "Buyurtmalar",
+                icon: <Split width={18} />, 
                 path: "/truck",
             },
-              {
-                label: "Transport Info",
-                icon: <Truck width={18} />,
+            {
+                label: "Moliya",
+                icon: <TrendingUp width={18} />,
+                path: "/transport",
+            },
+            {
+                label: "Ish jadvali",
+                icon: <CalendarDays width={18} />, 
+                path: "/transport",
+            },
+            {
+                label: "Hisobotlar",
+                icon: <ClipboardList width={18} />, 
+                path: "/transport",
+                items: [
+                    {
+                        label: "Avtomobillar",
+                        path: "/dashboard",
+                    },
+                    {
+                        label: "Haydovchilar",
+                        path: "/truck",
+                    },
+                    {
+                        label: "Ekspeditorlar",
+                        path: "/transport",
+                    },
+                    {
+                        label: "Agent",
+                        path: "/transport",
+                    },
+                    {
+                        label: "Logistlar",
+                        path: "/transport",
+                    },
+                ],
+            },
+            {
+                label: "Sozlamalar",
+                icon: <Settings width={18} />,
                 path: "/transport",
             },
         ],

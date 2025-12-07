@@ -16,16 +16,10 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as MainImport } from './routes/_main'
 import { Route as AuthImport } from './routes/_auth'
 import { Route as MainIndexImport } from './routes/_main/index'
-import { Route as MainTrucksTruckDetailIdImport } from './routes/_main/_trucks/truck-detail/$id'
 
 // Create Virtual Routes
 
-const MainTransportLazyImport = createFileRoute('/_main/transport')()
-const MainDashboardLazyImport = createFileRoute('/_main/dashboard')()
 const AuthAuthLazyImport = createFileRoute('/_auth/auth')()
-const MainTrucksTruckIndexLazyImport = createFileRoute(
-  '/_main/_trucks/truck/',
-)()
 
 // Create/Update Routes
 
@@ -44,36 +38,10 @@ const MainIndexRoute = MainIndexImport.update({
   getParentRoute: () => MainRoute,
 } as any)
 
-const MainTransportLazyRoute = MainTransportLazyImport.update({
-  path: '/transport',
-  getParentRoute: () => MainRoute,
-} as any).lazy(() =>
-  import('./routes/_main/transport.lazy').then((d) => d.Route),
-)
-
-const MainDashboardLazyRoute = MainDashboardLazyImport.update({
-  path: '/dashboard',
-  getParentRoute: () => MainRoute,
-} as any).lazy(() =>
-  import('./routes/_main/dashboard.lazy').then((d) => d.Route),
-)
-
 const AuthAuthLazyRoute = AuthAuthLazyImport.update({
   path: '/auth',
   getParentRoute: () => AuthRoute,
 } as any).lazy(() => import('./routes/_auth/auth.lazy').then((d) => d.Route))
-
-const MainTrucksTruckIndexLazyRoute = MainTrucksTruckIndexLazyImport.update({
-  path: '/truck/',
-  getParentRoute: () => MainRoute,
-} as any).lazy(() =>
-  import('./routes/_main/_trucks/truck/index.lazy').then((d) => d.Route),
-)
-
-const MainTrucksTruckDetailIdRoute = MainTrucksTruckDetailIdImport.update({
-  path: '/truck-detail/$id',
-  getParentRoute: () => MainRoute,
-} as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -100,39 +68,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthAuthLazyImport
       parentRoute: typeof AuthImport
     }
-    '/_main/dashboard': {
-      id: '/_main/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof MainDashboardLazyImport
-      parentRoute: typeof MainImport
-    }
-    '/_main/transport': {
-      id: '/_main/transport'
-      path: '/transport'
-      fullPath: '/transport'
-      preLoaderRoute: typeof MainTransportLazyImport
-      parentRoute: typeof MainImport
-    }
     '/_main/': {
       id: '/_main/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof MainIndexImport
-      parentRoute: typeof MainImport
-    }
-    '/_main/_trucks/truck-detail/$id': {
-      id: '/_main/_trucks/truck-detail/$id'
-      path: '/truck-detail/$id'
-      fullPath: '/truck-detail/$id'
-      preLoaderRoute: typeof MainTrucksTruckDetailIdImport
-      parentRoute: typeof MainImport
-    }
-    '/_main/_trucks/truck/': {
-      id: '/_main/_trucks/truck/'
-      path: '/truck'
-      fullPath: '/truck'
-      preLoaderRoute: typeof MainTrucksTruckIndexLazyImport
       parentRoute: typeof MainImport
     }
   }
@@ -151,19 +91,11 @@ const AuthRouteChildren: AuthRouteChildren = {
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
 interface MainRouteChildren {
-  MainDashboardLazyRoute: typeof MainDashboardLazyRoute
-  MainTransportLazyRoute: typeof MainTransportLazyRoute
   MainIndexRoute: typeof MainIndexRoute
-  MainTrucksTruckDetailIdRoute: typeof MainTrucksTruckDetailIdRoute
-  MainTrucksTruckIndexLazyRoute: typeof MainTrucksTruckIndexLazyRoute
 }
 
 const MainRouteChildren: MainRouteChildren = {
-  MainDashboardLazyRoute: MainDashboardLazyRoute,
-  MainTransportLazyRoute: MainTransportLazyRoute,
   MainIndexRoute: MainIndexRoute,
-  MainTrucksTruckDetailIdRoute: MainTrucksTruckDetailIdRoute,
-  MainTrucksTruckIndexLazyRoute: MainTrucksTruckIndexLazyRoute,
 }
 
 const MainRouteWithChildren = MainRoute._addFileChildren(MainRouteChildren)
@@ -171,21 +103,13 @@ const MainRouteWithChildren = MainRoute._addFileChildren(MainRouteChildren)
 export interface FileRoutesByFullPath {
   '': typeof MainRouteWithChildren
   '/auth': typeof AuthAuthLazyRoute
-  '/dashboard': typeof MainDashboardLazyRoute
-  '/transport': typeof MainTransportLazyRoute
   '/': typeof MainIndexRoute
-  '/truck-detail/$id': typeof MainTrucksTruckDetailIdRoute
-  '/truck': typeof MainTrucksTruckIndexLazyRoute
 }
 
 export interface FileRoutesByTo {
   '': typeof AuthRouteWithChildren
   '/auth': typeof AuthAuthLazyRoute
-  '/dashboard': typeof MainDashboardLazyRoute
-  '/transport': typeof MainTransportLazyRoute
   '/': typeof MainIndexRoute
-  '/truck-detail/$id': typeof MainTrucksTruckDetailIdRoute
-  '/truck': typeof MainTrucksTruckIndexLazyRoute
 }
 
 export interface FileRoutesById {
@@ -193,42 +117,15 @@ export interface FileRoutesById {
   '/_auth': typeof AuthRouteWithChildren
   '/_main': typeof MainRouteWithChildren
   '/_auth/auth': typeof AuthAuthLazyRoute
-  '/_main/dashboard': typeof MainDashboardLazyRoute
-  '/_main/transport': typeof MainTransportLazyRoute
   '/_main/': typeof MainIndexRoute
-  '/_main/_trucks/truck-detail/$id': typeof MainTrucksTruckDetailIdRoute
-  '/_main/_trucks/truck/': typeof MainTrucksTruckIndexLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | ''
-    | '/auth'
-    | '/dashboard'
-    | '/transport'
-    | '/'
-    | '/truck-detail/$id'
-    | '/truck'
+  fullPaths: '' | '/auth' | '/'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | ''
-    | '/auth'
-    | '/dashboard'
-    | '/transport'
-    | '/'
-    | '/truck-detail/$id'
-    | '/truck'
-  id:
-    | '__root__'
-    | '/_auth'
-    | '/_main'
-    | '/_auth/auth'
-    | '/_main/dashboard'
-    | '/_main/transport'
-    | '/_main/'
-    | '/_main/_trucks/truck-detail/$id'
-    | '/_main/_trucks/truck/'
+  to: '' | '/auth' | '/'
+  id: '__root__' | '/_auth' | '/_main' | '/_auth/auth' | '/_main/'
   fileRoutesById: FileRoutesById
 }
 
@@ -267,35 +164,15 @@ export const routeTree = rootRoute
     "/_main": {
       "filePath": "_main.tsx",
       "children": [
-        "/_main/dashboard",
-        "/_main/transport",
-        "/_main/",
-        "/_main/_trucks/truck-detail/$id",
-        "/_main/_trucks/truck/"
+        "/_main/"
       ]
     },
     "/_auth/auth": {
       "filePath": "_auth/auth.lazy.tsx",
       "parent": "/_auth"
     },
-    "/_main/dashboard": {
-      "filePath": "_main/dashboard.lazy.tsx",
-      "parent": "/_main"
-    },
-    "/_main/transport": {
-      "filePath": "_main/transport.lazy.tsx",
-      "parent": "/_main"
-    },
     "/_main/": {
       "filePath": "_main/index.tsx",
-      "parent": "/_main"
-    },
-    "/_main/_trucks/truck-detail/$id": {
-      "filePath": "_main/_trucks/truck-detail/$id.tsx",
-      "parent": "/_main"
-    },
-    "/_main/_trucks/truck/": {
-      "filePath": "_main/_trucks/truck/index.lazy.tsx",
       "parent": "/_main"
     }
   }

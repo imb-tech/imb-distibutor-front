@@ -1,5 +1,5 @@
 import { Check, Copy } from "lucide-react"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { toast } from "sonner"
 
 export const CopyButton = (text: string | number) => {
@@ -15,10 +15,12 @@ export const CopyButton = (text: string | number) => {
                 setCopied(true)
                 setTimeout(() => {
                     setCopied(false)
-                }, 1000);
+                }, 1000)
             }}
         >
-            {copied ? <Check width={16} /> : <Copy width={16} />}
+            {copied ?
+                <Check width={16} />
+            :   <Copy width={16} />}
             {text}
         </span>
     )

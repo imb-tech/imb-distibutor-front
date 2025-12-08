@@ -36,6 +36,6 @@ type SearchParams = {
     project?: string
     companies?: string
     worker?: string
-    departments?: string
+    today?: string
     selected_loading_place?: string
 };

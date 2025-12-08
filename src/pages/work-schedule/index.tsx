@@ -10,10 +10,13 @@ const WorkSchedule = () => {
             <div className="flex items-center justify-between">
                 <ParamTabs options={options} className={"bg-transparent"} />
                 <div className="flex items-center gap-3">
-                    <ParamCombobox paramName="year" options={[]} label="Yil" className="w-full" />
+                    <ParamCombobox paramName="year" options={[]} label="Yil" className="w-full" addButtonProps={{
+                        size:"sm"
+                    }} />
                     <DownloadAsExcel
                         url="working-schedule"
                         name="ish-jadvali"
+                        
                     />
                 </div>
             </div>

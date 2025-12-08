@@ -10,6 +10,7 @@ import {
 import { ReactNode, useMemo } from "react"
 import { useUser } from "./useUser"
 
+
 export interface MenuItem {
     label: string
     icon?: ReactNode
@@ -120,27 +121,27 @@ export const useItems = () =>
             {
                 label: "Hisobotlar",
                 icon: <ClipboardList width={18} />,
-                path: "/cars",
+                path: "/reports/cars",
                 items: [
                     {
                         label: "Avtomobillar",
-                        path: "/cars",
+                        path: "/reports/cars",
                     },
                     {
                         label: "Haydovchilar",
-                        path: "/drivers",
+                        path: "/reports/drivers",
                     },
                     {
                         label: "Ekspeditorlar",
-                        path: "/freight-forwarders",
+                        path: "/reports/freight-forwarders",
                     },
                     {
                         label: "Agentlar",
-                        path: "/agents",
+                        path: "/reports/agents",
                     },
                     {
                         label: "Logistlar",
-                        path: "/logisticians",
+                        path: "/reports/logisticians",
                     },
                 ],
             },
@@ -167,15 +168,15 @@ export const useItems = () =>
                     },
                     {
                         label: "Ombor",
-                        path: "/agents",
+                        path: "/settings/warehouse",
                     },
                     {
                         label: "Logistlar",
-                        path: "/logisticians",
+                        path: "/settings/logisticians",
                     },
                     {
                         label: "Mijozlar",
-                        path: "/logisticians",
+                        path: "/settings/customers",
                     },
                 ],
             },

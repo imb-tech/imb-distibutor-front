@@ -90,7 +90,7 @@ export default function ScheduleTable({
                 </div>
             </CardHeader>
             <CardContent>
-                <ScrollArea className="w-full whitespace-nowrap rounded-md border">
+                <ScrollArea className="w-full whitespace-nowrap rounded-md border no-scrollbar-x">
                     <div className="min-w-[800px]">
                         <Table>
                             <TableHeader>

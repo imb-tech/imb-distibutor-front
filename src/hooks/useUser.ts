@@ -1,0 +1,24 @@
+import { PROFILE } from "@/constants/api-endpoints"
+import { useGet } from "@/hooks/useGet"
+
+export const useUser = () => {
+    const { data, ...other } = useGet<Profile>(PROFILE)
+
+    const actions = data?.actions
+
+    return {
+        data,
+        actions,
+        ...other,
+    }
+}
+
+export function useHasAction(actionCodes: string | string[]): boolean {
+    const { actions } = useUser()
+
+    if (!actions || !Array.isArray(actions)) return false
+
+    const codes = Array.isArray(actionCodes) ? actionCodes : [actionCodes]
+
+    return codes.some((code) => actions.includes(code))
+}

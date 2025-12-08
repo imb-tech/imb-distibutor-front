@@ -1,5 +1,5 @@
+import { ParamCombobox } from "@/components/as-params/combobox"
 import ParamTabs from "@/components/as-params/tabs"
-import ParamYearPicker from "@/components/as-params/year-picker"
 import DownloadAsExcel from "@/components/download-as-excel"
 import { employees, options } from "./constants"
 import ScheduleTable from "./schedule-table"
@@ -9,8 +9,8 @@ const WorkSchedule = () => {
         <div>
             <div className="flex items-center justify-between">
                 <ParamTabs options={options} className={"bg-transparent"} />
-                <div className="flex items-center gap-5">
-                    <ParamYearPicker />
+                <div className="flex items-center gap-3">
+                    <ParamCombobox paramName="year" options={[]} label="Yil" className="w-full" />
                     <DownloadAsExcel
                         url="working-schedule"
                         name="ish-jadvali"

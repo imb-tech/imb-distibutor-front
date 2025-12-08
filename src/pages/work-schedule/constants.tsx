@@ -1,65 +1,66 @@
 import { format } from "date-fns"
 const currentMonth = new Date()
+
 export const options = [
     {
         value: "yanvar",
         label: "Yanvar",
-        className: "bg-card",
+        className: "bg-card min-w-20",
     },
     {
         value: "fevral",
         label: "Fevral",
-        className: "bg-card",
+        className: "bg-card min-w-20",
     },
     {
         value: "mart",
         label: "Mart",
-        className: "bg-card",
+        className: "bg-card min-w-20",
     },
     {
         value: "aprel",
         label: "Aprel",
-        className: "bg-card",
+        className: "bg-card min-w-20",
     },
     {
         value: "may",
         label: "May",
-        className: "bg-card",
+        className: "bg-card min-w-20",
     },
     {
         value: "iyun",
         label: "Iyun",
-        className: "bg-card",
+        className: "bg-card min-w-20",
     },
     {
         value: "iyul",
         label: "Iyul",
-        className: "bg-card",
+        className: "bg-card min-w-20",
     },
     {
         value: "avgust",
         label: "Avgust",
-        className: "bg-card",
+        className: "bg-card min-w-20",
     },
     {
         value: "sentabr",
         label: "Sentabr",
-        className: "bg-card",
+        className: "bg-card min-w-20",
     },
     {
         value: "oktabr",
         label: "Oktabr",
-        className: "bg-card",
+        className: "bg-card min-w-20",
     },
     {
         value: "noyabry",
         label: "Noyabr",
-        className: "bg-card",
+        className: "bg-card min-w-20",
     },
     {
         value: "dekabr",
         label: "Dekabr",
-        className: "bg-card",
+        className: "bg-card min-w-20",
     },
 ]
 

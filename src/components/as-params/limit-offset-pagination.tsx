@@ -86,7 +86,7 @@ const LimitOffsetPagination: React.FC<
                     value={search[pageSizeParamName] || PageSize}
                     setValue={(value) =>
                         navigate({
-                            search: { ...search, [pageSizeParamName]: +value },
+                            search: { ...search, [pageSizeParamName]: value },
                         })
                     }
                 />

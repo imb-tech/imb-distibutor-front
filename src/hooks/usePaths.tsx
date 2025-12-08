@@ -150,7 +150,7 @@ export const useItems = () =>
                         path: "/freight-forwarders",
                     },
                     {
-                        label: "Agent",
+                        label: "Agentlar",
                         path: "/agents",
                     },
                     {

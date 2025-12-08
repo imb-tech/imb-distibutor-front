@@ -17,7 +17,7 @@ const Header = ({ type }: { type?: string }) => {
                     )}
                 >
                     <SidebarTrigger className="text-gray-500 dark:text-white" />
-                    <h1 className="font-bold text-primary text-2xl ">GARAJ</h1>
+                    <h1 className="font-bold text-primary text-2xl ">DISTRIBUTOR</h1>
                 </div>
             </div>
 

@@ -10,7 +10,7 @@ import {
 import { useIsMobile } from "@/hooks/use-mobile"
 import { MenuItem, useItems, usePaths } from "@/hooks/usePaths"
 import { useUser } from "@/hooks/useUser"
-import { Link, useLocation, useSearch } from "@tanstack/react-router"
+import { Link, useLocation } from "@tanstack/react-router"
 
 export function NavMain() {
     const { toggleSidebar, open: sidebarOpen } = useSidebar()
@@ -87,7 +87,15 @@ export function NavMain() {
                                             if (mobile) toggleSidebar()
                                         }}
                                     >
-                                        {icon}
+                                        <span
+                                            className={
+                                                isParentActive ?
+                                                    "rounded-md bg-primary text-white w-8 h-8 flex justify-center items-center transition-all "
+                                                :   ""
+                                            }
+                                        >
+                                            {icon}
+                                        </span>
                                         <span>{label}</span>
                                     </SidebarMenuButton>
                                 </SidebarMenuItem>

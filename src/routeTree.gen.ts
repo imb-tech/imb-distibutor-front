@@ -26,8 +26,14 @@ const MainWorkScheduleIndexLazyImport = createFileRoute(
 const MainRouteIndexLazyImport = createFileRoute('/_main/route/')()
 const MainOrdersIndexLazyImport = createFileRoute('/_main/orders/')()
 const MainFinanceIndexLazyImport = createFileRoute('/_main/finance/')()
+const MainSettingsWarehouseLazyImport = createFileRoute(
+  '/_main/settings/warehouse',
+)()
 const MainSettingsProductsLazyImport = createFileRoute(
   '/_main/settings/products',
+)()
+const MainSettingsLogisticiansLazyImport = createFileRoute(
+  '/_main/settings/logisticians',
 )()
 const MainSettingsFreightForwardersLazyImport = createFileRoute(
   '/_main/settings/freight-forwarders',
@@ -35,21 +41,22 @@ const MainSettingsFreightForwardersLazyImport = createFileRoute(
 const MainSettingsDriversLazyImport = createFileRoute(
   '/_main/settings/drivers',
 )()
+const MainSettingsCustomersLazyImport = createFileRoute(
+  '/_main/settings/customers',
+)()
 const MainSettingsCarsLazyImport = createFileRoute('/_main/settings/cars')()
 const MainReportsLogisticiansIndexLazyImport = createFileRoute(
-  '/_main/_reports/logisticians/',
+  '/_main/reports/logisticians/',
 )()
 const MainReportsFreightForwardersIndexLazyImport = createFileRoute(
-  '/_main/_reports/freight-forwarders/',
+  '/_main/reports/freight-forwarders/',
 )()
 const MainReportsDriversIndexLazyImport = createFileRoute(
-  '/_main/_reports/drivers/',
+  '/_main/reports/drivers/',
 )()
-const MainReportsCarsIndexLazyImport = createFileRoute(
-  '/_main/_reports/cars/',
-)()
+const MainReportsCarsIndexLazyImport = createFileRoute('/_main/reports/cars/')()
 const MainReportsAgentsIndexLazyImport = createFileRoute(
-  '/_main/_reports/agents/',
+  '/_main/reports/agents/',
 )()
 
 // Create/Update Routes
@@ -102,12 +109,27 @@ const MainFinanceIndexLazyRoute = MainFinanceIndexLazyImport.update({
   import('./routes/_main/finance/index.lazy').then((d) => d.Route),
 )
 
+const MainSettingsWarehouseLazyRoute = MainSettingsWarehouseLazyImport.update({
+  path: '/settings/warehouse',
+  getParentRoute: () => MainRoute,
+} as any).lazy(() =>
+  import('./routes/_main/settings/warehouse.lazy').then((d) => d.Route),
+)
+
 const MainSettingsProductsLazyRoute = MainSettingsProductsLazyImport.update({
   path: '/settings/products',
   getParentRoute: () => MainRoute,
 } as any).lazy(() =>
   import('./routes/_main/settings/products.lazy').then((d) => d.Route),
 )
+
+const MainSettingsLogisticiansLazyRoute =
+  MainSettingsLogisticiansLazyImport.update({
+    path: '/settings/logisticians',
+    getParentRoute: () => MainRoute,
+  } as any).lazy(() =>
+    import('./routes/_main/settings/logisticians.lazy').then((d) => d.Route),
+  )
 
 const MainSettingsFreightForwardersLazyRoute =
   MainSettingsFreightForwardersLazyImport.update({
@@ -126,6 +148,13 @@ const MainSettingsDriversLazyRoute = MainSettingsDriversLazyImport.update({
   import('./routes/_main/settings/drivers.lazy').then((d) => d.Route),
 )
 
+const MainSettingsCustomersLazyRoute = MainSettingsCustomersLazyImport.update({
+  path: '/settings/customers',
+  getParentRoute: () => MainRoute,
+} as any).lazy(() =>
+  import('./routes/_main/settings/customers.lazy').then((d) => d.Route),
+)
+
 const MainSettingsCarsLazyRoute = MainSettingsCarsLazyImport.update({
   path: '/settings/cars',
   getParentRoute: () => MainRoute,
@@ -135,46 +164,46 @@ const MainSettingsCarsLazyRoute = MainSettingsCarsLazyImport.update({
 
 const MainReportsLogisticiansIndexLazyRoute =
   MainReportsLogisticiansIndexLazyImport.update({
-    path: '/logisticians/',
+    path: '/reports/logisticians/',
     getParentRoute: () => MainRoute,
   } as any).lazy(() =>
-    import('./routes/_main/_reports/logisticians/index.lazy').then(
+    import('./routes/_main/reports/logisticians/index.lazy').then(
       (d) => d.Route,
     ),
   )
 
 const MainReportsFreightForwardersIndexLazyRoute =
   MainReportsFreightForwardersIndexLazyImport.update({
-    path: '/freight-forwarders/',
+    path: '/reports/freight-forwarders/',
     getParentRoute: () => MainRoute,
   } as any).lazy(() =>
-    import('./routes/_main/_reports/freight-forwarders/index.lazy').then(
+    import('./routes/_main/reports/freight-forwarders/index.lazy').then(
       (d) => d.Route,
     ),
   )
 
 const MainReportsDriversIndexLazyRoute =
   MainReportsDriversIndexLazyImport.update({
-    path: '/drivers/',
+    path: '/reports/drivers/',
     getParentRoute: () => MainRoute,
   } as any).lazy(() =>
-    import('./routes/_main/_reports/drivers/index.lazy').then((d) => d.Route),
+    import('./routes/_main/reports/drivers/index.lazy').then((d) => d.Route),
   )
 
 const MainReportsCarsIndexLazyRoute = MainReportsCarsIndexLazyImport.update({
-  path: '/cars/',
+  path: '/reports/cars/',
   getParentRoute: () => MainRoute,
 } as any).lazy(() =>
-  import('./routes/_main/_reports/cars/index.lazy').then((d) => d.Route),
+  import('./routes/_main/reports/cars/index.lazy').then((d) => d.Route),
 )
 
 const MainReportsAgentsIndexLazyRoute = MainReportsAgentsIndexLazyImport.update(
   {
-    path: '/agents/',
+    path: '/reports/agents/',
     getParentRoute: () => MainRoute,
   } as any,
 ).lazy(() =>
-  import('./routes/_main/_reports/agents/index.lazy').then((d) => d.Route),
+  import('./routes/_main/reports/agents/index.lazy').then((d) => d.Route),
 )
 
 // Populate the FileRoutesByPath interface
@@ -216,6 +245,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainSettingsCarsLazyImport
       parentRoute: typeof MainImport
     }
+    '/_main/settings/customers': {
+      id: '/_main/settings/customers'
+      path: '/settings/customers'
+      fullPath: '/settings/customers'
+      preLoaderRoute: typeof MainSettingsCustomersLazyImport
+      parentRoute: typeof MainImport
+    }
     '/_main/settings/drivers': {
       id: '/_main/settings/drivers'
       path: '/settings/drivers'
@@ -230,11 +266,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainSettingsFreightForwardersLazyImport
       parentRoute: typeof MainImport
     }
+    '/_main/settings/logisticians': {
+      id: '/_main/settings/logisticians'
+      path: '/settings/logisticians'
+      fullPath: '/settings/logisticians'
+      preLoaderRoute: typeof MainSettingsLogisticiansLazyImport
+      parentRoute: typeof MainImport
+    }
     '/_main/settings/products': {
       id: '/_main/settings/products'
       path: '/settings/products'
       fullPath: '/settings/products'
       preLoaderRoute: typeof MainSettingsProductsLazyImport
+      parentRoute: typeof MainImport
+    }
+    '/_main/settings/warehouse': {
+      id: '/_main/settings/warehouse'
+      path: '/settings/warehouse'
+      fullPath: '/settings/warehouse'
+      preLoaderRoute: typeof MainSettingsWarehouseLazyImport
       parentRoute: typeof MainImport
     }
     '/_main/finance/': {
@@ -265,38 +315,38 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainWorkScheduleIndexLazyImport
       parentRoute: typeof MainImport
     }
-    '/_main/_reports/agents/': {
-      id: '/_main/_reports/agents/'
-      path: '/agents'
-      fullPath: '/agents'
+    '/_main/reports/agents/': {
+      id: '/_main/reports/agents/'
+      path: '/reports/agents'
+      fullPath: '/reports/agents'
       preLoaderRoute: typeof MainReportsAgentsIndexLazyImport
       parentRoute: typeof MainImport
     }
-    '/_main/_reports/cars/': {
-      id: '/_main/_reports/cars/'
-      path: '/cars'
-      fullPath: '/cars'
+    '/_main/reports/cars/': {
+      id: '/_main/reports/cars/'
+      path: '/reports/cars'
+      fullPath: '/reports/cars'
       preLoaderRoute: typeof MainReportsCarsIndexLazyImport
       parentRoute: typeof MainImport
     }
-    '/_main/_reports/drivers/': {
-      id: '/_main/_reports/drivers/'
-      path: '/drivers'
-      fullPath: '/drivers'
+    '/_main/reports/drivers/': {
+      id: '/_main/reports/drivers/'
+      path: '/reports/drivers'
+      fullPath: '/reports/drivers'
       preLoaderRoute: typeof MainReportsDriversIndexLazyImport
       parentRoute: typeof MainImport
     }
-    '/_main/_reports/freight-forwarders/': {
-      id: '/_main/_reports/freight-forwarders/'
-      path: '/freight-forwarders'
-      fullPath: '/freight-forwarders'
+    '/_main/reports/freight-forwarders/': {
+      id: '/_main/reports/freight-forwarders/'
+      path: '/reports/freight-forwarders'
+      fullPath: '/reports/freight-forwarders'
       preLoaderRoute: typeof MainReportsFreightForwardersIndexLazyImport
       parentRoute: typeof MainImport
     }
-    '/_main/_reports/logisticians/': {
-      id: '/_main/_reports/logisticians/'
-      path: '/logisticians'
-      fullPath: '/logisticians'
+    '/_main/reports/logisticians/': {
+      id: '/_main/reports/logisticians/'
+      path: '/reports/logisticians'
+      fullPath: '/reports/logisticians'
       preLoaderRoute: typeof MainReportsLogisticiansIndexLazyImport
       parentRoute: typeof MainImport
     }
@@ -318,9 +368,12 @@ const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 interface MainRouteChildren {
   MainIndexRoute: typeof MainIndexRoute
   MainSettingsCarsLazyRoute: typeof MainSettingsCarsLazyRoute
+  MainSettingsCustomersLazyRoute: typeof MainSettingsCustomersLazyRoute
   MainSettingsDriversLazyRoute: typeof MainSettingsDriversLazyRoute
   MainSettingsFreightForwardersLazyRoute: typeof MainSettingsFreightForwardersLazyRoute
+  MainSettingsLogisticiansLazyRoute: typeof MainSettingsLogisticiansLazyRoute
   MainSettingsProductsLazyRoute: typeof MainSettingsProductsLazyRoute
+  MainSettingsWarehouseLazyRoute: typeof MainSettingsWarehouseLazyRoute
   MainFinanceIndexLazyRoute: typeof MainFinanceIndexLazyRoute
   MainOrdersIndexLazyRoute: typeof MainOrdersIndexLazyRoute
   MainRouteIndexLazyRoute: typeof MainRouteIndexLazyRoute
@@ -335,10 +388,13 @@ interface MainRouteChildren {
 const MainRouteChildren: MainRouteChildren = {
   MainIndexRoute: MainIndexRoute,
   MainSettingsCarsLazyRoute: MainSettingsCarsLazyRoute,
+  MainSettingsCustomersLazyRoute: MainSettingsCustomersLazyRoute,
   MainSettingsDriversLazyRoute: MainSettingsDriversLazyRoute,
   MainSettingsFreightForwardersLazyRoute:
     MainSettingsFreightForwardersLazyRoute,
+  MainSettingsLogisticiansLazyRoute: MainSettingsLogisticiansLazyRoute,
   MainSettingsProductsLazyRoute: MainSettingsProductsLazyRoute,
+  MainSettingsWarehouseLazyRoute: MainSettingsWarehouseLazyRoute,
   MainFinanceIndexLazyRoute: MainFinanceIndexLazyRoute,
   MainOrdersIndexLazyRoute: MainOrdersIndexLazyRoute,
   MainRouteIndexLazyRoute: MainRouteIndexLazyRoute,
@@ -358,18 +414,21 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthAuthLazyRoute
   '/': typeof MainIndexRoute
   '/settings/cars': typeof MainSettingsCarsLazyRoute
+  '/settings/customers': typeof MainSettingsCustomersLazyRoute
   '/settings/drivers': typeof MainSettingsDriversLazyRoute
   '/settings/freight-forwarders': typeof MainSettingsFreightForwardersLazyRoute
+  '/settings/logisticians': typeof MainSettingsLogisticiansLazyRoute
   '/settings/products': typeof MainSettingsProductsLazyRoute
+  '/settings/warehouse': typeof MainSettingsWarehouseLazyRoute
   '/finance': typeof MainFinanceIndexLazyRoute
   '/orders': typeof MainOrdersIndexLazyRoute
   '/route': typeof MainRouteIndexLazyRoute
   '/work-schedule': typeof MainWorkScheduleIndexLazyRoute
-  '/agents': typeof MainReportsAgentsIndexLazyRoute
-  '/cars': typeof MainReportsCarsIndexLazyRoute
-  '/drivers': typeof MainReportsDriversIndexLazyRoute
-  '/freight-forwarders': typeof MainReportsFreightForwardersIndexLazyRoute
-  '/logisticians': typeof MainReportsLogisticiansIndexLazyRoute
+  '/reports/agents': typeof MainReportsAgentsIndexLazyRoute
+  '/reports/cars': typeof MainReportsCarsIndexLazyRoute
+  '/reports/drivers': typeof MainReportsDriversIndexLazyRoute
+  '/reports/freight-forwarders': typeof MainReportsFreightForwardersIndexLazyRoute
+  '/reports/logisticians': typeof MainReportsLogisticiansIndexLazyRoute
 }
 
 export interface FileRoutesByTo {
@@ -377,18 +436,21 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthAuthLazyRoute
   '/': typeof MainIndexRoute
   '/settings/cars': typeof MainSettingsCarsLazyRoute
+  '/settings/customers': typeof MainSettingsCustomersLazyRoute
   '/settings/drivers': typeof MainSettingsDriversLazyRoute
   '/settings/freight-forwarders': typeof MainSettingsFreightForwardersLazyRoute
+  '/settings/logisticians': typeof MainSettingsLogisticiansLazyRoute
   '/settings/products': typeof MainSettingsProductsLazyRoute
+  '/settings/warehouse': typeof MainSettingsWarehouseLazyRoute
   '/finance': typeof MainFinanceIndexLazyRoute
   '/orders': typeof MainOrdersIndexLazyRoute
   '/route': typeof MainRouteIndexLazyRoute
   '/work-schedule': typeof MainWorkScheduleIndexLazyRoute
-  '/agents': typeof MainReportsAgentsIndexLazyRoute
-  '/cars': typeof MainReportsCarsIndexLazyRoute
-  '/drivers': typeof MainReportsDriversIndexLazyRoute
-  '/freight-forwarders': typeof MainReportsFreightForwardersIndexLazyRoute
-  '/logisticians': typeof MainReportsLogisticiansIndexLazyRoute
+  '/reports/agents': typeof MainReportsAgentsIndexLazyRoute
+  '/reports/cars': typeof MainReportsCarsIndexLazyRoute
+  '/reports/drivers': typeof MainReportsDriversIndexLazyRoute
+  '/reports/freight-forwarders': typeof MainReportsFreightForwardersIndexLazyRoute
+  '/reports/logisticians': typeof MainReportsLogisticiansIndexLazyRoute
 }
 
 export interface FileRoutesById {
@@ -398,18 +460,21 @@ export interface FileRoutesById {
   '/_auth/auth': typeof AuthAuthLazyRoute
   '/_main/': typeof MainIndexRoute
   '/_main/settings/cars': typeof MainSettingsCarsLazyRoute
+  '/_main/settings/customers': typeof MainSettingsCustomersLazyRoute
   '/_main/settings/drivers': typeof MainSettingsDriversLazyRoute
   '/_main/settings/freight-forwarders': typeof MainSettingsFreightForwardersLazyRoute
+  '/_main/settings/logisticians': typeof MainSettingsLogisticiansLazyRoute
   '/_main/settings/products': typeof MainSettingsProductsLazyRoute
+  '/_main/settings/warehouse': typeof MainSettingsWarehouseLazyRoute
   '/_main/finance/': typeof MainFinanceIndexLazyRoute
   '/_main/orders/': typeof MainOrdersIndexLazyRoute
   '/_main/route/': typeof MainRouteIndexLazyRoute
   '/_main/work-schedule/': typeof MainWorkScheduleIndexLazyRoute
-  '/_main/_reports/agents/': typeof MainReportsAgentsIndexLazyRoute
-  '/_main/_reports/cars/': typeof MainReportsCarsIndexLazyRoute
-  '/_main/_reports/drivers/': typeof MainReportsDriversIndexLazyRoute
-  '/_main/_reports/freight-forwarders/': typeof MainReportsFreightForwardersIndexLazyRoute
-  '/_main/_reports/logisticians/': typeof MainReportsLogisticiansIndexLazyRoute
+  '/_main/reports/agents/': typeof MainReportsAgentsIndexLazyRoute
+  '/_main/reports/cars/': typeof MainReportsCarsIndexLazyRoute
+  '/_main/reports/drivers/': typeof MainReportsDriversIndexLazyRoute
+  '/_main/reports/freight-forwarders/': typeof MainReportsFreightForwardersIndexLazyRoute
+  '/_main/reports/logisticians/': typeof MainReportsLogisticiansIndexLazyRoute
 }
 
 export interface FileRouteTypes {
@@ -419,36 +484,42 @@ export interface FileRouteTypes {
     | '/auth'
     | '/'
     | '/settings/cars'
+    | '/settings/customers'
     | '/settings/drivers'
     | '/settings/freight-forwarders'
+    | '/settings/logisticians'
     | '/settings/products'
+    | '/settings/warehouse'
     | '/finance'
     | '/orders'
     | '/route'
     | '/work-schedule'
-    | '/agents'
-    | '/cars'
-    | '/drivers'
-    | '/freight-forwarders'
-    | '/logisticians'
+    | '/reports/agents'
+    | '/reports/cars'
+    | '/reports/drivers'
+    | '/reports/freight-forwarders'
+    | '/reports/logisticians'
   fileRoutesByTo: FileRoutesByTo
   to:
     | ''
     | '/auth'
     | '/'
     | '/settings/cars'
+    | '/settings/customers'
     | '/settings/drivers'
     | '/settings/freight-forwarders'
+    | '/settings/logisticians'
     | '/settings/products'
+    | '/settings/warehouse'
     | '/finance'
     | '/orders'
     | '/route'
     | '/work-schedule'
-    | '/agents'
-    | '/cars'
-    | '/drivers'
-    | '/freight-forwarders'
-    | '/logisticians'
+    | '/reports/agents'
+    | '/reports/cars'
+    | '/reports/drivers'
+    | '/reports/freight-forwarders'
+    | '/reports/logisticians'
   id:
     | '__root__'
     | '/_auth'
@@ -456,18 +527,21 @@ export interface FileRouteTypes {
     | '/_auth/auth'
     | '/_main/'
     | '/_main/settings/cars'
+    | '/_main/settings/customers'
     | '/_main/settings/drivers'
     | '/_main/settings/freight-forwarders'
+    | '/_main/settings/logisticians'
     | '/_main/settings/products'
+    | '/_main/settings/warehouse'
     | '/_main/finance/'
     | '/_main/orders/'
     | '/_main/route/'
     | '/_main/work-schedule/'
-    | '/_main/_reports/agents/'
-    | '/_main/_reports/cars/'
-    | '/_main/_reports/drivers/'
-    | '/_main/_reports/freight-forwarders/'
-    | '/_main/_reports/logisticians/'
+    | '/_main/reports/agents/'
+    | '/_main/reports/cars/'
+    | '/_main/reports/drivers/'
+    | '/_main/reports/freight-forwarders/'
+    | '/_main/reports/logisticians/'
   fileRoutesById: FileRoutesById
 }
 
@@ -508,18 +582,21 @@ export const routeTree = rootRoute
       "children": [
         "/_main/",
         "/_main/settings/cars",
+        "/_main/settings/customers",
         "/_main/settings/drivers",
         "/_main/settings/freight-forwarders",
+        "/_main/settings/logisticians",
         "/_main/settings/products",
+        "/_main/settings/warehouse",
         "/_main/finance/",
         "/_main/orders/",
         "/_main/route/",
         "/_main/work-schedule/",
-        "/_main/_reports/agents/",
-        "/_main/_reports/cars/",
-        "/_main/_reports/drivers/",
-        "/_main/_reports/freight-forwarders/",
-        "/_main/_reports/logisticians/"
+        "/_main/reports/agents/",
+        "/_main/reports/cars/",
+        "/_main/reports/drivers/",
+        "/_main/reports/freight-forwarders/",
+        "/_main/reports/logisticians/"
       ]
     },
     "/_auth/auth": {
@@ -534,6 +611,10 @@ export const routeTree = rootRoute
       "filePath": "_main/settings/cars.lazy.tsx",
       "parent": "/_main"
     },
+    "/_main/settings/customers": {
+      "filePath": "_main/settings/customers.lazy.tsx",
+      "parent": "/_main"
+    },
     "/_main/settings/drivers": {
       "filePath": "_main/settings/drivers.lazy.tsx",
       "parent": "/_main"
@@ -542,8 +623,16 @@ export const routeTree = rootRoute
       "filePath": "_main/settings/freight-forwarders.lazy.tsx",
       "parent": "/_main"
     },
+    "/_main/settings/logisticians": {
+      "filePath": "_main/settings/logisticians.lazy.tsx",
+      "parent": "/_main"
+    },
     "/_main/settings/products": {
       "filePath": "_main/settings/products.lazy.tsx",
+      "parent": "/_main"
+    },
+    "/_main/settings/warehouse": {
+      "filePath": "_main/settings/warehouse.lazy.tsx",
       "parent": "/_main"
     },
     "/_main/finance/": {
@@ -562,24 +651,24 @@ export const routeTree = rootRoute
       "filePath": "_main/work-schedule/index.lazy.tsx",
       "parent": "/_main"
     },
-    "/_main/_reports/agents/": {
-      "filePath": "_main/_reports/agents/index.lazy.tsx",
+    "/_main/reports/agents/": {
+      "filePath": "_main/reports/agents/index.lazy.tsx",
       "parent": "/_main"
     },
-    "/_main/_reports/cars/": {
-      "filePath": "_main/_reports/cars/index.lazy.tsx",
+    "/_main/reports/cars/": {
+      "filePath": "_main/reports/cars/index.lazy.tsx",
       "parent": "/_main"
     },
-    "/_main/_reports/drivers/": {
-      "filePath": "_main/_reports/drivers/index.lazy.tsx",
+    "/_main/reports/drivers/": {
+      "filePath": "_main/reports/drivers/index.lazy.tsx",
       "parent": "/_main"
     },
-    "/_main/_reports/freight-forwarders/": {
-      "filePath": "_main/_reports/freight-forwarders/index.lazy.tsx",
+    "/_main/reports/freight-forwarders/": {
+      "filePath": "_main/reports/freight-forwarders/index.lazy.tsx",
       "parent": "/_main"
     },
-    "/_main/_reports/logisticians/": {
-      "filePath": "_main/_reports/logisticians/index.lazy.tsx",
+    "/_main/reports/logisticians/": {
+      "filePath": "_main/reports/logisticians/index.lazy.tsx",
       "parent": "/_main"
     }
   }

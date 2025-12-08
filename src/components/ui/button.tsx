@@ -10,10 +10,8 @@ const buttonVariants = cva(
     {
         variants: {
             variant: {
-                default:
-                    "bg-primary/10 text-primary hover:bg-primary/15",
-                destructive:
-                    "bg-red-500/10 text-red-500 hover:bg-red-500/15",
+                default: "bg-primary/10 text-primary hover:bg-primary/15",
+                destructive: "bg-red-500/10 text-red-500 hover:bg-red-500/15",
                 outline:
                     "border border-input !bg-background hover:bg-accent hover:text-accent-foreground",
                 secondary:
@@ -75,12 +73,8 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
                 {...props}
                 disabled={loading || disabled}
             >
-                {loading && (
-                    <Spinner
-                        size="sm"
-                    />
-                )}{" "}
-                {!loading && icon} {props.children}
+                {loading && <Spinner size="sm" />} {!loading && icon}{" "}
+                {props.children}
             </Comp>
         )
     },

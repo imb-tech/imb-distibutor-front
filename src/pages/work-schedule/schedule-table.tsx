@@ -96,27 +96,23 @@ export default function ScheduleTable({
                             <TableHeader>
                                 <TableRow>
                                     <TableHead className="sticky left-0 bg-background z-10 border-r min-w-[60px]">
-                                        No.
+                                        No
                                     </TableHead>
                                     <TableHead className="sticky left-[60px] bg-background z-10 border-r min-w-[180px]">
-                                        Employee
+                                      F.I.O
                                     </TableHead>
                                     <TableHead className="sticky left-[240px] bg-background z-10 border-r min-w-[120px]">
-                                        Role
+                                        Lavozimi
                                     </TableHead>
 
                                     {daysInMonth.map((day) => (
                                         <TableHead
                                             key={day.dateString}
                                             className={cn(
-                                                "text-center min-w-[50px] max-w-[50px]",
-                                                day.isWeekend && "bg-muted",
+                                                "text-center min-w-[50px] max-w-[50px] bg-background border-r",
                                             )}
                                         >
                                             <div className="flex flex-col items-center">
-                                                <span className="text-xs font-normal">
-                                                    {day.dayName}
-                                                </span>
                                                 <span className="text-sm font-semibold">
                                                     {day.dayNumber}
                                                 </span>
@@ -125,7 +121,7 @@ export default function ScheduleTable({
                                     ))}
 
                                     <TableHead className="sticky right-0 bg-background z-10 border-l min-w-[80px] text-center">
-                                        Total
+                                        Ish kuni
                                     </TableHead>
                                 </TableRow>
                             </TableHeader>
@@ -190,10 +186,6 @@ export default function ScheduleTable({
                                                     <div className="font-medium">
                                                         {employee.fullName}
                                                     </div>
-                                                    <div className="text-xs text-muted-foreground">
-                                                        ID:{" "}
-                                                        {employee.employeeId}
-                                                    </div>
                                                 </div>
                                             </TableCell>
 
@@ -210,7 +202,7 @@ export default function ScheduleTable({
                                                     <TableCell
                                                         key={`${employee.id}-${day.dateString}`}
                                                         className={cn(
-                                                            "text-center p-1 cursor-pointer",
+                                                            "text-center p-1 cursor-pointer border-2",
                                                             day.isWeekend &&
                                                                 "bg-muted/30",
                                                             !readonly &&

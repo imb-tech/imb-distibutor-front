@@ -5,4 +5,6 @@ export const PROFILE = "hr/"
 
 /** ===== WORKING-SCHEDULE ===== */
 export const WORKING_SCHEDULE = "working-schedule"
+export const ORDERS="/order"
+
 

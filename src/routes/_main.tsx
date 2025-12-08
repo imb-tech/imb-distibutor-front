@@ -3,7 +3,6 @@ import { AppSidebar } from "@/components/sidebar/app-sidebar"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import type { SEARCH_KEY } from "@/constants/default"
 import { cn } from "@/lib/utils"
-import { useGlobalStore } from "@/store/global-store"
 import { createFileRoute, Outlet } from "@tanstack/react-router"
 
 export const Route = createFileRoute("/_main")({
@@ -12,8 +11,6 @@ export const Route = createFileRoute("/_main")({
 })
 
 function MainLayout() {
-    const { getData } = useGlobalStore()
-
     return (
         <SidebarProvider defaultOpen={true}>
             <AppSidebar />

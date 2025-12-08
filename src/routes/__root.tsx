@@ -8,7 +8,6 @@ import {
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import ThemeDataProvider from "@/layouts/color"
 import { ConfirmProvider } from "@/layouts/confirm"
 import { PromptProvider } from "@/layouts/prompt"
 import { PromptWithCauseProvider } from "@/layouts/prompt-with-causer"
@@ -50,18 +49,16 @@ function RootComponent() {
     return (
         <ModalProvider>
             <ThemeProvider defaultTheme="dark" storageKey="theme">
-                <ThemeDataProvider>
-                    <ConfirmProvider>
-                        <PromptProvider>
-                            <PromptWithCauseProvider>
-                                <ViewProvider>
-                                    <Outlet />
-                                </ViewProvider>
-                            </PromptWithCauseProvider>
-                        </PromptProvider>
-                    </ConfirmProvider>
-                    <Toaster />
-                </ThemeDataProvider>
+                <ConfirmProvider>
+                    <PromptProvider>
+                        <PromptWithCauseProvider>
+                            <ViewProvider>
+                                <Outlet />
+                            </ViewProvider>
+                        </PromptWithCauseProvider>
+                    </PromptProvider>
+                </ConfirmProvider>
+                <Toaster />
             </ThemeProvider>
             <ScrollRestoration getKey={(location) => location.pathname} />
         </ModalProvider>

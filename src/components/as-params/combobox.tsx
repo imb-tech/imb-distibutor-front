@@ -133,7 +133,7 @@ export function ParamCombobox<T extends Record<string, any>>({
                     aria-expanded={open}
                     className={cn(
                         "w-full  justify-between font-normal ",
-                        currentValue && "font-medium !text-white",
+                        currentValue && "font-medium dark:!text-white",
                         isError && "!text-destructive",
                     )}
                     {...addButtonProps}

@@ -9,7 +9,7 @@ export const useoColumns = () => {
                 header: "Nomi",
             },
             {
-                accessorKey: "eslatma",
+                accessorKey: "note",
                 header: "Eslatma",
             },
             {
@@ -17,15 +17,15 @@ export const useoColumns = () => {
                 header: "O'lchov turi",
             },
             {
-                accessorKey: "miqdor",
+                accessorKey: "quantity",
                 header: "Midqor",
             },
             {
-                accessorKey: "narx_uz",
+                accessorKey: "price_uz",
                 header: "Narx uzs",
             },
             {
-                accessorKey: "jami_uz",
+                accessorKey: "total_uz",
                 header: "Jami",
             },
         ],

@@ -1,10 +1,8 @@
-import { X } from "lucide-react"
-import { format } from "date-fns"
-import { cn } from "@/lib/utils"
 import { useNavigate, useSearch } from "@tanstack/react-router"
-import { DatePicker } from "../ui/datepicker"
+import { format } from "date-fns"
 import { useEffect } from "react"
 import { ButtonProps } from "../ui/button"
+import { DatePicker } from "../ui/datepicker"
 
 interface IProps {
     name?: string
@@ -15,8 +13,8 @@ interface IProps {
     disabled?: boolean
     paramName?: string
     defaultValue?: Date | string
-     addButtonProps?: ButtonProps
-     placeholder?:string
+    addButtonProps?: ButtonProps
+    placeholder?: string
 }
 
 export default function ParamDatePicker({
@@ -50,43 +48,20 @@ export default function ParamDatePicker({
         }
     }
 
-    function reset() {
-        if (!disabled) {
-            navigate({
-                search: {
-                    ...search,
-                    [paramName]: undefined,
-                },
-            })
-        }
-    }
-
     useEffect(() => {
         navigate({ search: { ...search, [paramName]: defaultValue } })
     }, [])
+
     return (
-        <div
-            className={cn(
-                "relative flex items-center justify-between min-w-52 max-w-[280px]",
-                className,
-            )}
-        >
-            <DatePicker
-                date={parsedDate}
-                setDate={handleOnChange}
-                disabled={disabled}
-                {...props}
-                defaultValue={new Date()}
-                addButtonProps={addButtonProps}
-                placeholder={placeholder}
-            />
-            {parsedDate && !disabled && (
-                <X
-                    onClick={reset}
-                    size={16}
-                    className="text-destructive absolute right-2 cursor-pointer"
-                />
-            )}
-        </div>
+        <DatePicker
+            date={parsedDate}
+            setDate={handleOnChange}
+            disabled={disabled}
+            {...props}
+            defaultValue={new Date()}
+            addButtonProps={addButtonProps}
+            placeholder={placeholder}
+            paramName={paramName}
+        />
     )
 }

@@ -12,6 +12,8 @@ export const ORDERS_WINDOW="/order"
 /** ===== SETTINGS ===== */
 
 export const SETTINGS_PRODUCTS= "setting-products"
+export const SETTINGS_DRIVERS= "setting-drivers"
+export const SETTINGS_CARS= "setting-cars"
 
 
 

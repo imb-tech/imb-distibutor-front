@@ -7,26 +7,32 @@ export const useoColumns = () => {
             {
                 accessorKey: "product_name",
                 header: "Nomi",
+                enableSorting: true,
             },
             {
-                accessorKey: "eslatma",
+                accessorKey: "note",
                 header: "Eslatma",
+                enableSorting: true,
             },
             {
                 accessorKey: "measurement_type",
                 header: "O'lchov turi",
+                enableSorting: true,
             },
             {
-                accessorKey: "miqdor",
+                accessorKey: "quantity",
                 header: "Midqor",
+                enableSorting: true,
             },
             {
-                accessorKey: "narx_uz",
+                accessorKey: "price_uz",
                 header: "Narx uzs",
+                enableSorting: true,
             },
             {
-                accessorKey: "jami_uz",
+                accessorKey: "total_uz",
                 header: "Jami",
+                enableSorting: true,
             },
         ],
         [],

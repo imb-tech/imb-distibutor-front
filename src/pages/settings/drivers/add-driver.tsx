@@ -1,36 +1,39 @@
 import FormInput from "@/components/form/input"
 import { FormNumberInput } from "@/components/form/number-input"
 import { Button } from "@/components/ui/button"
-import { SETTINGS_PRODUCTS } from "@/constants/api-endpoints"
+import { SETTINGS_DRIVERS } from "@/constants/api-endpoints"
 import { useModal } from "@/hooks/useModal"
 import { usePatch } from "@/hooks/usePatch"
 import { usePost } from "@/hooks/usePost"
 import { useGlobalStore } from "@/store/global-store"
 import { useQueryClient } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
+
 import { toast } from "sonner"
 
-const AddProductModal = () => {
+const AddDriverModal = () => {
     const queryClient = useQueryClient()
     const { closeModal } = useModal("create")
     const { getData, clearKey } = useGlobalStore()
 
-    const currentProduct = getData<ProductsType>(SETTINGS_PRODUCTS)
-    const form = useForm<ProductsType>({
-        defaultValues: currentProduct,
+    const currentDriver = getData<DriversType>(SETTINGS_DRIVERS)
+    const form = useForm<DriversType>({
+        defaultValues: currentDriver,
     })
 
     const { handleSubmit, reset } = form
 
     const onSuccess = () => {
-        toast.success(
-            `Mahsulot muvaffaqiyatli ${currentProduct?.id ? "tahrirlandi!" : "qo'shildi"} `,
-        )
+        if (currentDriver?.id) {
+            toast.success("Haydovchi muvaffaqiyatli tahrirlandi!")
+        } else {
+            toast.success("Haydovchi muvaffaqiyatli qo'shildi")
+        }
 
         reset()
-        clearKey(SETTINGS_PRODUCTS)
+        clearKey(SETTINGS_DRIVERS)
         closeModal()
-        queryClient.refetchQueries({ queryKey: [SETTINGS_PRODUCTS] })
+        queryClient.refetchQueries({ queryKey: [SETTINGS_DRIVERS] })
     }
 
     const { mutate: postMutate, isPending: isPendingCreate } = usePost({
@@ -43,11 +46,11 @@ const AddProductModal = () => {
 
     const isPending = isPendingCreate || isPendingUpdate
 
-    const onSubmit = (values: ProductsType) => {
-        if (currentProduct?.id) {
-            updateMutate(`${SETTINGS_PRODUCTS}/${currentProduct.id}`, values)
+    const onSubmit = (values: DriversType) => {
+        if (currentDriver?.id) {
+            updateMutate(`${SETTINGS_DRIVERS}/${currentDriver.id}`, values)
         } else {
-            postMutate(SETTINGS_PRODUCTS, values)
+            postMutate(SETTINGS_DRIVERS, values)
         }
     }
 
@@ -60,44 +63,62 @@ const AddProductModal = () => {
                 >
                     <FormInput
                         required
-                        name="product_name"
-                        label="Nomi"
+                        name="full_name"
+                        label="F.I.O"
                         methods={form}
                     />
                     <FormInput
                         required
-                        name="note"
-                        label="Eslatma"
+                        name="phone_number"
+                        label="Telefon raqami"
                         methods={form}
                     />
                     <FormInput
                         required
-                        name="measurement_type"
-                        label="O'lchov turlari"
+                        name="passport_series"
+                        label="Pasport seriya va raqami"
                         methods={form}
                     />
                     <FormNumberInput
+                        registerOptions={{
+                            max: {
+                                value: 14,
+                                message: "14 xonali bo'lishi kerak",
+                            },
+                        }}
+                        thousandSeparator={""}
                         required
-                        name="price_uz"
-                        label="Narx uzs"
+                        name="jshshir"
+                        label="JShShIR"
                         control={form.control}
                     />
-                    <FormNumberInput
+                    <FormInput
                         required
-                        name="quantity"
-                        label="Midqor"
-                        control={form.control}
+                        name="driver_license"
+                        label="Haydovchilik quvohnomasi"
+                        methods={form}
                     />
-                    <FormNumberInput
+                    <FormInput
                         required
-                        name="total_uz"
-                        label="Jami uzs"
-                        control={form.control}
+                        name="company_id"
+                        label="Kompanya ID"
+                        methods={form}
+                    />
+                    <FormInput
+                        required
+                        name="login"
+                        label="Login"
+                        methods={form}
+                    />
+                    <FormInput
+                        required
+                        name="parol"
+                        label="Parol"
+                        methods={form}
                     />
 
                     <div className="flex items-center justify-end gap-2 md:col-span-2">
                         <Button
-                            variant={"default2"}
                             className="min-w-36 w-full md:w-max"
                             type="submit"
                             loading={isPending}
@@ -111,4 +132,4 @@ const AddProductModal = () => {
     )
 }
 
-export default AddProductModal
+export default AddDriverModal

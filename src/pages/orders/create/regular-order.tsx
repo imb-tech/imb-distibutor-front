@@ -113,6 +113,8 @@ export const RegularOrders = ({ form }: Props) => {
                             methods={form}
                             name="route_region"
                             placeholder="Manzil hududi"
+                            prefixIcon={<MapPin className="text-primary h-5" />}
+
                         />
                         <div className="grid grid-cols-2 justify-between w-full gap-4 ">
                             <FormInput

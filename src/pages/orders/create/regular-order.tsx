@@ -45,6 +45,7 @@ export const RegularOrders = ({ form }: Props) => {
                         className={"!w-full"}
                         control={form.control}
                         name="date"
+                        placeholder="Sanani tanlang"
                     />
                 </div>
                 <FormCombobox

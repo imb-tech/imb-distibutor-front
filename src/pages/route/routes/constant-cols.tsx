@@ -1,8 +1,12 @@
 import { CopyButton } from "@/lib/copy-button"
+import { useSearch } from "@tanstack/react-router"
 import { ColumnDef } from "@tanstack/react-table"
 import { useMemo } from "react"
 
 export const useConstantColumns = () => {
+    const search = useSearch({ from: "/_main/route/" })
+    const { type } = search
+
     return useMemo<ColumnDef<RouteConstant>[]>(
         () => [
             {
@@ -32,7 +36,14 @@ export const useConstantColumns = () => {
                 accessorKey: "customerOrg",
                 enableSorting: true,
             },
-            { header: "Manzil", accessorKey: "address", enableSorting: true },
+            {
+                header: "Manzil",
+                accessorKey: "address",
+                enableSorting: true,
+                cell: ({ row: { original } }) => (
+                    <div className="min-w-52 break-all">{original.address}</div>
+                ),
+            },
             {
                 header: "Manzil hududi",
                 accessorKey: "region",
@@ -53,7 +64,11 @@ export const useConstantColumns = () => {
                 accessorKey: "workTime",
                 enableSorting: true,
             },
-            { header: "Eslatma", accessorKey: "note", enableSorting: true },
+            { header: "Eslatma", accessorKey: "note", enableSorting: true,
+                cell: ({ row: { original } }) => (
+                    <div className="min-w-32 break-all">{original.note}</div>
+                ),
+             },
             {
                 header: "Ustuvor transport",
                 accessorKey: "priorityTransport",
@@ -81,6 +96,6 @@ export const useConstantColumns = () => {
             },
             { header: "Hajm m3", accessorKey: "volumeM3", enableSorting: true },
         ],
-        [],
+        [type],
     )
 }

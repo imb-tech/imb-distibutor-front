@@ -90,7 +90,7 @@ export function NavMain() {
                                         <span
                                             className={
                                                 isParentActive ?
-                                                    "rounded-md bg-primary text-white w-8 h-8 flex justify-center items-center transition-all "
+                                                    "rounded-md bg-primary text-white min-w-8 h-8 flex justify-center items-center transition-all "
                                                 :   ""
                                             }
                                         >

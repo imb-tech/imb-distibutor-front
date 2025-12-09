@@ -31,12 +31,12 @@ const HeaderRoute = () => {
                         onClick={handleCreate}
                         type="button"
                         icon={<CirclePlus size={18} />}
-                        className="bg-primary text-white"
+                        className="bg-primary hover:bg-primary/90 text-white"
                     >
                         Buyurtma qo'shish
                     </Button>
                     <Button
-                        className="bg-green-500 text-white"
+                        className="bg-green-500 hover:bg-green-600/90 text-white"
                         type="button"
                         icon={<Route size={18} />}
                     >

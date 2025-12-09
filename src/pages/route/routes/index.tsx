@@ -18,7 +18,7 @@ export const constantOrders: RouteConstant[] = [
         date: "2025-09-12",
         warehouse: "Zalina Montella",
         customerOrg: "Smart",
-        address: "77Q3+R47, Ташкент, Tashkent, Узбекистан",
+        address: "77Q3+R47, Узбекистан",
         region: "Yunusobod 1",
         phone: "+998909084402",
         workTime: "8:00-22:00",
@@ -36,7 +36,7 @@ export const constantOrders: RouteConstant[] = [
 const additionOrders: RouteAddition[] = [
     {
         orderId: "5678",
-        date: "12.12.2025",
+        date: "2025-12-12",
         warehouse: "Ombor 1",
         customerOrg: "OOO “Montella group”",
         address: "Toshkent, Yashnobod",

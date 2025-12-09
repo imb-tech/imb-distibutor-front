@@ -61,7 +61,7 @@ export default function TableActions({
                                 e.stopPropagation()
                                 onEdit()
                             }}
-                            className="!text-primary"
+                            className="!text-blue-500"
                         >
                             <Edit width={16} className="mr-1.5" />
                             {"Tahrirlash"}
@@ -112,7 +112,7 @@ export default function TableActions({
                 )}
                 {onEdit && (
                     <Button
-                        icon={<SquarePen className="text-primary" size={16} />}
+                        icon={<SquarePen className="text-blue-600" size={16} />}
                         size="sm"
                         className="p-0 h-3"
                         variant="ghost"

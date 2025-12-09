@@ -11,6 +11,7 @@ import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { ExtraOrders } from "./extra-order"
 import { RegularOrders } from "./regular-order"
+import FormRadioGroup from "@/components/form/radio-group"
 
 export const AddOrder = () => {
     const queryClient = useQueryClient()
@@ -74,21 +75,21 @@ export const AddOrder = () => {
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-4 ">
-                <Button
-                    type="button"
-                    onClick={() => handleOrderTypeChange("regular")}
-                    variant={orderType === "regular" ? "default" : "outline"}
-                >
-                    Regular
-                </Button>
-
-                <Button
-                    type="button"
-                    onClick={() => handleOrderTypeChange("extra")}
-                    variant={orderType === "extra" ? "default" : "outline"}
-                >
-                    Extra
-                </Button>
+             <div className="sm:col-span-2">
+                   <FormRadioGroup
+                    methods={form}
+                    required
+                    name="order_type"
+                    className={"grid grid-cols-2  "}
+                    classNameItem={"border rounded-lg p-3"}
+                    itemClassName="w-full"
+                    options={[
+                         { id: "regular", name: "Doimiy" },
+                        { id: "extra", name: "Qo'shimcha" }
+                    ]}
+                
+                />
+             </div>
 
                 <div className="sm:col-span-2">
                     <FormInput

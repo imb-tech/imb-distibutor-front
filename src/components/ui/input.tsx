@@ -58,7 +58,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
                 )}
                 {!!prefixIcon && (
                     <span
-                        className="absolute left-1 top-1/2 -translate-y-1/2 text-muted-foreground p-1 box-content cursor-pointer backdrop-blur z-1"
+                        className="absolute right-1 top-1/2 -translate-y-1/2 text-muted-foreground p-1 box-content cursor-pointer backdrop-blur z-1"
                         onClick={handleIconClick}
                     >
                         {prefixIcon}

@@ -1,4 +1,5 @@
 // components/schedule-table.tsx
+import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import {
@@ -78,10 +79,10 @@ export default function ScheduleTable({
     }
 
     return (
-        <Card className="w-full mt-[50px]">
-            <CardHeader>
+        <Card className="w-full mt-3">
+            <CardHeader className="pb-0">
                 <div className="flex items-center justify-between">
-                    <CardTitle>Ish Jadvali</CardTitle>
+                    <CardTitle >Ish Jadvali</CardTitle>
                     <div className="flex items-center gap-2"></div>
                 </div>
             </CardHeader>
@@ -92,10 +93,10 @@ export default function ScheduleTable({
                             <TableHeader>
                                 <TableRow>
                                     <TableHead className="sticky left-0 bg-background z-10 border-r min-w-[60px]">
-                                        No
+                                        №
                                     </TableHead>
                                     <TableHead className="sticky left-[60px] bg-background z-10 border-r min-w-[180px]">
-                                      F.I.O
+                                        F.I.O
                                     </TableHead>
                                     <TableHead className="sticky left-[240px] bg-background z-10 border-r min-w-[120px]">
                                         Lavozimi
@@ -198,7 +199,7 @@ export default function ScheduleTable({
                                                     <TableCell
                                                         key={`${employee.id}-${day.dateString}`}
                                                         className={cn(
-                                                            "text-center p-1 cursor-pointer border-2",
+                                                            "text-center p-1 cursor-pointer border",
                                                             day.isWeekend &&
                                                                 "bg-muted/30",
                                                             !readonly &&
@@ -221,9 +222,9 @@ export default function ScheduleTable({
                                             })}
 
                                             <TableCell className="sticky right-0 bg-background border-l text-center font-bold">
-                                                <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-primary text-primary-foreground">
+                                                <Badge className="bg-primary hover:bg-primary/90 text-white">
                                                     {employeeTotals[index]}
-                                                </span>
+                                                </Badge>
                                             </TableCell>
                                         </TableRow>
                                     ),
@@ -242,7 +243,7 @@ export default function ScheduleTable({
                             </TableBody>
                         </Table>
                     </div>
-                    <ScrollBar orientation="horizontal" />
+                    <ScrollBar orientation="horizontal" className="h-0" />
                 </ScrollArea>
             </CardContent>
         </Card>

@@ -45,10 +45,10 @@ const HeaderRoute = () => {
                 </div>
             </div>
             <div className="flex items-center gap-3">
-                <p className="border border-primary rounded-md w-max px-3 py-0.5 text-primary">
+                <p className="border border-primary bg-primary/10 rounded-lg w-max px-3 py-0.5 text-primary">
                     90 141 kg O'g'irlik
                 </p>
-                <p className="border border-primary rounded-md w-max px-3 py-0.5 text-primary">
+                <p className="border border-primary bg-primary/10 rounded-lg w-max px-3 py-0.5 text-primary">
                     500 Buyurtmalar soni
                 </p>
             </div>

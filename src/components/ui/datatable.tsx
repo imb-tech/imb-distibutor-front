@@ -399,6 +399,7 @@ export function DataTable<TData>({
                                         rowColor?.(row.original),
                                         index % 2 !== 0 && "bg-secondary/70",
                                     )}
+
                                 >
                                     {selecteds_row && (
                                         <TableCell className="w-8 ">
@@ -428,17 +429,12 @@ export function DataTable<TData>({
                                             <TableCell
                                                 key={index}
                                                 onClick={() =>
-                                                    !notClick(cell.column.id) &&
                                                     onRowClick?.(
                                                         cell.row.original,
                                                     )
                                                 }
                                                 className={cn(
-                                                    `cursor-pointer border-r border-secondary last:border-none  ${
-                                                        notClick(
-                                                            cell.column.id,
-                                                        ) && "cursor-default"
-                                                    }`,
+                                                    `cursor-pointer border-r border-secondary last:border-none `,
                                                 )}
                                             >
                                                 {flexRender(
@@ -495,14 +491,3 @@ export function DataTable<TData>({
     )
 }
 
-function notClick(id: string) {
-    return [
-        "code",
-        "phone_number",
-        "phone",
-        "Amallar",
-        "Boshqarish",
-        " ",
-        "Telefon",
-    ].includes(id)
-}

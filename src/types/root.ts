@@ -13,4 +13,9 @@ type SearchParams = {
     start_date?: string
     end_date?: string
     region?: string
+    project?: string
+    companies?: string
+    type?: string
+    today?: string
+    selected_loading_place?: string
 };

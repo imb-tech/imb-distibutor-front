@@ -1,0 +1,50 @@
+import { ColumnDef } from "@tanstack/react-table";
+import { useMemo } from "react";
+
+export const cols = () => {
+  return useMemo<ColumnDef<any>[]>(
+    () => [
+      { header: "Reys kodi", accessorKey: "reys_kodi", enableSorting: true, },
+      { header: "ID buyurtma", accessorKey: "id_buyurtma", enableSorting: true },
+      { header: "Sana", accessorKey: "sana", enableSorting: true },
+      { header: "Haydovchi", accessorKey: "haydovchi", enableSorting: true },
+      { header: "Avtomobil raqami", accessorKey: "avto_raqami", enableSorting: true },
+      { header: "Ekspeditor", accessorKey: "ekspeditor", enableSorting: true },
+      { header: "Mijoz", accessorKey: "mijoz", enableSorting: true },
+      { header: "Manzil", accessorKey: "manzil", enableSorting: true },
+      { header: "Eslatma", accessorKey: "eslatma", enableSorting: true },
+      { header: "Status", accessorKey: "status", enableSorting: true },
+      { header: "Vaqt", accessorKey: "vaqt", enableSorting: true },
+      { header: "Kontakt nomi", accessorKey: "kontakt_nomi", enableSorting: true },
+      { header: "Rad etish sababi", accessorKey: "rad_sababi", enableSorting: true },
+      { header: "Ogʼirlik kg", accessorKey: "ogirlik", enableSorting: true },
+      { header: "Ish vaqti: dan", accessorKey: "ish_dan", enableSorting: true },
+      { header: "Ish vaqti: gacha", accessorKey: "ish_gacha", enableSorting: true },
+      { header: "Yuk tushirish vaqti", accessorKey: "tushirish_vaqti", enableSorting: true },
+      { header: "Yuk jo'natuvchi", accessorKey: "yuk_jonatuvchi", enableSorting: true },
+      { header: "Sana marshrut", accessorKey: "sana_marshrut", enableSorting: true },
+      { header: "Uzunlik", accessorKey: "uzunlik", enableSorting: true },
+      { header: "Kenglik", accessorKey: "kenglik", enableSorting: true },
+      { header: "Reys hududi", accessorKey: "reys_hududi", enableSorting: true },
+      { header: "Kuzatuv ID", accessorKey: "kuzatuv_id", enableSorting: true },
+      { header: "Toʼlov naqd summasi", accessorKey: "tolov_summasi", enableSorting: true },
+      { header: "Hajm m3", accessorKey: "hajm", enableSorting: true },
+      { header: "Yetkazib beruvchi", accessorKey: "yetkazib_beruvchi", enableSorting: true },
+      { header: "Yetib keldi", accessorKey: "yetib_keldi", enableSorting: true },
+      { header: "Ustuvorlik", accessorKey: "ustuvorlik", enableSorting: true },
+      { header: "Ombor manzili", accessorKey: "ombor_manzili", enableSorting: true },
+      { header: "Logist", accessorKey: "logist", enableSorting: true },
+      { header: "Buyurtma yaratilgan", accessorKey: "yaratilgan_vaqt", enableSorting: true },
+      { header: "Kuzatuv link", accessorKey: "kuzatuv_link", enableSorting: true },
+      { header: "Telefon raqami", accessorKey: "telefon", enableSorting: true },
+      { header: "Ketdi", accessorKey: "ketdi", enableSorting: true },
+      { header: "Qabul qilingan toʼlov", accessorKey: "qabul_tolov", enableSorting: true },
+      { header: "Haydovchi eslatmasi", accessorKey: "hayd_eslatma", enableSorting: true },
+      { header: "Elektron pochta", accessorKey: "email", enableSorting: true },
+      { header: "ETA vaqti", accessorKey: "eta_vaqti", enableSorting: true },
+      { header: "Buyurtma tugallanish", accessorKey: "tugallanish", enableSorting: true },
+      { header: "Buyurtma boshlash", accessorKey: "boshlash", enableSorting: true },
+      { header: "Faoliyat", accessorKey: "faoliyat", enableSorting: true },
+    ], []
+  )
+};

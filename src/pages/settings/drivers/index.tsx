@@ -155,7 +155,7 @@ const driversData: DriversType[] = [
 const Drivers = () => {
     const { data } = useGet<DriversType>(SETTINGS_DRIVERS)
     const { getData, setData } = useGlobalStore()
-    const item = getData<ProductsType>(SETTINGS_DRIVERS)
+    const item = getData<DriversType>(SETTINGS_DRIVERS)
 
     const { openModal: openDeleteModal } = useModal("delete")
     const { openModal: openCreateModal } = useModal(`create`)
@@ -178,7 +178,7 @@ const Drivers = () => {
                 onEdit={({ original }) => handleEdit(original)}
                 head={
                     <TableHeader
-                        fileName="Haydovchilar"
+                        fileName="Eksp"
                         url="excel"
                         storeKey={SETTINGS_DRIVERS}
                     />

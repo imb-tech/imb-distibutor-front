@@ -14,6 +14,7 @@ export const ORDERS_WINDOW="/order"
 export const SETTINGS_PRODUCTS= "setting-products"
 export const SETTINGS_DRIVERS= "setting-drivers"
 export const SETTINGS_CARS= "setting-cars"
+export const SETTINGS_FORWARDERS = "setting-forwarder"
 
 
 

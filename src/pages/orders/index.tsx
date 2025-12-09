@@ -103,7 +103,7 @@ const OrdersMain = () => {
                 title={
                     currentStaff?.id ?
                         "Buyurtma tahrirlash"
-                        : "Buyurtma qo'shish"
+                    :   "Buyurtma qo'shish"
                 }
             >
                 <div className=" max-h-[80vh] overflow-y-auto no-scrollbar-x p-0.5">

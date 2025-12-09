@@ -18,7 +18,7 @@ export const ExtraOrders = ({ form, orderType, onOrderTypeChange }: Props) => {
     const date = watch("date")
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-4">
             <div className="grid grid-cols-4 gap-4 items-center">
                 <FormInput
                     methods={form}

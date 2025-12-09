@@ -98,19 +98,20 @@ export function Combobox<T extends Record<string, any>>({
                 >
                     <div
                         className={cn(
-                            "flex items-center gap-2 pl-2 ",
+                            "flex items-center gap-2 pl-2 w-full ",
                             onAdd && "pr-4",
                         )}
                     >
-                        <span className="line-clamp-1 break-all whitespace-pre-wrap ">
+                        <div className="line-clamp-1 break-all whitespace-pre-wrap w-full text-start">
                             {value ?
                                 options
                                     ?.find((d) => d[valueKey] == value)
                                     ?.[labelKey]?.toString() || value
                             :   label}
-                        </span>
-                        <ChevronDown className=" h-4 w-4  text-primary opacity-50 " />
-
+                        </div>
+                        {!value && (
+                            <ChevronDown className=" h-4 w-4  text-primary  " />
+                        )}
                     </div>
                     {!!value && isClearIcon && (
                         <span

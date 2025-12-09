@@ -18,7 +18,7 @@ export const RegularOrders = ({ form }: Props) => {
     const date = watch("date")
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-4">
             <div className="grid grid-cols-4 gap-4 items-center">
                 <FormInput
                     methods={form}
@@ -62,7 +62,7 @@ export const RegularOrders = ({ form }: Props) => {
             <div className="space-y-2">
                 <h2>Mijoz Tafsilotlari</h2>
                 <div className="grid grid-cols-2 gap-4 items-center">
-                    <div className="flex flex-col gap-2 py-2">
+                    <div className="flex flex-col gap-4 ">
                         <FormInput
                             methods={form}
                             name="customer"
@@ -79,7 +79,7 @@ export const RegularOrders = ({ form }: Props) => {
                             required
                             name={"phone"}
                         />
-                        <div className="grid grid-cols-2 items-center gap-2 py-2">
+                        <div className="grid grid-cols-2 items-center gap-4">
                             <FormInput
                                 methods={form}
                                 name="note"
@@ -100,7 +100,7 @@ export const RegularOrders = ({ form }: Props) => {
                         </div>
                     </div>
 
-                    <div className="flex flex-col items-center gap-2 py-2 ">
+                    <div className="flex flex-col items-center gap-4 ">
                         <FormInput
                             methods={form}
                             name="address"
@@ -113,8 +113,10 @@ export const RegularOrders = ({ form }: Props) => {
                             methods={form}
                             name="route_region"
                             placeholder="Manzil hududi"
+                            prefixIcon={<MapPin className="text-primary h-5" />}
+
                         />
-                        <div className="grid grid-cols-2 justify-between w-full gap-2 py-2">
+                        <div className="grid grid-cols-2 justify-between w-full gap-4 ">
                             <FormInput
                                 methods={form}
                                 name="start_time"

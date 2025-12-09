@@ -44,6 +44,35 @@ const OrdersMain = () => {
         createOrder()
     }
 
+    function setToday(navigate: any, search: any) {
+        navigate({
+            to: "/orders",
+            search: {
+                ...search,
+                today: new Date().toISOString().split("T")[0], // YYYY-MM-DD
+                from: undefined,
+                to: undefined,
+            },
+        });
+    }
+
+    function setLastMonth(navigate: any, search: any) {
+        const now = new Date();
+        const first = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+        const last = new Date(now.getFullYear(), now.getMonth(), 0);
+
+        navigate({
+            to: "/orders",
+            search: {
+                ...search,
+                today: undefined,
+                from: first.toISOString().split("T")[0],
+                to: last.toISOString().split("T")[0],
+            },
+        });
+    }
+
+
     return (
         <div>
             <DataTable
@@ -68,21 +97,22 @@ const OrdersMain = () => {
                                     variant={
                                         !!search?.today ? "default" : "outline"
                                     }
-                                    onClick={() =>
-                                        navigate({
-                                            to: "/orders",
-                                            search: {
-                                                ...search,
-                                                today: String(new Date()),
-                                            },
-                                        })
+                                    onClick={() => setToday(navigate, search)
+
                                     }
                                     size={"sm"}
                                     type="button"
                                 >
                                     Bugungi
                                 </Button>
-                                <Button size={"sm"} type="button">
+                                <Button variant={
+                                    search?.from && search?.to
+                                        ? "default"
+                                        : "outline"
+                                }
+
+                                    onClick={() => setLastMonth(navigate, search)}
+                                    size={"sm"} type="button">
                                     Oxirgi oy
                                 </Button>
                                 <ParamDateRange

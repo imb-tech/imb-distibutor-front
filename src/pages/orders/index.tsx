@@ -115,7 +115,7 @@ const OrdersMain = () => {
                             <Button onClick={handleCreate}> Buyurtma qo'shish +</Button>
 
                             <div className="flex items-center gap-3 bg-secondary rounded-lg p-1">
-                                <Button variant={!!search?.today ? "default" : "outline"} onClick={() => navigate({ to: "/reports", search: { ...search, today: String(new Date()) } })} size={"sm"} type="button">
+                                <Button variant={!!search?.today ? "default" : "outline"} onClick={() => navigate({ to: "/orders", search: { ...search, today: String(new Date()) } })} size={"sm"} type="button">
                                     Bugungi
                                 </Button>
                                 <Button size={"sm"} type="button">

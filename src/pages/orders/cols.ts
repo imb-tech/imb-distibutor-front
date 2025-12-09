@@ -4,7 +4,7 @@ import { useMemo } from "react";
 export const cols = () => {
   return useMemo<ColumnDef<any>[]>(
     () => [
-      { header: "Reys kodi", accessorKey: "reys_kodi", enableSorting: true },
+      { header: "Reys kodi", accessorKey: "reys_kodi", enableSorting: true, },
       { header: "ID buyurtma", accessorKey: "id_buyurtma", enableSorting: true },
       { header: "Sana", accessorKey: "sana", enableSorting: true },
       { header: "Haydovchi", accessorKey: "haydovchi", enableSorting: true },
@@ -45,6 +45,6 @@ export const cols = () => {
       { header: "Buyurtma tugallanish", accessorKey: "tugallanish", enableSorting: true },
       { header: "Buyurtma boshlash", accessorKey: "boshlash", enableSorting: true },
       { header: "Faoliyat", accessorKey: "faoliyat", enableSorting: true },
-    ],[]
+    ], []
   )
 };

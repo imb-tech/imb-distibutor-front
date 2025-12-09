@@ -16,6 +16,7 @@ interface IProps {
     paramName?: string
     defaultValue?: Date | string
      addButtonProps?: ButtonProps
+     placeholder?:string
 }
 
 export default function ParamDatePicker({
@@ -26,6 +27,7 @@ export default function ParamDatePicker({
     defaultValue,
     disabled,
     addButtonProps,
+    placeholder,
     ...props
 }: IProps) {
     const navigate = useNavigate()
@@ -76,6 +78,7 @@ export default function ParamDatePicker({
                 {...props}
                 defaultValue={new Date()}
                 addButtonProps={addButtonProps}
+                placeholder={placeholder}
             />
             {parsedDate && !disabled && (
                 <X

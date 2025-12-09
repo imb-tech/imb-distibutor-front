@@ -15,7 +15,7 @@ type SearchParams = {
     region?: string
     project?: string
     companies?: string
-    worker?: string
+    type?: string
     today?: string
     selected_loading_place?: string
 };

@@ -9,3 +9,12 @@ export const ORDERS="/order"
 export const ORDERS_WINDOW="/order"
 
 
+/** ===== SETTINGS ===== */
+
+export const SETTINGS_PRODUCTS= "setting-products"
+
+
+
+
+
+

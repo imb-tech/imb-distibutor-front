@@ -92,7 +92,7 @@ function Calendar({
                     >
                         <SelectTrigger
                             className={cn(
-                                buttonVariants({ variant: "ghost" }),
+                                buttonVariants({ variant: "default" }),
                                 "pl-2 pr-1 py-2 h-7 w-fit font-medium [.is-between_&]:hidden [.is-end_&]:hidden [.is-start.is-end_&]:flex",
                             )}
                         >

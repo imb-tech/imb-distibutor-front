@@ -79,6 +79,7 @@ export function FormInput<IForm extends FieldValues>({
                     :   "",
                     uppercase && "uppercase placeholder:capitalize", // Add uppercase class for visual feedback
                     className,
+                    
                 )}
                 wrapperClassName={wrapperClassName as string}
             />

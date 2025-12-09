@@ -17,5 +17,7 @@ type SearchParams = {
     companies?: string
     type?: string
     today?: string
+    from:string
+    to:string
     selected_loading_place?: string
 };

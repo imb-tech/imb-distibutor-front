@@ -1,4 +1,5 @@
 import FormInput from "@/components/form/input"
+import FormRadioGroup from "@/components/form/radio-group"
 import { Button } from "@/components/ui/button"
 import { ORDERS } from "@/constants/api-endpoints"
 import { buildQueryKey } from "@/hooks/useGet"
@@ -74,21 +75,20 @@ export const AddOrder = () => {
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-4 ">
-                <Button
-                    type="button"
-                    onClick={() => handleOrderTypeChange("regular")}
-                    variant={orderType === "regular" ? "default" : "outline"}
-                >
-                    Regular
-                </Button>
-
-                <Button
-                    type="button"
-                    onClick={() => handleOrderTypeChange("extra")}
-                    variant={orderType === "extra" ? "default" : "outline"}
-                >
-                    Extra
-                </Button>
+                <div className="sm:col-span-2">
+                    <FormRadioGroup
+                        methods={form}
+                        required
+                        name="order_type"
+                        className={"grid grid-cols-2  "}
+                        classNameItem={"border rounded-lg p-3"}
+                        itemClassName="w-full"
+                        options={[
+                            { id: "regular", name: "Doimiy" },
+                            { id: "extra", name: "Qo'shimcha" },
+                        ]}
+                    />
+                </div>
 
                 <div className="sm:col-span-2">
                     <FormInput
@@ -120,11 +120,12 @@ export const AddOrder = () => {
             {/* Footer */}
             <div className="flex items-center justify-end  pt-2">
                 <Button
+                    variant={"default2"}
                     type="submit"
-                    className="px-6 rounded-lg bg-orange-500 hover:bg-orange-600 text-white"
+                    className="px-6"
                     loading={isPending}
                 >
-                    Save
+                    Saqlash
                 </Button>
             </div>
         </form>

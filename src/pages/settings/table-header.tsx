@@ -3,7 +3,7 @@ import DownloadAsExcel from "@/components/download-as-excel"
 import { Button } from "@/components/ui/button"
 import { useModal } from "@/hooks/useModal"
 import { useGlobalStore } from "@/store/global-store"
-import { CirclePlus, Plus } from "lucide-react"
+import { CirclePlus } from "lucide-react"
 
 interface TableHeaderProps {
     fileName: string
@@ -11,13 +11,9 @@ interface TableHeaderProps {
     url: string
 }
 
-const TableHeader = ({
-    fileName,
-    storeKey,
-
-}: TableHeaderProps) => {
+const TableHeader = ({ fileName, storeKey }: TableHeaderProps) => {
     const { openModal: openCreateModal } = useModal("create")
-    const {  clearKey } = useGlobalStore()
+    const { clearKey } = useGlobalStore()
 
     const handleAdd = () => {
         if (storeKey) {
@@ -27,29 +23,20 @@ const TableHeader = ({
     }
 
     return (
-        
-            <div className="flex items-center justify-between mb-3">
-                <ParamInput />
-                <div className="flex items-center gap-2">
-                    <DownloadAsExcel
-                        url={"settings_url"}
-                        name={`${fileName}`}
-                
-                    />
+        <div className="flex items-center justify-between gap-3 mb-3">
+            <ParamInput fullWidth />
+            <div className="flex items-center gap-3">
+                <DownloadAsExcel url={"settings_url"} name={`${fileName}`} />
 
-                    <Button
-                        
-                        className="text-white bg-primary hover:bg-primary/90"
-                        onClick={handleAdd}
-                        icon={<CirclePlus size={18} />}
-                    >
-                      
-                        Qo'shish
-                    </Button>
-                </div>
+                <Button
+                    className="text-white bg-primary hover:bg-primary/90"
+                    onClick={handleAdd}
+                    icon={<CirclePlus size={18} />}
+                >
+                    Qo'shish
+                </Button>
             </div>
-
-        
+        </div>
     )
 }
 

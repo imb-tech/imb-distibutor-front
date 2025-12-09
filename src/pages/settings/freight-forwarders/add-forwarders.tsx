@@ -1,36 +1,37 @@
 import FormInput from "@/components/form/input"
 import { FormNumberInput } from "@/components/form/number-input"
 import { Button } from "@/components/ui/button"
-import { SETTINGS_PRODUCTS } from "@/constants/api-endpoints"
+import { SETTINGS_FORWARDERS } from "@/constants/api-endpoints"
 import { useModal } from "@/hooks/useModal"
 import { usePatch } from "@/hooks/usePatch"
 import { usePost } from "@/hooks/usePost"
 import { useGlobalStore } from "@/store/global-store"
 import { useQueryClient } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
+
 import { toast } from "sonner"
 
-const AddProductModal = () => {
+const AddForwarderModal = () => {
     const queryClient = useQueryClient()
     const { closeModal } = useModal("create")
     const { getData, clearKey } = useGlobalStore()
 
-    const currentProduct = getData<ProductsType>(SETTINGS_PRODUCTS)
-    const form = useForm<ProductsType>({
-        defaultValues: currentProduct,
+    const  currentForwarder = getData<ForwardersType>(SETTINGS_FORWARDERS)
+    const form = useForm<ForwardersType>({
+        defaultValues:  currentForwarder,
     })
 
     const { handleSubmit, reset } = form
 
     const onSuccess = () => {
-        toast.success(
-            `Mahsulot muvaffaqiyatli ${currentProduct?.id ? "tahrirlandi!" : "qo'shildi"} `,
+       toast.success(
+            `Avtomobil muvaffaqiyatli ${ currentForwarder?.id ? "tahrirlandi!" : "qo'shildi"} `,
         )
 
         reset()
-        clearKey(SETTINGS_PRODUCTS)
+        clearKey(SETTINGS_FORWARDERS)
         closeModal()
-        queryClient.refetchQueries({ queryKey: [SETTINGS_PRODUCTS] })
+        queryClient.refetchQueries({ queryKey: [SETTINGS_FORWARDERS] })
     }
 
     const { mutate: postMutate, isPending: isPendingCreate } = usePost({
@@ -43,11 +44,11 @@ const AddProductModal = () => {
 
     const isPending = isPendingCreate || isPendingUpdate
 
-    const onSubmit = (values: ProductsType) => {
-        if (currentProduct?.id) {
-            updateMutate(`${SETTINGS_PRODUCTS}/${currentProduct.id}`, values)
+    const onSubmit = (values: ForwardersType) => {
+        if ( currentForwarder?.id) {
+            updateMutate(`${SETTINGS_FORWARDERS}/${ currentForwarder.id}`, values)
         } else {
-            postMutate(SETTINGS_PRODUCTS, values)
+            postMutate(SETTINGS_FORWARDERS, values)
         }
     }
 
@@ -60,44 +61,44 @@ const AddProductModal = () => {
                 >
                     <FormInput
                         required
-                        name="product_name"
-                        label="Nomi"
+                        name="full_name"
+                        label="F.I.O"
                         methods={form}
                     />
                     <FormInput
                         required
-                        name="note"
-                        label="Eslatma"
+                        name="phone_number"
+                        label="Telefon raqami"
                         methods={form}
                     />
                     <FormInput
                         required
-                        name="measurement_type"
-                        label="O'lchov turlari"
+                        name="passport_series"
+                        label="Pasport seriya va raqami"
                         methods={form}
                     />
                     <FormNumberInput
+                        registerOptions={{
+                            max: {
+                                value: 14,
+                                message: "14 xonali bo'lishi kerak",
+                            },
+                        }}
+                        thousandSeparator={""}
                         required
-                        name="price_uz"
-                        label="Narx uzs"
+                        name="jshshir"
+                        label="JShShIR"
                         control={form.control}
                     />
-                    <FormNumberInput
+                    <FormInput
                         required
-                        name="quantity"
-                        label="Midqor"
-                        control={form.control}
-                    />
-                    <FormNumberInput
-                        required
-                        name="total_uz"
-                        label="Jami uzs"
-                        control={form.control}
+                        name="warehouse"
+                        label="Ombor"
+                        methods={form}
                     />
 
                     <div className="flex items-center justify-end gap-2 md:col-span-2">
                         <Button
-                            variant={"default2"}
                             className="min-w-36 w-full md:w-max"
                             type="submit"
                             loading={isPending}
@@ -111,4 +112,4 @@ const AddProductModal = () => {
     )
 }
 
-export default AddProductModal
+export default AddForwarderModal

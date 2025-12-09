@@ -66,7 +66,6 @@ const HeaderRoute = () => {
                         ]}
                     />
                     <DownloadAsExcel
-                        addButtonProps={{ variant: "outline" }}
                         name="Yuklab olish"
                         url="/excel"
                     />

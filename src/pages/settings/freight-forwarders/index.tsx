@@ -116,6 +116,7 @@ const Forwarders = () => {
                 data={forwardersData}
                 onDelete={handleDelete}
                 onEdit={({ original }) => handleEdit(original)}
+                numeration={true}
                 head={
                     <TableHeader
                         fileName="Haydovchilar"

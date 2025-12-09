@@ -31,7 +31,7 @@ export function FormNumberInput<IForm extends FieldValues>({
     wrapperClassName,
     className,
     formatOptions,
-    thousandSeparator,
+    thousandSeparator = " ",
     decimalSeparator,
     hideError = true,
     ...props
@@ -51,7 +51,6 @@ export function FormNumberInput<IForm extends FieldValues>({
         },
     })
 
-    
     return (
         <fieldset className={cn("flex flex-col w-full", wrapperClassName)}>
             {label && (

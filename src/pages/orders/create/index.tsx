@@ -1,105 +1,132 @@
-// AddOrder.tsx
-import { useForm } from "react-hook-form"
-import { useQueryClient } from "@tanstack/react-query"
-import { toast } from "sonner"
+import FormInput from "@/components/form/input"
 import { Button } from "@/components/ui/button"
-import { usePost } from "@/hooks/usePost"
-import { usePatch } from "@/hooks/usePatch"
-import { useModal } from "@/hooks/useModal"
-import { useGlobalStore } from "@/store/global-store"
-import { buildQueryKey } from "@/hooks/useGet"
-import { OrderMainSection } from "./regular-order"
-import { OrderProductsSection } from "./extra-order"
 import { ORDERS } from "@/constants/api-endpoints"
-
-
+import { buildQueryKey } from "@/hooks/useGet"
+import { useModal } from "@/hooks/useModal"
+import { usePatch } from "@/hooks/usePatch"
+import { usePost } from "@/hooks/usePost"
+import { useGlobalStore } from "@/store/global-store"
+import { useQueryClient } from "@tanstack/react-query"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
+import { ExtraOrders } from "./extra-order"
+import { RegularOrders } from "./regular-order"
 
 export const AddOrder = () => {
-  const queryClient = useQueryClient()
-  const { closeModal } = useModal(ORDERS)
-  const { getData, clearKey } = useGlobalStore()
+    const queryClient = useQueryClient()
+    const { closeModal } = useModal(ORDERS)
+    const { getData, clearKey } = useGlobalStore()
 
-  const currentOrder = getData<OrderRow>(ORDERS)
+    const currentOrder = getData<OrderRow>(ORDERS)
 
-  const form = useForm<OrderRow>({
-    defaultValues: currentOrder || {
-      // @ts-ignore – agar type’da bo‘lmasa
-      order_type: "doimiy",
-    },
-  })
-
-  const { handleSubmit, reset, watch, setValue } = form
-
-  const orderType = (watch("order_type" as any) as string) || "doimiy"
-
-  const onSuccess = () => {
-    toast.success(
-      `Buyurtma muvaffaqiyatli ${
-        (currentOrder as any)?.id ? "yangilandi" : "yaratildi"
-      }`
-    )
-    reset()
-    clearKey(ORDERS)
-    closeModal()
-    queryClient.refetchQueries({
-      queryKey: buildQueryKey(ORDERS),
+    const form = useForm<OrderRow>({
+        defaultValues: currentOrder || {
+            // keep english default
+            order_type: "regular",
+            supplier: "",
+        },
     })
-  }
 
-  const { mutate: postMutate, isPending: isPendingCreate } = usePost({
-    onSuccess,
-  })
+    const { handleSubmit, reset, watch, setValue } = form
 
-  const { mutate: updateMutate, isPending: isPendingUpdate } = usePatch({
-    onSuccess,
-  })
+    const orderType = watch("order_type") || "regular"
 
-  const isPending = isPendingCreate || isPendingUpdate
-
-  const onSubmit = (values: OrderRow) => {
-    console.log(values);
-    
-    if ((currentOrder as any)?.id) {
-      updateMutate(`${ORDERS}/${(currentOrder as any).id}`, values)
-    } else {
-      postMutate(ORDERS, values)
+    const onSuccess = () => {
+        toast.success(
+            `Order successfully ${(currentOrder as any)?.id ? "updated" : "created"}`,
+        )
+        reset()
+        clearKey(ORDERS)
+        closeModal()
+        queryClient.refetchQueries({
+            queryKey: buildQueryKey(ORDERS),
+        })
     }
-  }
 
-  const handleOrderTypeChange = (value: "doimiy" | "qoshimcha") => {
-    // @ts-ignore
-    setValue("order_type", value, { shouldDirty: true, shouldValidate: true })
-  }
+    const { mutate: postMutate, isPending: isPendingCreate } = usePost({
+        onSuccess,
+    })
 
-  return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="space-y-6"
-    >
+    const { mutate: updateMutate, isPending: isPendingUpdate } = usePatch({
+        onSuccess,
+    })
 
-      <OrderMainSection
-        form={form}
-        orderType={orderType as "doimiy" | "qoshimcha"}
-        onOrderTypeChange={handleOrderTypeChange}
-      />
-      <OrderProductsSection />
-      <div className="flex items-center justify-end gap-3 pt-2">
-        <Button
-          type="button"
-          variant="outline"
-          className="px-6 rounded-lg"
-          onClick={closeModal}
-        >
-          Bekor qilish
-        </Button>
-        <Button
-          type="submit"
-          className="px-6 rounded-lg bg-orange-500 hover:bg-orange-600 text-white"
-          loading={isPending}
-        >
-          {(currentOrder as any)?.id ? "Yangilash" : "Qo‘shish"}
-        </Button>
-      </div>
-    </form>
-  )
+    const isPending = isPendingCreate || isPendingUpdate
+
+    const onSubmit = (values: OrderRow) => {
+        console.log(values)
+
+        if ((currentOrder as any)?.id) {
+            updateMutate(`${ORDERS}/${(currentOrder as any).id}`, values)
+        } else {
+            postMutate(ORDERS, values)
+        }
+    }
+
+    const handleOrderTypeChange = (value: "regular" | "extra") => {
+        // @ts-ignore
+        setValue("order_type", value, {
+            shouldDirty: true,
+            shouldValidate: true,
+        })
+    }
+
+    return (
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-4 ">
+                <Button
+                    type="button"
+                    onClick={() => handleOrderTypeChange("regular")}
+                    variant={orderType === "regular" ? "default" : "outline"}
+                >
+                    Regular
+                </Button>
+
+                <Button
+                    type="button"
+                    onClick={() => handleOrderTypeChange("extra")}
+                    variant={orderType === "extra" ? "default" : "outline"}
+                >
+                    Extra
+                </Button>
+
+                <div className="sm:col-span-2">
+                    <FormInput
+                        required
+                        name="supplier"
+                        placeholder="Yetqazuvchi"
+                        methods={form}
+                    />
+                </div>
+            </div>
+
+            {/* Dynamic body */}
+            {orderType === "regular" && (
+                <RegularOrders
+                    form={form}
+                    orderType={orderType}
+                    onOrderTypeChange={handleOrderTypeChange}
+                />
+            )}
+
+            {orderType === "extra" && (
+                <ExtraOrders
+                    form={form}
+                    orderType={orderType}
+                    onOrderTypeChange={handleOrderTypeChange}
+                />
+            )}
+
+            {/* Footer */}
+            <div className="flex items-center justify-end  pt-2">
+                <Button
+                    type="submit"
+                    className="px-6 rounded-lg bg-orange-500 hover:bg-orange-600 text-white"
+                    loading={isPending}
+                >
+                    Save
+                </Button>
+            </div>
+        </form>
+    )
 }

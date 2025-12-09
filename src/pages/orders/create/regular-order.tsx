@@ -1,205 +1,147 @@
 // order-main-section.tsx
-
+import { FormCombobox } from "@/components/form/combobox"
+import { FormDatePicker } from "@/components/form/date-picker"
+import { FormFormatNumberInput } from "@/components/form/format-number-input"
 import { FormInput } from "@/components/form/input"
-import { FormNumberInput } from "@/components/form/number-input"
+import { UseFormReturn } from "react-hook-form"
 
+type Props = {
+    form: UseFormReturn<OrderRow>
+    orderType: "regular" | "extra"
+    onOrderTypeChange: (value: "regular" | "extra") => void
+}
 
+export const RegularOrders = ({ form }: Props) => {
+    const { control, watch } = form
+    const date = watch("date")
 
-export const OrderMainSection = ({
-  form,
-  orderType,
-  onOrderTypeChange,
-}: Props) => {
-  const { control, register } = form
+    return (
+        <div className="space-y-6">
+            <div className="grid grid-cols-4 gap-4 items-center">
+                <FormInput
+                    methods={form}
+                    name="order_id"
+                    placeholder="Buyurtma ID"
+                    className="max-w-sm"
+                />
 
-  return (
-    <div className="space-y-6">
-      <section className="space-y-4">
-        <h3 className="text-sm font-semibold text-slate-800">
-          Asosiy ma’lumotlar
-        </h3>
+                <FormCombobox
+                    placeholder="Ustuvorlik"
+                    required
+                    options={[
+                        { label: "High", value: "high" },
+                        { label: "Normal", value: "normal" },
+                        { label: "Low", value: "low" },
+                    ]}
+                    name="priority"
+                    control={control}
+                    className="max-w-sm"
+                />
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="md:col-span-2 flex items-center">
-            <div className="inline-flex w-full md:w-auto rounded-full bg-slate-50 p-1 gap-1">
-              <button
-                type="button"
-                onClick={() => onOrderTypeChange("doimiy")}
-                className={`flex-1 px-4 py-2 text-sm rounded-full border transition 
-                  ${
-                    orderType === "doimiy"
-                      ? "bg-orange-500 text-white border-orange-500 shadow-sm"
-                      : "bg-transparent text-slate-700 border-transparent hover:bg-white"
-                  }`}
-              >
-                Doimiy
-              </button>
-              <button
-                type="button"
-                onClick={() => onOrderTypeChange("qoshimcha")}
-                className={`flex-1 px-4 py-2 text-sm rounded-full border transition 
-                  ${
-                    orderType === "qoshimcha"
-                      ? "bg-orange-500 text-white border-orange-500 shadow-sm"
-                      : "bg-transparent text-slate-700 border-transparent hover:bg-white"
-                  }`}
-              >
-                Qo‘shimcha
-              </button>
+                <div>
+                    <FormDatePicker
+                        className={"!w-full"}
+                        control={form.control}
+                        name="date"
+                    />
+                </div>
+                <FormCombobox
+                    placeholder="Ombor"
+                    required
+                    options={[
+                        { name: "Main Warehouse", id: "main" },
+                        { name: "Warehouse B", id: "b" },
+                    ]}
+                    name="warehouse"
+                    control={control}
+                />
             </div>
-            <input
-              type="hidden"
-              {...register("order_type")}
-            />
-          </div>
 
-          <div className="md:col-span-2">
-            <FormInput
-              name="yetkazib_beruvchi"
-              label="Yetkazib beruvchi"
-              methods={form}
-            />
-          </div>
+            <div className="space-y-2">
+                <h2>Mijoz Tafsilotlari</h2>
+                <div className="grid grid-cols-2 gap-4 items-center">
+                    <div className="flex flex-col gap-2 py-2">
+                        <FormInput
+                            methods={form}
+                            name="customer"
+                            placeholder="Mijoz: Tashkilot nomi"
+                        />
+                        <FormInput
+                            methods={form}
+                            name="contact_name"
+                            placeholder="Kontakt nomi"
+                        />
+                        <FormFormatNumberInput
+                            control={form.control}
+                            format="+998 ## ### ## ##"
+                            required
+                            name={"phone"}
+                        />
+                        <div className="grid grid-cols-2 items-center gap-2 py-2">
+                            <FormInput
+                                methods={form}
+                                name="note"
+                                placeholder="Eslatma"
+                            />
+                            <FormCombobox
+                                placeholder="Ustuvor transport"
+                                required
+                                options={[
+                                    { label: "Truck", value: "truck" },
+                                    { label: "Van", value: "van" },
+                                    { label: "Box", value: "box" },
+                                ]}
+                                name="preferred_transport"
+                                control={control}
+                                className="w-full"
+                            />
+                        </div>
+                    </div>
 
-          <FormInput
-            required
-            name="id_buyurtma"
-            label="ID buyurtma"
-            methods={form}
-          />
+                    <div className="flex flex-col items-center gap-2 py-2 ">
+                        <FormInput
+                            methods={form}
+                            name="address"
+                            placeholder="Manzil"
+                        />
 
-          <FormInput
-            name="ustuvorlik"
-            label="Ustuvorlik"
-            methods={form}
-          />
+                        <FormInput
+                            methods={form}
+                            name="route_region"
+                            placeholder="Manzil hududi"
+                        />
+                        <div className="grid grid-cols-2 justify-between w-full gap-2 py-2">
+                            <FormInput
+                                methods={form}
+                                name="start_time"
+                                placeholder="Yuk tushirish vaqti"
+                                type="time"
+                            />
+                            <FormInput
+                                methods={form}
+                                name="end_time"
+                                placeholder="Yuk tushirish vaqti"
+                                type="time"
+                            />
 
-          <FormInput
-            name="sana"
-            label="Sana"
-            methods={form}
-            placeholder="YYYY.MM.DD"
-          />
+                            <FormInput
+                                methods={form}
+                                name="unloading_time"
+                                placeholder="Yuk tushirish vaqti"
+                            />
 
-          <FormInput
-            name="ombor_manzili"
-            label="Ombor"
-            methods={form}
-          />
+                            <FormFormatNumberInput
+                                format="###"
+                                control={form.control}
+                                name="cash_payment"
+                                placeholder="To'lov naqd summasi"
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div></div>
         </div>
-      </section>
-
-      {/* --- Mijoz tafsilotlari --- */}
-      <section className="space-y-4">
-        <h3 className="text-sm font-semibold text-slate-800">
-          Mijoz tafsilotlari
-        </h3>
-
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="md:col-span-2">
-            <FormInput
-              required
-              name="mijoz"
-              label="Mijoz:Tashkilot nomi"
-              methods={form}
-            />
-          </div>
-
-          <div className="md:col-span-2">
-            <FormInput
-              required
-              name="manzil"
-              label="Manzil"
-              methods={form}
-            />
-          </div>
-
-          <FormInput
-            name="kontakt_nomi"
-            label="Kontakt nomi"
-            methods={form}
-          />
-
-          <FormInput
-            name="reys_hududi"
-            label="Manzil hududi"
-            methods={form}
-          />
-
-          <FormInput
-            name="telefon"
-            label="Telefon raqami"
-            methods={form}
-            type="tel"
-          />
-
-          <FormInput
-            name="ish_dan"
-            label="Ish vaqti: dan"
-            methods={form}
-          />
-
-          <FormInput
-            name="ish_gacha"
-            label="Ish vaqti: gacha"
-            methods={form}
-          />
-
-          <FormInput
-            name="eslatma"
-            label="Eslatma"
-            methods={form}
-          />
-
-          <FormInput
-            name="ustuvor_transport"
-            label="Ustuvor transport"
-            methods={form}
-          />
-
-          <FormInput
-            name="tushirish_vaqti"
-            label="Yuk tushirish vaqti"
-            methods={form}
-          />
-
-          <FormNumberInput
-            name="tolov_summasi"
-            label="To‘lov naqd summasi"
-            control={control}
-            maxLength={10}
-          />
-        </div>
-      </section>
-
-    
-      <section className="space-y-4">
-        <h3 className="text-sm font-semibold text-slate-800">
-          Yuk tavsilotlari
-        </h3>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <FormNumberInput
-            name="ogirlik"
-            label="Og‘irligi kg"
-            control={control}
-            maxLength={6}
-          />
-
-          <FormNumberInput
-            name="maxsulot_soni"
-            label="Maxsulot soni"
-            control={control}
-            maxLength={6}
-          />
-
-          <FormInput
-            name="hajm"
-            label="Hajm m3"
-            methods={form}
-          />
-        </div>
-      </section>
-    </div>
-  )
+    )
 }

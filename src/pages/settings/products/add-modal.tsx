@@ -24,13 +24,14 @@ const AddProductModal = () => {
 
     const { handleSubmit, reset } = form
 
-    const onSuccess = () => {
+    const onSuccess = (text:string) => {
         toast.success("Mahsulot muvaffaqiyatli qo'shildi")
         reset()
         clearKey(SETTINGS_PRODUCTS)
         closeModal()
         queryClient.refetchQueries({ queryKey: [SETTINGS_PRODUCTS] })
     }
+
 
     const { mutate: postMutate, isPending: isPendingCreate } = usePost({
         onSuccess,

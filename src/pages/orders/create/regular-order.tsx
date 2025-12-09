@@ -3,6 +3,8 @@ import { FormCombobox } from "@/components/form/combobox"
 import { FormDatePicker } from "@/components/form/date-picker"
 import { FormFormatNumberInput } from "@/components/form/format-number-input"
 import { FormInput } from "@/components/form/input"
+import { FormNumberInput } from "@/components/form/number-input"
+import { Clock, MapPin } from "lucide-react"
 import { UseFormReturn } from "react-hook-form"
 
 type Props = {
@@ -103,6 +105,8 @@ export const RegularOrders = ({ form }: Props) => {
                             methods={form}
                             name="address"
                             placeholder="Manzil"
+                            prefixIcon={<MapPin className="text-primary h-5" />}
+
                         />
 
                         <FormInput
@@ -116,22 +120,26 @@ export const RegularOrders = ({ form }: Props) => {
                                 name="start_time"
                                 placeholder="Yuk tushirish vaqti"
                                 type="time"
+                                prefixIcon={<Clock className="text-primary h-5" />}
                             />
                             <FormInput
                                 methods={form}
                                 name="end_time"
                                 placeholder="Yuk tushirish vaqti"
                                 type="time"
+                                prefixIcon={<Clock className="text-primary h-5" />}
+
                             />
 
                             <FormInput
                                 methods={form}
                                 name="unloading_time"
                                 placeholder="Yuk tushirish vaqti"
+
                             />
 
-                            <FormFormatNumberInput
-                                format="###"
+                            <FormNumberInput
+                                thousandSeparator={" "}
                                 control={form.control}
                                 name="cash_payment"
                                 placeholder="To'lov naqd summasi"
@@ -139,9 +147,37 @@ export const RegularOrders = ({ form }: Props) => {
                         </div>
                     </div>
                 </div>
+
             </div>
 
-            <div></div>
+            <div className="space-y-2">
+                <h2>Yuk tavsilotlari</h2>
+
+                <div className="grid grid-cols-2 gap-4">
+
+                    <FormNumberInput
+                        thousandSeparator={" "}
+                        control={form.control}
+                        name="weight"
+                        placeholder="Og’irligi kg"
+                    />
+                    <FormNumberInput
+                        thousandSeparator={" "}
+                        control={form.control}
+                        name="product_count"
+                        placeholder="Maxsulot soni"
+                    />
+                    <FormNumberInput
+                        thousandSeparator={" "}
+                        control={form.control}
+                        name="volume"
+                        placeholder="Hajm m3"
+                    />
+
+                </div>
+            </div>
+
+
         </div>
     )
 }

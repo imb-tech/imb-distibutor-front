@@ -24,6 +24,7 @@ interface IProps<IForm extends FieldValues> {
     options: SelectOption[]
     label?: string
     className?: ClassNameValue
+    classNameItem?: ClassNameValue
     hideError?: boolean
     returnValue?: "name" | "id"
     disabled?: boolean
@@ -41,6 +42,7 @@ export default function FormRadioGroup<IForm extends FieldValues>({
     label,
     returnValue = "id",
     itemClassName,
+    classNameItem,
 }: IProps<IForm>) {
     const {
         field,
@@ -86,7 +88,7 @@ export default function FormRadioGroup<IForm extends FieldValues>({
                     >
                         {options?.map((option) => (
                             <div className="space-y-3" key={option.id}>
-                                <div className="flex f items-center space-x-2  ">
+                                <div className={cn("flex items-center space-x-2  ", classNameItem)}>
                                     <RadioGroupItem
                                         id={option?.[
                                             lastReturnValue

@@ -1,7 +1,6 @@
 
 import { DataTable } from "@/components/ui/datatable";
 import { cols } from "./cols";
-import ParamsInput from '../../components/as-params/input'
 import ParamTabs from "@/components/as-params/tabs";
 import { orderTabs } from "./constants";
 import { Button } from "@/components/ui/button";
@@ -16,6 +15,7 @@ import { ORDERS } from "@/constants/api-endpoints";
 import DeleteModal from "@/components/custom/delete-modal";
 
 import {orders}from './constants'
+import ParamInput from "@/components/as-params/input";
 
 const allData = Array.from({ length: 25 }, (_, i) => ({
     ...orders[i % orders.length],
@@ -58,7 +58,7 @@ const OrdersMain = () => {
                 onDelete={(row) => handleDelete(row.original)}
                 head={
                     <div className="flex  items-center justify-between gap-3 mb-3">
-                        <ParamsInput className="w-lg" />
+                        <ParamInput className="w-lg" />
 
                         <div className="flex justify-between items-center gap-4 ">
                             <Button onClick={handleCreate}> Buyurtma qo'shish +</Button>

@@ -1,56 +1,50 @@
-// import { UseFormReturn } from "react-hook-form";
-
- type OrderRow = {
-    id?: number | string
-    reys_kodi: string;
-    id_buyurtma: string;
-    sana: string;
-    haydovchi: string;
-    avto_raqami: string;
-    ekspeditor: string;
-    mijoz: string;
-    manzil: string;
-    eslatma: string;
-    status: string;
-    vaqt: string;
-    kontakt_nomi: string;
-    rad_sababi: string;
-    ogirlik: string;
-    ish_dan: string;
-    ish_gacha: string;
-    tushirish_vaqti: string;
-    yuk_jonatuvchi: string;
-    sana_marshrut: string;
-    ustuvor_transport?:string;
-    uzunlik: string;
-    kenglik: string;
-    reys_hududi: string;
-    kuzatuv_id: string;
-    maxsulot_soni?:string;
-    tolov_summasi: string;
-    hajm: string;
-    yetkazib_beruvchi: string;
-    yetib_keldi: string;
-    ustuvorlik: string;
-    ombor_manzili: string;
-    logist: string;
-    yaratilgan_vaqt: string;
-    kuzatuv_link: string;
-    telefon: string;
-    ketdi: string;
-    qabul_tolov: string;
-    hayd_eslatma: string;
-    email: string;
-    eta_vaqti: string;
-    tugallanish: string;
-    boshlash: string;
-    faoliyat: string;
-
-    
-};
-
-type Props = {
-  form: UseFormReturn<OrderRow>
-  orderType: "doimiy" | "qoshimcha"
-  onOrderTypeChange: (value: "doimiy" | "qoshimcha") => void
+type OrderRow = {
+  id?: number | string
+  flight_code: string
+  order_id: string
+  warehouse: string
+  date: string
+  driver: string
+  vehicle_number: string
+  expediter: string
+  customer: string
+  address: string
+  note: string
+  status: string
+  order_type: "regular" | "extra"
+  time: string
+  contact_name: string
+  rejection_reason: string
+  weight: string
+  work_from: string
+  work_to: string
+  unloading_time: string
+  cargo_sender: string
+  route_date: string
+  preferred_transport?: string
+  length: string
+  width: string
+  route_region: string
+  tracking_id: string
+  payment_amount: string
+  volume: string
+  supplier: string
+  arrived: string
+  priority: string
+  warehouse_address: string
+  logistic: string
+  created_time: string
+  tracking_link: string
+  phone: string
+  departed: string
+  cash_received: string
+  driver_note: string
+  email: string
+  eta_time: string
+  completion: string
+  start: string
+  activity: string
+  cash_payment:string
+  start_time:string
+  end_time:string
 }

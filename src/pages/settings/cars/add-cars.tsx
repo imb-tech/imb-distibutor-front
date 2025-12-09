@@ -30,12 +30,9 @@ const AddCarsModal = () => {
     const { handleSubmit, reset } = form
 
     const onSuccess = () => {
-        if (currentCar?.id) {
-            toast.success("Avtomobil muvaffaqiyatli tahrirlandi!")
-        } else {
-            toast.success("Avtomobil muvaffaqiyatli qo'shildi")
-        }
-
+        toast.success(
+            `Avtomobil muvaffaqiyatli ${currentCar?.id ? "tahrirlandi!" : "qo'shildi"} `,
+        )
         reset()
         clearKey(SETTINGS_CARS)
         closeModal()

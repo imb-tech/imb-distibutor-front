@@ -23,11 +23,9 @@ const AddProductModal = () => {
     const { handleSubmit, reset } = form
 
     const onSuccess = () => {
-        if (currentProduct?.id) {
-            toast.success("Mahsulot muvaffaqiyatli tahrirlandi!")
-        } else {
-            toast.success("Mahsulot muvaffaqiyatli qo'shildi")
-        }
+        toast.success(
+            `Mahsulot muvaffaqiyatli ${currentProduct?.id ? "tahrirlandi!" : "qo'shildi"} `,
+        )
 
         reset()
         clearKey(SETTINGS_PRODUCTS)
@@ -79,21 +77,18 @@ const AddProductModal = () => {
                         methods={form}
                     />
                     <FormNumberInput
-                      thousandSeparator={" "}
                         required
                         name="price_uz"
                         label="Narx uzs"
                         control={form.control}
                     />
                     <FormNumberInput
-                    thousandSeparator={" "}
                         required
                         name="quantity"
                         label="Midqor"
                         control={form.control}
                     />
                     <FormNumberInput
-                       thousandSeparator={" "}
                         required
                         name="total_uz"
                         label="Jami uzs"
@@ -102,6 +97,7 @@ const AddProductModal = () => {
 
                     <div className="flex items-center justify-end gap-2 md:col-span-2">
                         <Button
+                            variant={"default2"}
                             className="min-w-36 w-full md:w-max"
                             type="submit"
                             loading={isPending}

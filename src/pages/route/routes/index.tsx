@@ -95,6 +95,7 @@ function RoutesMain() {
                     data={allData}
                     onEdit={(row) => handleEdit(row.original)}
                     onDelete={(row) => handleDelete(row.original)}
+                    wrapperClassName="px-0"
                 />
 
                 <Modal

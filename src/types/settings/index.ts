@@ -56,3 +56,12 @@ type CarsType = {
     load_capacity: string
     warehouse: string
 }
+
+type ForwardersType={
+     id: number
+    full_name: string
+    phone_number: string
+    passport_series: string
+    jshshir: string,
+    warehouse:string
+}

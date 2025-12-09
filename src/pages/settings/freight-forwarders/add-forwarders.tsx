@@ -1,7 +1,7 @@
 import FormInput from "@/components/form/input"
 import { FormNumberInput } from "@/components/form/number-input"
 import { Button } from "@/components/ui/button"
-import { SETTINGS_DRIVERS } from "@/constants/api-endpoints"
+import { SETTINGS_FORWARDERS } from "@/constants/api-endpoints"
 import { useModal } from "@/hooks/useModal"
 import { usePatch } from "@/hooks/usePatch"
 import { usePost } from "@/hooks/usePost"
@@ -11,27 +11,27 @@ import { useForm } from "react-hook-form"
 
 import { toast } from "sonner"
 
-const AddDriverModal = () => {
+const AddForwarderModal = () => {
     const queryClient = useQueryClient()
     const { closeModal } = useModal("create")
     const { getData, clearKey } = useGlobalStore()
 
-    const currentDriver = getData<DriversType>(SETTINGS_DRIVERS)
-    const form = useForm<DriversType>({
-        defaultValues: currentDriver,
+    const  currentForwarder = getData<ForwardersType>(SETTINGS_FORWARDERS)
+    const form = useForm<ForwardersType>({
+        defaultValues:  currentForwarder,
     })
 
     const { handleSubmit, reset } = form
 
     const onSuccess = () => {
-         toast.success(
-            `Avtomobil muvaffaqiyatli ${currentDriver?.id ? "tahrirlandi!" : "qo'shildi"} `,
+       toast.success(
+            `Avtomobil muvaffaqiyatli ${ currentForwarder?.id ? "tahrirlandi!" : "qo'shildi"} `,
         )
 
         reset()
-        clearKey(SETTINGS_DRIVERS)
+        clearKey(SETTINGS_FORWARDERS)
         closeModal()
-        queryClient.refetchQueries({ queryKey: [SETTINGS_DRIVERS] })
+        queryClient.refetchQueries({ queryKey: [SETTINGS_FORWARDERS] })
     }
 
     const { mutate: postMutate, isPending: isPendingCreate } = usePost({
@@ -44,11 +44,11 @@ const AddDriverModal = () => {
 
     const isPending = isPendingCreate || isPendingUpdate
 
-    const onSubmit = (values: DriversType) => {
-        if (currentDriver?.id) {
-            updateMutate(`${SETTINGS_DRIVERS}/${currentDriver.id}`, values)
+    const onSubmit = (values: ForwardersType) => {
+        if ( currentForwarder?.id) {
+            updateMutate(`${SETTINGS_FORWARDERS}/${ currentForwarder.id}`, values)
         } else {
-            postMutate(SETTINGS_DRIVERS, values)
+            postMutate(SETTINGS_FORWARDERS, values)
         }
     }
 
@@ -92,26 +92,8 @@ const AddDriverModal = () => {
                     />
                     <FormInput
                         required
-                        name="driver_license"
-                        label="Haydovchilik quvohnomasi"
-                        methods={form}
-                    />
-                    <FormInput
-                        required
-                        name="company_id"
-                        label="Kompanya ID"
-                        methods={form}
-                    />
-                    <FormInput
-                        required
-                        name="login"
-                        label="Login"
-                        methods={form}
-                    />
-                    <FormInput
-                        required
-                        name="parol"
-                        label="Parol"
+                        name="warehouse"
+                        label="Ombor"
                         methods={form}
                     />
 
@@ -130,4 +112,4 @@ const AddDriverModal = () => {
     )
 }
 
-export default AddDriverModal
+export default AddForwarderModal

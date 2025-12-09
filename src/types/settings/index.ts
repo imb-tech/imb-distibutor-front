@@ -57,11 +57,20 @@ type CarsType = {
     warehouse: string
 }
 
-type ForwardersType={
-     id: number
+type ForwardersType = {
+    id: number
     full_name: string
     phone_number: string
     passport_series: string
-    jshshir: string,
-    warehouse:string
+    jshshir: string
+    warehouse: string
+}
+
+type WarehouseType = {
+    id: number
+    address: string
+    latitude: number
+    longtitude: number
+    map_location: string
+    location: string
 }

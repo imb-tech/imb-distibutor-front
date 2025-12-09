@@ -8,7 +8,18 @@ import { useGlobalStore } from "@/store/global-store"
 import TableHeader from "../table-header"
 import AddProductModal from "./add-modal"
 import { useoColumns } from "./cols"
-import { productData } from "./table-data"
+
+const productData = [
+    {
+        id: 1,
+        product_name: "Cola 0.33ml",
+        note: "-",
+        measurement_type: "dona",
+        quantity: "100",
+        price_uz: "750 000",
+        total_uz: "750 000",
+    },
+]
 
 const Products = () => {
     const { getData, setData } = useGlobalStore()
@@ -43,14 +54,14 @@ const Products = () => {
                     />
                 }
             />
-            <DeleteModal path={SETTINGS_PRODUCTS} id={item?.id} />
             <Modal
                 size="max-w-2xl"
-                title={item?.id ? "Tahrirlash" : "Qo'shish"}
+                title={`Mahsulot ${item?.id ? "tahrirlash" : "qo'shish"}`}
                 modalKey="create"
             >
                 <AddProductModal />
             </Modal>
+            <DeleteModal path={SETTINGS_PRODUCTS} id={item?.id} />
         </div>
     )
 }

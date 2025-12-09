@@ -227,7 +227,7 @@ export function DataTable<TData>({
 
             <div
                 className={cn(
-                    "relative overflow-x-auto overflow-y-hidden no-scollbar-x  rounded-md",
+                    "relative overflow-x-auto overflow-y-hidden no-scrollbar-x  rounded-md",
                     tableWrapperClassName,
                 )}
             >
@@ -272,9 +272,10 @@ export function DataTable<TData>({
                         )}
                     </Table>
                 )}
+                
                 {!loading && !!data?.length && (
                     <Table
-                        className={`${className} select-text bg-card rounded-md`}
+                        className={`${className} select-text bg-card rounded-md `}
                     >
                         <TableHeader>
                             {table
@@ -455,7 +456,7 @@ export function DataTable<TData>({
                 {data?.length === 0 && !loading && <EmptyBox height={height} />}
             </div>
 
-            {!viewAll && data?.length > 25 ?
+            {!viewAll && data?.length ?
                 <div className="pt-4 mx-auto w-full relative flex justify-center">
                     {!!viewCount && !!table.getRowModel().rows?.length && (
                         <p className="absolute top-6 left-2">

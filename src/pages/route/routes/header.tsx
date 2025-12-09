@@ -24,8 +24,9 @@ const HeaderRoute = () => {
                 <div className="flex items-center gap-3">
                     <ParamDatePicker
                         placeholder="Bugun"
-                        className={"max-w-20 min-w-40"}
+                        className={"min-w-0 w-max"}
                         defaultValue={format(String(new Date()), "yyyy-MM-dd")}
+                        addButtonProps={{ className: "flex gap-0" }}
                     />
                     <Button
                         onClick={handleCreate}
@@ -45,10 +46,10 @@ const HeaderRoute = () => {
                 </div>
             </div>
             <div className="flex items-center gap-3">
-                <p className="border border-primary rounded-md w-max px-3 py-0.5 text-primary">
+                <p className="border border-primary  rounded-lg w-max px-3 py-0.5 text-primary">
                     90 141 kg O'g'irlik
                 </p>
-                <p className="border border-primary rounded-md w-max px-3 py-0.5 text-primary">
+                <p className="border border-primary  rounded-lg w-max px-3 py-0.5 text-primary">
                     500 Buyurtmalar soni
                 </p>
             </div>
@@ -65,7 +66,6 @@ const HeaderRoute = () => {
                         ]}
                     />
                     <DownloadAsExcel
-                        addButtonProps={{ variant: "outline" }}
                         name="Yuklab olish"
                         url="/excel"
                     />

@@ -1,3 +1,5 @@
+// import { UseFormReturn } from "react-hook-form";
+
  type OrderRow = {
     id?: number | string
     reys_kodi: string;
@@ -46,3 +48,9 @@
 
     
 };
+
+type Props = {
+  form: UseFormReturn<OrderRow>
+  orderType: "doimiy" | "qoshimcha"
+  onOrderTypeChange: (value: "doimiy" | "qoshimcha") => void
+}

@@ -2,7 +2,6 @@
 import { useForm } from "react-hook-form"
 import { useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
-
 import { Button } from "@/components/ui/button"
 import { usePost } from "@/hooks/usePost"
 import { usePatch } from "@/hooks/usePatch"
@@ -11,17 +10,16 @@ import { useGlobalStore } from "@/store/global-store"
 import { buildQueryKey } from "@/hooks/useGet"
 import { OrderMainSection } from "./regular-order"
 import { OrderProductsSection } from "./extra-order"
+import { ORDERS } from "@/constants/api-endpoints"
 
-const ORDER_ENDPOINT = "/orders"
-const ORDER_LIST_KEY = "order_data"
-const ORDER_EDIT_KEY = "order_data"
+
 
 export const AddOrder = () => {
   const queryClient = useQueryClient()
-  const { closeModal } = useModal("order_create")
+  const { closeModal } = useModal(ORDERS)
   const { getData, clearKey } = useGlobalStore()
 
-  const currentOrder = getData<OrderRow | undefined>(ORDER_EDIT_KEY)
+  const currentOrder = getData<OrderRow>(ORDERS)
 
   const form = useForm<OrderRow>({
     defaultValues: currentOrder || {
@@ -41,10 +39,10 @@ export const AddOrder = () => {
       }`
     )
     reset()
-    clearKey(ORDER_EDIT_KEY)
+    clearKey(ORDERS)
     closeModal()
     queryClient.refetchQueries({
-      queryKey: buildQueryKey(ORDER_LIST_KEY),
+      queryKey: buildQueryKey(ORDERS),
     })
   }
 
@@ -62,9 +60,9 @@ export const AddOrder = () => {
     console.log(values);
     
     if ((currentOrder as any)?.id) {
-      updateMutate(`${ORDER_ENDPOINT}/${(currentOrder as any).id}`, values)
+      updateMutate(`${ORDERS}/${(currentOrder as any).id}`, values)
     } else {
-      postMutate(ORDER_ENDPOINT, values)
+      postMutate(ORDERS, values)
     }
   }
 
@@ -89,14 +87,14 @@ export const AddOrder = () => {
         <Button
           type="button"
           variant="outline"
-          className="px-6 rounded-full"
+          className="px-6 rounded-lg"
           onClick={closeModal}
         >
           Bekor qilish
         </Button>
         <Button
           type="submit"
-          className="px-6 rounded-full bg-orange-500 hover:bg-orange-600 text-white"
+          className="px-6 rounded-lg bg-orange-500 hover:bg-orange-600 text-white"
           loading={isPending}
         >
           {(currentOrder as any)?.id ? "Yangilash" : "Qo‘shish"}

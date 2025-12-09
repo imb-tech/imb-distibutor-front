@@ -1,14 +1,9 @@
 // order-main-section.tsx
-import { UseFormReturn } from "react-hook-form"
-import { OrderRow } from "@/types/orders"
+
 import { FormInput } from "@/components/form/input"
 import { FormNumberInput } from "@/components/form/number-input"
 
-type Props = {
-  form: UseFormReturn<OrderRow>
-  orderType: "doimiy" | "qoshimcha"
-  onOrderTypeChange: (value: "doimiy" | "qoshimcha") => void
-}
+
 
 export const OrderMainSection = ({
   form,
@@ -52,10 +47,9 @@ export const OrderMainSection = ({
                 Qo‘shimcha
               </button>
             </div>
-            {/* hidden field */}
             <input
               type="hidden"
-              {...register("order_type" as any)}
+              {...register("order_type")}
             />
           </div>
 

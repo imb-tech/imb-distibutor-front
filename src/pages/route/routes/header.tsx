@@ -24,8 +24,9 @@ const HeaderRoute = () => {
                 <div className="flex items-center gap-3">
                     <ParamDatePicker
                         placeholder="Bugun"
-                        className={"max-w-20 min-w-40"}
+                        className={"min-w-0 w-max"}
                         defaultValue={format(String(new Date()), "yyyy-MM-dd")}
+                        addButtonProps={{ className: "flex gap-0" }}
                     />
                     <Button
                         onClick={handleCreate}

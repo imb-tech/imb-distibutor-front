@@ -1,5 +1,5 @@
 import { format } from "date-fns"
-import { Calendar as CalendarIcon } from "lucide-react"
+import { CalendarDays, X } from "lucide-react"
 
 import { Button, ButtonProps } from "@/components/ui/button"
 import { Calendar, CalendarProps } from "@/components/ui/calendar"
@@ -9,6 +9,7 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
+import { useNavigate, useSearch } from "@tanstack/react-router"
 import { ClassNameValue } from "tailwind-merge"
 
 export function DatePicker({
@@ -22,6 +23,7 @@ export function DatePicker({
     addButtonProps,
     className,
     isError,
+    paramName = "date",
 }: {
     date: Date | any
     setDate: any
@@ -33,7 +35,28 @@ export function DatePicker({
     addButtonProps?: ButtonProps
     className?: ClassNameValue
     isError?: boolean
+    paramName?: string
 }) {
+    const navigate = useNavigate()
+    const search: any = useSearch({ from: "/_main" }) as Record<
+        string,
+        string | undefined
+    >
+
+    const dateString = search[paramName]
+    const parsedDate = dateString ? new Date(dateString) : undefined
+
+    function reset() {
+        if (!disabled) {
+            navigate({
+                search: {
+                    ...search,
+                    [paramName]: undefined,
+                },
+            })
+        }
+    }
+
     return (
         <Popover>
             <PopoverTrigger asChild>
@@ -49,10 +72,19 @@ export function DatePicker({
                     disabled={disabled}
                     {...addButtonProps}
                 >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
                     {date ?
                         format(date, "dd/MM/yyyy")
                     :   <span>{placeholder || "Kunni tanlang"}</span>}
+
+                    <CalendarDays className="ml-2 h-4 w-4 text-primary" />
+
+                    {parsedDate && !disabled && (
+                        <X
+                            onClick={reset}
+                            size={16}
+                            className="text-destructive  ml-2 cursor-pointer"
+                        />
+                    )}
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0">

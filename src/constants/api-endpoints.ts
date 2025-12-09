@@ -6,3 +6,12 @@ export const PROFILE = "hr/"
 /** ===== WORKING-SCHEDULE ===== */
 export const WORKING_SCHEDULE = "working-schedule"
 
+/** ===== SETTINGS ===== */
+
+export const SETTINGS_PRODUCTS= "setting-products"
+
+
+
+
+
+

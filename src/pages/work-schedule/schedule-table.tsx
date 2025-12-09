@@ -77,10 +77,6 @@ export default function ScheduleTable({
         }
     }
 
-    const formatMonthYear = (date: Date) => {
-        return format(date, "MMMM yyyy")
-    }
-
     return (
         <Card className="w-full mt-[50px]">
             <CardHeader>

@@ -1,7 +1,7 @@
 import { useDownloadAsExcel } from "@/hooks/useDownloadAsExcel"
 import { Download } from "lucide-react"
 import type { ReactNode } from "react"
-import { Button } from "../ui/button"
+import { Button, ButtonProps } from "../ui/button"
 
 type Props = {
     url: string
@@ -11,6 +11,7 @@ type Props = {
     variant?: ButtonVariant
     className?: string
     fileType?: string
+    addButtonProps?: ButtonProps
 }
 
 const DownloadAsExcel = ({
@@ -21,6 +22,7 @@ const DownloadAsExcel = ({
     variant = "secondary",
     className,
     fileType,
+    addButtonProps,
 }: Props) => {
     const { trigger, isFetching } = useDownloadAsExcel({ url, name, fileType })
     return (
@@ -30,6 +32,7 @@ const DownloadAsExcel = ({
             loading={isFetching}
             onClick={trigger}
             className={className}
+            {...addButtonProps}
         >
             {children}
         </Button>

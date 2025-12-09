@@ -1,6 +1,15 @@
 import { useLocation } from "@tanstack/react-router"
-import { CalendarDays, ClipboardList, ListOrdered, Route, Settings, Split, TrendingUp, Truck } from "lucide-react"
+import {
+    CalendarDays,
+    ClipboardList,
+    Route,
+    Settings,
+    Split,
+    TrendingUp,
+} from "lucide-react"
 import { ReactNode, useMemo } from "react"
+import { useUser } from "./useUser"
+
 
 export interface MenuItem {
     label: string
@@ -14,44 +23,47 @@ const filterMenuItems = (
     allowedModules: string[],
 ): MenuItem[] => {
     return items.reduce<MenuItem[]>((acc, item) => {
-        const isModuleAllowed = allowedModules.includes(item.label)
-        const hasVisibleSubItems = item.items?.some(
-            (sub) =>
-                allowedModules.includes(sub.label) ||
-                sub.items?.some((subsub) =>
-                    allowedModules.includes(subsub.label),
-                ),
-        )
+        const filteredItem: MenuItem = { ...item }
 
-        if (isModuleAllowed || hasVisibleSubItems) {
-            const filteredItem: MenuItem = { ...item }
-
-            if (item.items) {
-                filteredItem.items = filterMenuItems(item.items, allowedModules)
+        if (item.items) {
+            filteredItem.items = filterMenuItems(item.items, allowedModules)
+            if (filteredItem.items.length > 0) {
+                filteredItem.path = filteredItem.items[0].path
             }
-
-            acc.push(filteredItem)
         }
 
+        // const isAllowed =
+        //     (item.allowKey &&
+        //         allowedModules.includes(item.allowKey as Action)) ||
+        //     (filteredItem.items && filteredItem.items.length > 0)
+
+        // if (isAllowed) {
+        // }
+
+        acc.push(filteredItem)
         return acc
     }, [])
 }
 
-const findChildPaths = (items: MenuItem[], currentPath: string): MenuItem[] => {
-    for (const firstLevelItem of items) {
-        if (!firstLevelItem.items) continue
+const findChildPaths = (items: MenuItem[], pathname: string): MenuItem[] => {
+    for (const item of items) {
+        if (pathname === item.path || pathname.startsWith(item.path + "/")) {
+            return item.items ?? []
+        }
 
-        for (const secondLevelItem of firstLevelItem.items) {
-            if (!secondLevelItem.items) continue
-
-            for (const thirdLevelItem of secondLevelItem.items) {
-                if (thirdLevelItem.path === currentPath) {
-                    return secondLevelItem.items
-                }
+        if (item.items) {
+            const hasMatchingChild = item.items.some(
+                (subItem) =>
+                    pathname === subItem.path ||
+                    pathname.startsWith(subItem.path + "/"),
+            )
+            if (hasMatchingChild) {
+                return item.items
             }
 
-            if (secondLevelItem.path === currentPath) {
-                return secondLevelItem.items
+            const found = findChildPaths(item.items, pathname)
+            if (found.length > 0) {
+                return found
             }
         }
     }
@@ -59,37 +71,17 @@ const findChildPaths = (items: MenuItem[], currentPath: string): MenuItem[] => {
     return []
 }
 
-const getAllPaths = (filteredItems: MenuItem[]) =>
-    filteredItems?.flatMap((item) =>
-        item.items ? item.items.map((i) => i.path) : [item.path],
-    ) || []
-
-const getAllLabels = (items: MenuItem[]): string[] => {
-    const result: string[] = []
-
-    const traverse = (items: MenuItem[]) => {
-        for (const item of items) {
-            result.push(item.label)
-            if (item.items?.length) {
-                traverse(item.items)
-            }
-        }
-    }
-
-    traverse(items)
-    return result
-}
-
 export const usePaths = () => {
-    const pathname = useLocation().pathname
+    const { pathname } = useLocation()
+    const { actions } = useUser()
+
+    const safeActions: string[] = actions ?? []
 
     const items = useItems()
 
-    const allLabels = getAllLabels(items)
-
     const filteredItems = useMemo(
-        () => filterMenuItems(items, allLabels),
-        [items, allLabels],
+        () => filterMenuItems(items, safeActions),
+        [items, safeActions],
     )
 
     const childPaths = useMemo(
@@ -97,14 +89,8 @@ export const usePaths = () => {
         [filteredItems, pathname],
     )
 
-    const allPaths = useMemo(() => getAllPaths(filteredItems), [filteredItems])
-
-    const addOrder = allLabels.includes("Buyurtmalar")
-
     return {
         childPaths,
-        allPaths,
-        addOrder,
         filteredItems,
     }
 }
@@ -114,12 +100,12 @@ export const useItems = () =>
         () => [
             {
                 label: "Marshrut",
-                icon: <Route width={18} />, 
+                icon: <Route width={18} />,
                 path: "/route",
             },
             {
                 label: "Buyurtmalar",
-                icon: <Split width={18} />, 
+                icon: <Split width={18} />,
                 path: "/orders",
             },
             {
@@ -129,40 +115,70 @@ export const useItems = () =>
             },
             {
                 label: "Ish jadvali",
-                icon: <CalendarDays width={18} />, 
+                icon: <CalendarDays width={18} />,
                 path: "/work-schedule",
             },
             {
                 label: "Hisobotlar",
-                icon: <ClipboardList width={18} />, 
-                path: "/reports",
+                icon: <ClipboardList width={18} />,
+                path: "/reports/cars",
                 items: [
                     {
                         label: "Avtomobillar",
-                        path: "/cars",
+                        path: "/reports/cars",
                     },
                     {
                         label: "Haydovchilar",
-                        path: "/drivers",
+                        path: "/reports/drivers",
                     },
                     {
                         label: "Ekspeditorlar",
-                        path: "/freight-forwarders",
+                        path: "/reports/freight-forwarders",
                     },
                     {
                         label: "Agentlar",
-                        path: "/agents",
+                        path: "/reports/agents",
                     },
                     {
                         label: "Logistlar",
-                        path: "/logisticians",
+                        path: "/reports/logisticians",
                     },
                 ],
             },
             {
                 label: "Sozlamalar",
                 icon: <Settings width={18} />,
-                path: "/settings",
+                path: "/settings/products",
+                items: [
+                    {
+                        label: "Mahsulotlar",
+                        path: "/settings/products",
+                    },
+                    {
+                        label: "Haydovchilar",
+                        path: "/settings/drivers",
+                    },
+                    {
+                        label: "Avtomobillar",
+                        path: "/settings/cars",
+                    },
+                    {
+                        label: "Ekspeditorlar",
+                        path: "/settings/freight-forwarders",
+                    },
+                    {
+                        label: "Ombor",
+                        path: "/settings/warehouse",
+                    },
+                    {
+                        label: "Logistlar",
+                        path: "/settings/logisticians",
+                    },
+                    {
+                        label: "Mijozlar",
+                        path: "/settings/customers",
+                    },
+                ],
             },
         ],
         [],

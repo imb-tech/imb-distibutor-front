@@ -92,3 +92,28 @@ type ListResponse<T> = {
     count: number
     results: T[]
 }
+
+
+ 
+type Employee= {
+  id: string
+  employeeId: string
+  fullName: string
+  role: string
+  schedule: Record<string, boolean>  
+}
+
+type ScheduleTableProps= {
+  employees: Employee[]
+  month: Date
+  onScheduleChange?: (employeeId: string, date: string, isWorking: boolean) => void
+  readonly?: boolean
+}
+
+type DayInfo = {
+  date: Date
+  dayNumber: number
+  dayName: string
+  isWeekend: boolean
+  dateString: string
+}

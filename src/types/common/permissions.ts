@@ -5,7 +5,7 @@ type TPermissions = [
     "buyurtma-statusi",
     "haydovchilarni-korish",
     "reyestr",
-    "reyestr-distributor",
+    "reyestr-DISTRIBUTION",
     "reyestr-yopilganlar",
     "dispetcherlik",
     "dispetcherlar-nazorati",

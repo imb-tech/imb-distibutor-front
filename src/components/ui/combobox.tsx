@@ -109,7 +109,9 @@ export function Combobox<T extends Record<string, any>>({
                                     ?.[labelKey]?.toString() || value
                             :   label}
                         </div>
-                        <ChevronDown className=" h-4 w-4  text-primary  " />
+                        {!value && (
+                            <ChevronDown className=" h-4 w-4  text-primary  " />
+                        )}
                     </div>
                     {!!value && isClearIcon && (
                         <span

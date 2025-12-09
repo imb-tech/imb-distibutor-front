@@ -13,7 +13,7 @@ import { productData } from "./table-data"
 const Products = () => {
     const { getData, setData } = useGlobalStore()
     const item = getData<ProductsType>(SETTINGS_PRODUCTS)
-    const { isLoading } = useGet(SETTINGS_PRODUCTS)
+    const { isLoading } = useGet<ProductsType>(SETTINGS_PRODUCTS)
 
     const { openModal: openDeleteModal } = useModal("delete")
     const { openModal: openCreateModal } = useModal(`create`)

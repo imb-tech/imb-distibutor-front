@@ -20,9 +20,9 @@ type Profile = {
 type ProductsType = {
     id: number
     product_name:string
-    eslatma: string
+    note: string
     measurement_type: string
-    miqdor: string
-    narx_uz: string
-    jami_uz: string
+    quantity: string
+    price_uz: string
+    total_uz: string
 }

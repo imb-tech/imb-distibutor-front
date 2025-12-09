@@ -15,23 +15,25 @@ const AddProductModal = () => {
     const { closeModal } = useModal("create")
     const { getData, clearKey } = useGlobalStore()
 
-    const currentProduct = getData<ProductsType>(
-        SETTINGS_PRODUCTS,
-    )
+    const currentProduct = getData<ProductsType>(SETTINGS_PRODUCTS)
     const form = useForm<ProductsType>({
         defaultValues: currentProduct,
     })
 
     const { handleSubmit, reset } = form
 
-    const onSuccess = (text:string) => {
-        toast.success("Mahsulot muvaffaqiyatli qo'shildi")
+    const onSuccess = () => {
+        if (currentProduct?.id) {
+            toast.success("Mahsulot muvaffaqiyatli tahrirlandi!")
+        } else {
+            toast.success("Mahsulot muvaffaqiyatli qo'shildi")
+        }
+
         reset()
         clearKey(SETTINGS_PRODUCTS)
         closeModal()
         queryClient.refetchQueries({ queryKey: [SETTINGS_PRODUCTS] })
     }
-
 
     const { mutate: postMutate, isPending: isPendingCreate } = usePost({
         onSuccess,
@@ -66,7 +68,7 @@ const AddProductModal = () => {
                     />
                     <FormInput
                         required
-                        name="eslatma"
+                        name="note"
                         label="Eslatma"
                         methods={form}
                     />
@@ -76,23 +78,26 @@ const AddProductModal = () => {
                         label="O'lchov turlari"
                         methods={form}
                     />
-                    <FormInput
+                    <FormNumberInput
+                      thousandSeparator={" "}
                         required
-                        name="narx_uz"
+                        name="price_uz"
                         label="Narx uzs"
-                        methods={form}
+                        control={form.control}
                     />
                     <FormNumberInput
+                    thousandSeparator={" "}
                         required
-                        name="miqdor"
+                        name="quantity"
                         label="Midqor"
                         control={form.control}
                     />
-                    <FormInput
+                    <FormNumberInput
+                       thousandSeparator={" "}
                         required
-                        name="jami_uz"
+                        name="total_uz"
                         label="Jami uzs"
-                        methods={form}
+                        control={form.control}
                     />
 
                     <div className="flex items-center justify-end gap-2 md:col-span-2">

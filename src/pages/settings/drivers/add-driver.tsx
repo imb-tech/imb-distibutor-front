@@ -83,6 +83,10 @@ const AddDriverModal = () => {
                                 value: 14,
                                 message: "14 xonali bo'lishi kerak",
                             },
+                            min: {
+                                value: 14,
+                                message: "14 xonali bo'lishi kerak",
+                            },
                         }}
                         thousandSeparator={""}
                         required

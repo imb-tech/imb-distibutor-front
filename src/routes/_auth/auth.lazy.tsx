@@ -27,7 +27,6 @@ function AuthComponent() {
         mutate(LOGIN, data, {
             onSuccess(res) {
                 localStorage.setItem("token", res.access)
-                localStorage.setItem("user_id", res.id)
                 window.location.href = "/"
             },
             onError: (error) => handleFormError(error, form),

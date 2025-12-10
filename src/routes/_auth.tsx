@@ -4,7 +4,7 @@ export const Route = createFileRoute("/_auth")({
     component: AuthLayout,
     beforeLoad: () => {
         const token = localStorage.getItem("token")
-        if (!token) {
+        if (token) {
             throw redirect({
                 to: "/route",
             })

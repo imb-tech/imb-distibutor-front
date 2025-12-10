@@ -9,7 +9,7 @@ export const Route = createFileRoute("/_main")({
     component: MainLayout,
     beforeLoad: () => {
         const token = localStorage.getItem("token")
-        if (token) {
+        if (!token) {
             throw redirect({
                 to: "/auth",
             })

@@ -74,3 +74,21 @@ type WarehouseType = {
     map_location: string
     location: string
 }
+
+type LogisticiansType = {
+    id: number
+    full_name: string
+    phone_number: string
+    working_warehouse: string
+}
+type CustomersType = {
+    id: number
+    full_name: string
+    organization: string
+    location: string
+    map_location: string
+    koordination: string
+    working_days: string
+    phone_number: string
+    email: string
+}

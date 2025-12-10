@@ -16,7 +16,8 @@ export const SETTINGS_DRIVERS= "setting-drivers"
 export const SETTINGS_CARS= "setting-cars"
 export const SETTINGS_FORWARDERS = "setting-forwarder"
 export const SETTINGS_WAREHOUSE = "setting_warehouse"
-
+export const SETTINGS_LOGISTICIANS = "setting_logistician"
+export const SETTINGS_CUSTOMERS= "setting_customer"
 
 
 

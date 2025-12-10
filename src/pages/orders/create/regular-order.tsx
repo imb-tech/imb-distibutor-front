@@ -31,9 +31,9 @@ export const RegularOrders = ({ form }: Props) => {
                     placeholder="Ustuvorlik"
                     required
                     options={[
-                        { label: "High", value: "high" },
-                        { label: "Normal", value: "normal" },
-                        { label: "Low", value: "low" },
+                        { name: "High", id: "high" },
+                        { name: "Normal", id: "normal" },
+                        { name: "Low", id: "low" },
                     ]}
                     name="priority"
                     control={control}
@@ -45,6 +45,7 @@ export const RegularOrders = ({ form }: Props) => {
                         className={"!w-full"}
                         control={form.control}
                         name="date"
+                        placeholder="Sanani tanlang"
                     />
                 </div>
                 <FormCombobox
@@ -89,9 +90,9 @@ export const RegularOrders = ({ form }: Props) => {
                                 placeholder="Ustuvor transport"
                                 required
                                 options={[
-                                    { label: "Truck", value: "truck" },
-                                    { label: "Van", value: "van" },
-                                    { label: "Box", value: "box" },
+                                    { name: "Truck", id: "truck" },
+                                    { name: "Van", id: "van" },
+                                    { name: "Box", id: "box" },
                                 ]}
                                 name="preferred_transport"
                                 control={control}

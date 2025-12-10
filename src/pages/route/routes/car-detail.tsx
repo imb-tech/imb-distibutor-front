@@ -8,7 +8,7 @@ interface CarDetailsRowProps {
 
 export const CarDetailsRow = ({ car }: CarDetailsRowProps) => {
     return (
-        <div className="px-6 py-6 border-t dark:bg-black">
+        <div className="px-6 py-6 border-t dark:">
             <div>
                 <h1 className=" text-[18px] mb-4 flex items-center gap-2">
                     Do'konlar

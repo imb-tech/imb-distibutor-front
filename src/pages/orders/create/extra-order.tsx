@@ -33,6 +33,7 @@ export const ExtraOrders = ({ form, orderType, onOrderTypeChange }: Props) => {
                         className={"!w-full"}
                         control={form.control}
                         name="date"
+                        placeholder="Sanani tanlang"
                     />
                 </div>
             </div>

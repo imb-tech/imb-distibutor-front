@@ -1,7 +1,6 @@
 import FormInput from "@/components/form/input"
-import { FormNumberInput } from "@/components/form/number-input"
 import { Button } from "@/components/ui/button"
-import { SETTINGS_DRIVERS } from "@/constants/api-endpoints"
+import { SETTINGS_CUSTOMERS } from "@/constants/api-endpoints"
 import { useModal } from "@/hooks/useModal"
 import { usePatch } from "@/hooks/usePatch"
 import { usePost } from "@/hooks/usePost"
@@ -11,27 +10,27 @@ import { useForm } from "react-hook-form"
 
 import { toast } from "sonner"
 
-const AddDriverModal = () => {
+const AddCustomersModal = () => {
     const queryClient = useQueryClient()
     const { closeModal } = useModal("create")
     const { getData, clearKey } = useGlobalStore()
 
-    const currentDriver = getData<DriversType>(SETTINGS_DRIVERS)
-    const form = useForm<DriversType>({
-        defaultValues: currentDriver,
+    const currentCustomer = getData<CustomersType>(SETTINGS_CUSTOMERS)
+    const form = useForm<CustomersType>({
+        defaultValues: currentCustomer,
     })
 
     const { handleSubmit, reset } = form
 
     const onSuccess = () => {
-         toast.success(
-            `Avtomobil muvaffaqiyatli ${currentDriver?.id ? "tahrirlandi!" : "qo'shildi"} `,
+        toast.success(
+            `Mijoz muvaffaqiyatli ${currentCustomer?.id ? "tahrirlandi!" : "qo'shildi"} `,
         )
 
         reset()
-        clearKey(SETTINGS_DRIVERS)
+        clearKey(SETTINGS_CUSTOMERS)
         closeModal()
-        queryClient.refetchQueries({ queryKey: [SETTINGS_DRIVERS] })
+        queryClient.refetchQueries({ queryKey: [SETTINGS_CUSTOMERS] })
     }
 
     const { mutate: postMutate, isPending: isPendingCreate } = usePost({
@@ -44,11 +43,11 @@ const AddDriverModal = () => {
 
     const isPending = isPendingCreate || isPendingUpdate
 
-    const onSubmit = (values: DriversType) => {
-        if (currentDriver?.id) {
-            updateMutate(`${SETTINGS_DRIVERS}/${currentDriver.id}`, values)
+    const onSubmit = (values: CustomersType) => {
+        if (currentCustomer?.id) {
+            updateMutate(`${SETTINGS_CUSTOMERS}/${currentCustomer.id}`, values)
         } else {
-            postMutate(SETTINGS_DRIVERS, values)
+            postMutate(SETTINGS_CUSTOMERS, values)
         }
     }
 
@@ -67,55 +66,40 @@ const AddDriverModal = () => {
                     />
                     <FormInput
                         required
+                        name="organization"
+                        label="Tashkilot"
+                        methods={form}
+                    />
+                    <FormInput
+                        required
+                        name="location"
+                        label="Manzil"
+                        methods={form}
+                    />
+                    <FormInput
+                        required
+                        name="map_location"
+                        label="Manzil hududi"
+                        methods={form}
+                    />
+
+                    <FormInput
+                        required
+                        name="koordination"
+                        label="Koordinatsiya"
+                        methods={form}
+                    />
+
+                    <FormInput
+                        required
+                        name="working_days"
+                        label="Ombor"
+                        methods={form}
+                    />
+                    <FormInput
+                        required
                         name="phone_number"
                         label="Telefon raqami"
-                        methods={form}
-                    />
-                    <FormInput
-                        required
-                        name="passport_series"
-                        label="Pasport seriya va raqami"
-                        methods={form}
-                    />
-                    <FormNumberInput
-                        registerOptions={{
-                            max: {
-                                value: 14,
-                                message: "14 xonali bo'lishi kerak",
-                            },
-                            min: {
-                                value: 14,
-                                message: "14 xonali bo'lishi kerak",
-                            },
-                        }}
-                        thousandSeparator={""}
-                        required
-                        name="jshshir"
-                        label="JShShIR"
-                        control={form.control}
-                    />
-                    <FormInput
-                        required
-                        name="driver_license"
-                        label="Haydovchilik quvohnomasi"
-                        methods={form}
-                    />
-                    <FormInput
-                        required
-                        name="company_id"
-                        label="Kompanya ID"
-                        methods={form}
-                    />
-                    <FormInput
-                        required
-                        name="login"
-                        label="Login"
-                        methods={form}
-                    />
-                    <FormInput
-                        required
-                        name="parol"
-                        label="Parol"
                         methods={form}
                     />
 
@@ -134,4 +118,4 @@ const AddDriverModal = () => {
     )
 }
 
-export default AddDriverModal
+export default AddCustomersModal

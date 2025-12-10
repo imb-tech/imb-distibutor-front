@@ -19,12 +19,11 @@ type Profile = {
 
 type ProductsType = {
     id: number
-    product_name: string
-    note: string
-    measurement_type: string
-    quantity: string
-    price_uz: string
-    total_uz: string
+    name: string
+    description: string
+    unit: number       
+    price: string       
+    currency: number   
 }
 
 type DriversType = {
@@ -73,4 +72,22 @@ type WarehouseType = {
     longtitude: number
     map_location: string
     location: string
+}
+
+type LogisticiansType = {
+    id: number
+    full_name: string
+    phone_number: string
+    working_warehouse: string
+}
+type CustomersType = {
+    id: number
+    full_name: string
+    organization: string
+    location: string
+    map_location: string
+    koordination: string
+    working_days: string
+    phone_number: string
+    email: string
 }

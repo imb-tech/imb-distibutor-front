@@ -19,12 +19,11 @@ type Profile = {
 
 type ProductsType = {
     id: number
-    product_name: string
-    note: string
-    measurement_type: string
-    quantity: string
-    price_uz: string
-    total_uz: string
+    name: string
+    description: string
+    unit: number       
+    price: string       
+    currency: number   
 }
 
 type DriversType = {

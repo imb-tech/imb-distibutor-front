@@ -1,3 +1,4 @@
+import { FormCombobox } from "@/components/form/combobox"
 import FormInput from "@/components/form/input"
 import { FormNumberInput } from "@/components/form/number-input"
 import { Button } from "@/components/ui/button"
@@ -19,6 +20,15 @@ const AddProductModal = () => {
     const form = useForm<ProductsType>({
         defaultValues: currentProduct,
     })
+
+    const CURRENCY_OPTIONS = [
+        { label: "US Dollar (USD)", value: 1 },
+        { label: "Euro (EUR)", value: 2 },
+        { label: "Uzbekistani Som (UZS)", value: 3 },
+        { label: "Russian Ruble (RUB)", value: 4 },
+        { label: "Kazakhstani Tenge (KZT)", value: 5 },
+        { label: "Japanese Yen (JPY)", value: 6 },
+    ];
 
     const { handleSubmit, reset } = form
 
@@ -60,40 +70,38 @@ const AddProductModal = () => {
                 >
                     <FormInput
                         required
-                        name="product_name"
+                        name="name"
                         label="Nomi"
                         methods={form}
                     />
                     <FormInput
                         required
-                        name="note"
+                        name="description"
                         label="Eslatma"
                         methods={form}
                     />
                     <FormInput
                         required
-                        name="measurement_type"
+                        name="unit"
                         label="O'lchov turlari"
                         methods={form}
                     />
-                    <FormNumberInput
-                        required
-                        name="price_uz"
-                        label="Narx uzs"
+                    <FormCombobox
+                        name="currency"
                         control={form.control}
+                        placeholder="Valyuta"
+                        options={CURRENCY_OPTIONS.map((o) => ({ label: o.label, value: o.value }))}
+                        className="w-full"
+                        labelKey="label"
+                        valueKey="value"
                     />
                     <FormNumberInput
                         required
-                        name="quantity"
-                        label="Midqor"
+                        name="price"
+                        label="Narxi"
                         control={form.control}
                     />
-                    <FormNumberInput
-                        required
-                        name="total_uz"
-                        label="Jami uzs"
-                        control={form.control}
-                    />
+
 
                     <div className="flex items-center justify-end gap-2 md:col-span-2">
                         <Button

@@ -9,22 +9,12 @@ import TableHeader from "../table-header"
 import AddProductModal from "./add-modal"
 import { useoColumns } from "./cols"
 
-const productData = [
-    {
-        id: 1,
-        product_name: "Cola 0.33ml",
-        note: "-",
-        measurement_type: "dona",
-        quantity: "100",
-        price_uz: "750 000",
-        total_uz: "750 000",
-    },
-]
+
 
 const Products = () => {
     const { getData, setData } = useGlobalStore()
     const item = getData<ProductsType>(SETTINGS_PRODUCTS)
-    const { isLoading } = useGet<ProductsType>(SETTINGS_PRODUCTS)
+    const { data, isLoading } = useGet<ListResponse<ProductsType>>(SETTINGS_PRODUCTS)
 
     const { openModal: openDeleteModal } = useModal("delete")
     const { openModal: openCreateModal } = useModal(`create`)
@@ -42,10 +32,13 @@ const Products = () => {
     return (
         <div>
             <DataTable
-                data={productData}
+                data={data?.results}
                 columns={columns}
                 onDelete={handleDelete}
                 onEdit={({ original }) => handleEdit(original)}
+                paginationProps={{
+                    totalPages:data?.total_pages
+                }}
                 head={
                     <TableHeader
                         fileName="Mahsulotlar"

@@ -10,7 +10,6 @@ import {
 import { ReactNode, useMemo } from "react"
 import { useUser } from "./useUser"
 
-
 export interface MenuItem {
     label: string
     icon?: ReactNode
@@ -109,15 +108,16 @@ export const useItems = () =>
                 path: "/orders",
             },
             {
-                label: "Moliya",
-                icon: <TrendingUp width={18} />,
-                path: "/finance",
-            },
-            {
                 label: "Ish jadvali",
                 icon: <CalendarDays width={18} />,
                 path: "/work-schedule",
             },
+            {
+                label: "Moliya",
+                icon: <TrendingUp width={18} />,
+                path: "/finance",
+            },
+
             {
                 label: "Hisobotlar",
                 icon: <ClipboardList width={18} />,

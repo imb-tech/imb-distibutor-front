@@ -50,9 +50,10 @@ const AddProductModal = () => {
         )
 
         reset()
-        clearKey(SETTINGS_PRODUCTS)
+        
         closeModal()
         queryClient.refetchQueries({ queryKey: [SETTINGS_PRODUCTS] })
+        clearKey("create")
     }
 
     const onError = (error: any) => {

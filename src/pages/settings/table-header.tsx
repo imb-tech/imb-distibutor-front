@@ -13,7 +13,7 @@ interface TableHeaderProps {
 }
 
 const TableHeader = ({ fileName, storeKey }: TableHeaderProps) => {
-    const { openModal: openCreateModal } = useModal(SETTINGS_CUSTOMERS)
+    const { openModal: openCreateModal } = useModal("create")
     const { clearKey } = useGlobalStore()
 
     const handleAdd = () => {

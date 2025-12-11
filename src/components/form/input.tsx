@@ -19,7 +19,7 @@ interface IProps<IForm extends FieldValues> {
     wrapperClassName?: ClassNameValue
     hideError?: boolean
     prefixIcon?: React.ReactNode
-    uppercase?: boolean // Added new prop
+    uppercase?: boolean 
 }
 
 export function getNestedValue(obj: any, path: string): any {

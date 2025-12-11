@@ -68,6 +68,7 @@ type WarehouseType = {
     uuid: string
     name: string
     address: string
+    location: number[]
 }
 type LogisticiansType = {
     id: number
@@ -77,12 +78,41 @@ type LogisticiansType = {
 }
 type CustomersType = {
     id: number
-    full_name: string
-    organization: string
-    location: string
-    map_location: string
-    koordination: string
-    working_days: string
+    uuid:string
+    name: string
+    company_name: string
+    address: string
+    loading_coordinates: number[]
+    coordinates: number[]
     phone_number: string
     email: string
+    note: string
+    schedules: SchedulesType[]
+}
+
+type SchedulesType = {
+    id: number
+    client: number
+    day_of_week: number
+    start_time: string
+    end_time: string
+}
+
+type ScheduleFormType = {
+    day_of_week: number
+    start_time: string
+    end_time: string
+    enabled?: boolean
+}
+
+type CustomerFormType = {
+    name: string
+    company_name: string
+    address: string
+    loading_coordinates: string[]
+    coordinates: string[]
+    phone_number: string
+    email: string
+    note: string
+    schedules: ScheduleFormType[]
 }

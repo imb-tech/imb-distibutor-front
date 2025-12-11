@@ -272,7 +272,7 @@ export function DataTable<TData>({
                         )}
                     </Table>
                 )}
-                
+
                 {!loading && !!data?.length && (
                     <Table
                         className={`${className} select-text bg-card rounded-md `}
@@ -399,7 +399,6 @@ export function DataTable<TData>({
                                         rowColor?.(row.original),
                                         index % 2 !== 0 && "bg-secondary/70",
                                     )}
-
                                 >
                                     {selecteds_row && (
                                         <TableCell className="w-8 ">
@@ -490,4 +489,3 @@ export function DataTable<TData>({
         </main>
     )
 }
-

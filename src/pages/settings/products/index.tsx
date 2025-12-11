@@ -8,13 +8,19 @@ import { useGlobalStore } from "@/store/global-store"
 import TableHeader from "../table-header"
 import AddProductModal from "./add-modal"
 import { useoColumns } from "./cols"
+import { count } from "console"
+import { useSearch } from "@tanstack/react-router"
 
 
 
 const Products = () => {
     const { getData, setData } = useGlobalStore()
     const item = getData<ProductsType>(SETTINGS_PRODUCTS)
-    const { data, isLoading } = useGet<ListResponse<ProductsType>>(SETTINGS_PRODUCTS)
+    const search = useSearch({ from: '/_main/settings/products' })
+
+    const { data, isLoading } = useGet<ListResponse<ProductsType>>(SETTINGS_PRODUCTS, {
+        params: search
+    })
 
     const { openModal: openDeleteModal } = useModal("delete")
     const { openModal: openCreateModal } = useModal(`create`)
@@ -32,12 +38,13 @@ const Products = () => {
     return (
         <div>
             <DataTable
+                loading={isLoading}
                 data={data?.results}
                 columns={columns}
                 onDelete={handleDelete}
                 onEdit={({ original }) => handleEdit(original)}
                 paginationProps={{
-                    totalPages:data?.total_pages
+                    totalPages: data?.total_pages,
                 }}
                 head={
                     <TableHeader
@@ -49,12 +56,12 @@ const Products = () => {
             />
             <Modal
                 size="max-w-2xl"
-                title={`Mahsulot ${item?.id ? "tahrirlash" : "qo'shish"}`}
+                title={`Mahsulot ${item?.uuid ? "tahrirlash" : "qo'shish"}`}
                 modalKey="create"
             >
                 <AddProductModal />
             </Modal>
-            <DeleteModal path={SETTINGS_PRODUCTS} id={item?.id} />
+            <DeleteModal path={SETTINGS_PRODUCTS} id={item?.uuid} />
         </div>
     )
 }

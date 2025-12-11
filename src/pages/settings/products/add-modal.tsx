@@ -30,11 +30,23 @@ const AddProductModal = () => {
         { label: "Japanese Yen (JPY)", value: 6 },
     ];
 
-    const { handleSubmit, reset } = form
+    const UNIT_OPTIONS = [
+        { value: 0, label: 'Pieces' },
+        { value: 1, label: 'Kg' },
+        { value: 2, label: 'Pound' },
+        { value: 3, label: 'Square meter' },
+        { value: 4, label: 'Liter' },
+        { value: 5, label: 'Cubic meter' },
+        { value: 6, label: 'Gallon' },
+    ]
+
+
+
+    const { handleSubmit, reset, setError, formState: { errors } } = form
 
     const onSuccess = () => {
         toast.success(
-            `Mahsulot muvaffaqiyatli ${currentProduct?.id ? "tahrirlandi!" : "qo'shildi"} `,
+            `Mahsulot muvaffaqiyatli ${currentProduct?.uuid ? "tahrirlandi!" : "qo'shildi"} `,
         )
 
         reset()
@@ -43,19 +55,43 @@ const AddProductModal = () => {
         queryClient.refetchQueries({ queryKey: [SETTINGS_PRODUCTS] })
     }
 
+    const onError = (error: any) => {
+        if (error.response?.data) {
+            const errorData = error.response.data
+
+
+            Object.keys(errorData).forEach((fieldName) => {
+                const errorMessages = errorData[fieldName]
+                if (errorMessages && errorMessages.length > 0) {
+                    setError(fieldName as keyof ProductsType, {
+                        type: "server",
+                        message: errorMessages[0]
+                    })
+                }
+            })
+        } else {
+            toast.error("Xatolik yuz berdi")
+        }
+    }
+
+
     const { mutate: postMutate, isPending: isPendingCreate } = usePost({
         onSuccess,
+        onError
     })
 
     const { mutate: updateMutate, isPending: isPendingUpdate } = usePatch({
         onSuccess,
+        onError
     })
+
+
 
     const isPending = isPendingCreate || isPendingUpdate
 
     const onSubmit = (values: ProductsType) => {
-        if (currentProduct?.id) {
-            updateMutate(`${SETTINGS_PRODUCTS}/${currentProduct.id}`, values)
+        if (currentProduct?.uuid) {
+            updateMutate(`${SETTINGS_PRODUCTS}/${currentProduct.uuid}`, values)
         } else {
             postMutate(SETTINGS_PRODUCTS, values)
         }
@@ -80,11 +116,14 @@ const AddProductModal = () => {
                         label="Eslatma"
                         methods={form}
                     />
-                    <FormInput
-                        required
+                    <FormCombobox
                         name="unit"
                         label="O'lchov turlari"
-                        methods={form}
+                        control={form.control}
+                        options={UNIT_OPTIONS.map((o) => ({ label: o.label, value: o.value }))} labelKey="label"
+                        valueKey="value"
+                        placeholder="Birlikni tanlang"
+
                     />
                     <FormCombobox
                         name="currency"

@@ -162,10 +162,10 @@ export const useItems = () =>
                         label: "Avtomobillar",
                         path: "/settings/cars",
                     },
-                    {
-                        label: "Ekspeditorlar",
-                        path: "/settings/freight-forwarders",
-                    },
+                    // {
+                    //     label: "Ekspeditorlar",
+                    //     path: "/settings/freight-forwarders",
+                    // },
                     {
                         label: "Ombor",
                         path: "/settings/warehouse",

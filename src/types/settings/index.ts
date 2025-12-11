@@ -18,12 +18,13 @@ type Profile = {
 }
 
 type ProductsType = {
+    uuid: string
     id: number
     name: string
     description: string
-    unit: number       
-    price: string       
-    currency: number   
+    unit: number
+    price: string
+    currency: number
 }
 
 type DriversType = {
@@ -42,20 +43,17 @@ type DriversType = {
 }
 
 type CarsType = {
-    id: number
-    path: string
-    car_model: string
-    car_number: string
-    driver: string
-    license_type: string
-    forwarder: string
-    series_number: string
+    uuid: string
+    driver: number
+    type: number
+    number: string
+    license: string
+    serial_number: string
     year: string
-    fuel_type: string
-    load_capacity: string
-    warehouse: string
+    fuel_type: number
+    size: number
+    depot: number
 }
-
 type ForwardersType = {
     id: number
     full_name: string
@@ -66,14 +64,11 @@ type ForwardersType = {
 }
 
 type WarehouseType = {
-    id: number
+    id?: string
+    uuid: string
+    name: string
     address: string
-    latitude: number
-    longtitude: number
-    map_location: string
-    location: string
 }
-
 type LogisticiansType = {
     id: number
     full_name: string

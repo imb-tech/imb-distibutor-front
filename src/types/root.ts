@@ -6,7 +6,7 @@ type SearchParams = {
     date?: string
     month?: string
     search?: string
-    tabs?: 'card' | 'table'
+    tabs?: string
     day?: string
     page_size?: string
     page_tabs?: string
@@ -19,5 +19,6 @@ type SearchParams = {
     today?: string
     from?:string
     to?:string
+    route_id?:string
     selected_loading_place?: string
 };

@@ -1,36 +1,39 @@
 import { ColumnDef } from "@tanstack/react-table"
 import { useMemo } from "react"
 
- 
 export const useColumnsWarehouseTable = () => {
     return useMemo<ColumnDef<WarehouseType>[]>(
         () => [
+            {
+                accessorKey: "name", // Add name column if you want it
+                header: "Ombor nomi",
+                enableSorting: true,
+            },
             {
                 accessorKey: "address",
                 header: "Manzil",
                 enableSorting: true,
             },
             {
-                accessorKey: "latitude",
-                header: "Kenglik",
+                accessorKey: "location",
+                header: "Kenglik (Latitude)",
                 enableSorting: true,
-            },
-            {
-                accessorKey: "longtitude",
-                header: "Uzunlik",
-                enableSorting: true,
-            },
-            {
-                accessorKey: "map_location",
-                header: "Xarita hududi",
-                enableSorting: true,
+                cell: ({ row }) => {
+                    const location = row.original.location
+                    // location[1] is latitude (second element in [longitude, latitude])
+                    return location && location[1] ? location[1].toFixed(6) : "—"
+                },
             },
             {
                 accessorKey: "location",
-                header: "Lokatsiya",
+                header: "Uzunlik (Longitude)",
                 enableSorting: true,
+                cell: ({ row }) => {
+                    const location = row.original.location
+                    
+                    return location && location[0] ? location[0].toFixed(6) : "—"
+                },
             },
-          
         ],
         [],
     )

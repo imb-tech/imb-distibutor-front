@@ -1,3 +1,4 @@
+import { FormCheckbox } from "@/components/form/checkbox"
 import FormInput from "@/components/form/input"
 import { Button } from "@/components/ui/button"
 import { SETTINGS_CUSTOMERS } from "@/constants/api-endpoints"
@@ -6,9 +7,10 @@ import { usePatch } from "@/hooks/usePatch"
 import { usePost } from "@/hooks/usePost"
 import { useGlobalStore } from "@/store/global-store"
 import { useQueryClient } from "@tanstack/react-query"
-import { useForm } from "react-hook-form"
-
+import { Clock, MapPin } from "lucide-react"
+import { useFieldArray, useForm } from "react-hook-form"
 import { toast } from "sonner"
+
 
 const AddCustomersModal = () => {
     const queryClient = useQueryClient()
@@ -16,21 +18,92 @@ const AddCustomersModal = () => {
     const { getData, clearKey } = useGlobalStore()
 
     const currentCustomer = getData<CustomersType>(SETTINGS_CUSTOMERS)
-    const form = useForm<CustomersType>({
-        defaultValues: currentCustomer,
+
+    const getDefaultValues = (): CustomerFormType => {
+        if (currentCustomer) {
+            const coordinates = currentCustomer.coordinates?.map(
+                (c) => c?.toString() || "",
+            ) || ["", ""]
+            const loadingCoordinates = currentCustomer.loading_coordinates?.map(
+                (c) => c?.toString() || "",
+            ) || ["", ""]
+
+            const schedules: ScheduleFormType[] = []
+
+            for (let i = 0; i < 7; i++) {
+                const existingSchedule = currentCustomer.schedules?.find(
+                    (s) => s.day_of_week === i,
+                )
+
+                if (existingSchedule) {
+                    schedules.push({
+                        day_of_week: i,
+                        start_time: existingSchedule.start_time.substring(0, 5), 
+                        end_time: existingSchedule.end_time.substring(0, 5), 
+                        enabled: true,
+                    })
+                } else {
+                    schedules.push({
+                        day_of_week: i,
+                        start_time: "09:00",
+                        end_time: "18:00",
+                        enabled: false,
+                    })
+                }
+            }
+
+            return {
+                name: currentCustomer.name || "",
+                company_name: currentCustomer.company_name || "",
+                address: currentCustomer.address || "",
+                loading_coordinates: loadingCoordinates,
+                coordinates: coordinates,
+                phone_number: currentCustomer.phone_number || "",
+                email: currentCustomer.email || "",
+                note: currentCustomer.note || "",
+                schedules,
+            }
+        }
+
+        return {
+            name: "",
+            company_name: "",
+            address: "",
+            loading_coordinates: ["", ""],
+            coordinates: ["", ""],
+            phone_number: "",
+            email: "",
+            note: "",
+            schedules: Array(7)
+                .fill(null)
+                .map((_, index) => ({
+                    day_of_week: index,
+                    start_time: "09:00",
+                    end_time: "18:00",
+                    enabled: false,
+                })),
+        }
+    }
+
+    const form = useForm<CustomerFormType>({
+        defaultValues: getDefaultValues(),
     })
 
-    const { handleSubmit, reset } = form
+    const { handleSubmit, control, watch } = form
+
+    const { fields } = useFieldArray({
+        control,
+        name: "schedules",
+    })
 
     const onSuccess = () => {
         toast.success(
-            `Mijoz muvaffaqiyatli ${currentCustomer?.id ? "tahrirlandi!" : "qo'shildi"} `,
+            `Mijoz muvaffaqiyatli ${currentCustomer?.id? "tahrirlandi!" : "qo'shildi"} `,
         )
 
-        reset()
         clearKey(SETTINGS_CUSTOMERS)
         closeModal()
-        queryClient.refetchQueries({ queryKey: [SETTINGS_CUSTOMERS] })
+        queryClient.invalidateQueries({ queryKey: [SETTINGS_CUSTOMERS] })
     }
 
     const { mutate: postMutate, isPending: isPendingCreate } = usePost({
@@ -43,57 +116,83 @@ const AddCustomersModal = () => {
 
     const isPending = isPendingCreate || isPendingUpdate
 
-    const onSubmit = (values: CustomersType) => {
+    const onSubmit = (values: CustomerFormType) => {
+        const enabledSchedules = values.schedules
+            .filter((schedule) => schedule.enabled)
+            .map((schedule) => ({
+                day_of_week: schedule.day_of_week,
+                start_time: `${schedule.start_time}:00`,
+                end_time: `${schedule.end_time}:00`,
+            }))
+
+        const coordinates = [
+            parseFloat(values.coordinates[0]) || 0,
+            parseFloat(values.coordinates[1]) || 0,
+        ]
+
+        const loading_coordinates =
+            values.loading_coordinates[0] && values.loading_coordinates[1] ?
+                [
+                    parseFloat(values.loading_coordinates[0]) || 0,
+                    parseFloat(values.loading_coordinates[1]) || 0,
+                ]
+            :   null
+
+        const formattedValues = {
+            name: values.name,
+            company_name: values.company_name,
+            address: values.address,
+            coordinates: coordinates,
+            loading_coordinates: loading_coordinates,
+            phone_number: values.phone_number,
+            email: values.email,
+            note: values.note,
+            schedules: enabledSchedules,
+        }
+
         if (currentCustomer?.id) {
-            updateMutate(`${SETTINGS_CUSTOMERS}/${currentCustomer.id}`, values)
+            updateMutate(
+                `${SETTINGS_CUSTOMERS}/${currentCustomer.uuid}`,
+                formattedValues,
+            )
         } else {
-            postMutate(SETTINGS_CUSTOMERS, values)
+            postMutate(SETTINGS_CUSTOMERS, formattedValues)
         }
     }
 
+    const weekDays = [
+        { id: 0, label: "Yakshanba" },
+        { id: 1, label: "Dushanba" },
+        { id: 2, label: "Seshanba" },
+        { id: 3, label: "Chorshanba" },
+        { id: 4, label: "Payshanba" },
+        { id: 5, label: "Juma" },
+        { id: 6, label: "Shanba" },
+    ]
+
     return (
-        <>
-            <div className="w-full max-w-4xl mx-auto p-1">
-                <form
-                    onSubmit={handleSubmit(onSubmit)}
-                    className="grid md:grid-cols-2 gap-4"
-                >
+        <div className="max-h-[80vh] overflow-y-auto no-scrollbar-x p-1">
+            <form
+                onSubmit={handleSubmit(onSubmit)}
+                className="grid grid-cols-1 lg:grid-cols-2 gap-6"
+            >
+                <div className="space-y-4">
                     <FormInput
                         required
-                        name="full_name"
+                        name="name"
                         label="F.I.O"
                         methods={form}
                     />
                     <FormInput
                         required
-                        name="organization"
-                        label="Tashkilot"
+                        name="company_name"
+                        label="Tashkilot nomi"
                         methods={form}
                     />
                     <FormInput
                         required
-                        name="location"
+                        name="address"
                         label="Manzil"
-                        methods={form}
-                    />
-                    <FormInput
-                        required
-                        name="map_location"
-                        label="Manzil hududi"
-                        methods={form}
-                    />
-
-                    <FormInput
-                        required
-                        name="koordination"
-                        label="Koordinatsiya"
-                        methods={form}
-                    />
-
-                    <FormInput
-                        required
-                        name="working_days"
-                        label="Ombor"
                         methods={form}
                     />
                     <FormInput
@@ -102,19 +201,139 @@ const AddCustomersModal = () => {
                         label="Telefon raqami"
                         methods={form}
                     />
+                    <FormInput
+                        name="email"
+                        label="Email"
+                        type="email"
+                        methods={form}
+                    />
 
-                    <div className="flex items-center justify-end gap-2 md:col-span-2">
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium leading-none">
+                            Koordinatalar (latitude, longitude)
+                        </label>
+                        <div className="grid grid-cols-2 gap-2">
+                            <FormInput
+                                name="coordinates.0"
+                                label="Latitude"
+                                prefixIcon={<MapPin className="h-4 w-4" />}
+                                methods={form}
+                                placeholder="41.314677"
+                                type="number"
+                                step="0.000001"
+                            />
+                            <FormInput
+                                name="coordinates.1"
+                                label="Longitude"
+                                prefixIcon={<MapPin className="h-4 w-4" />}
+                                methods={form}
+                                placeholder="68.087721"
+                                type="number"
+                                step="0.000001"
+                            />
+                        </div>
+                    </div>
+
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium leading-none">
+                            Yuk olish koordinatalari (latitude, longitude)
+                        </label>
+                        <div className="grid grid-cols-2 gap-2">
+                            <FormInput
+                                name="loading_coordinates.0"
+                                label="Latitude"
+                                prefixIcon={<MapPin className="h-4 w-4" />}
+                                methods={form}
+                                placeholder="41.314677"
+                                type="number"
+                                step="0.000001"
+                            />
+                            <FormInput
+                                name="loading_coordinates.1"
+                                label="Longitude"
+                                prefixIcon={<MapPin className="h-4 w-4" />}
+                                methods={form}
+                                placeholder="68.087721"
+                                type="number"
+                                step="0.000001"
+                            />
+                        </div>
+                    </div>
+
+                    <FormInput name="note" label="Izoh" methods={form} />
+                </div>
+
+                <div className="space-y-4">
+                    <div className="text-sm font-medium">Ish jadvali</div>
+
+                    <div className="space-y-3 max-h-[400px] pr-2">
+                        {weekDays.map((day, index) => {
+                            return (
+                                <div
+                                    key={day.id}
+                                    className="flex items-start gap-3 p-3 border rounded-lg"
+                                >
+                                    <div className="min-w-[100px] pt-2">
+                                        <FormCheckbox
+                                            control={control}
+                                            name={`schedules.${index}.enabled`}
+                                            label={day.label}
+                                        />
+                                    </div>
+
+                                    <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                        <div className="space-y-1">
+                                            <FormInput
+                                                prefixIcon={
+                                                    <Clock className="h-4 w-4" />
+                                                }
+                                                methods={form}
+                                                name={`schedules.${index}.start_time`}
+                                                type="time"
+                                                disabled={
+                                                    !watch(
+                                                        `schedules.${index}.enabled`,
+                                                    )
+                                                }
+                                                className="w-full"
+                                            />
+                                        </div>
+                                        <div className="space-y-1">
+                                            <FormInput
+                                                prefixIcon={
+                                                    <Clock className="h-4 w-4" />
+                                                }
+                                                methods={form}
+                                                name={`schedules.${index}.end_time`}
+                                                type="time"
+                                                disabled={
+                                                    !watch(
+                                                        `schedules.${index}.enabled`,
+                                                    )
+                                                }
+                                                className="w-full"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            )
+                        })}
+                    </div>
+                </div>
+
+                <div className="lg:col-span-2 border-t pt-4 mt-2 ">
+                    <div className="flex items-center justify-end gap-2">
                         <Button
-                            className="min-w-36 w-full md:w-max"
+                            className="min-w-36"
                             type="submit"
                             loading={isPending}
                         >
-                            {"Saqlash"}
+                            Saqlash
                         </Button>
                     </div>
-                </form>
-            </div>
-        </>
+                </div>
+            </form>
+        </div>
     )
 }
 

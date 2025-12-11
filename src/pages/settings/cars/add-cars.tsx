@@ -26,7 +26,6 @@ const VEHICLE_TYPE_OPTIONS = [
     { label: "Treyler", value: 4 },
     { label: "Maxsus texnika", value: 7 },
     { label: "Refrijerator", value: 10 },
-    // add more if needed
 ]
 
 const AddCarsModal = () => {

@@ -9,7 +9,7 @@ import {
     Route,
     Truck,
 } from "lucide-react"
-import { CarDetailsRow } from "./car-detail"
+import { CarDetailsRow } from "../table-detail"
 
 interface CarTableRowProps {
     car: CarsTypeInOrders

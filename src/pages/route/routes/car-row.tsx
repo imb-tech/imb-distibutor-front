@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { TableCell, TableRow } from "@/components/ui/table"
+import { useNavigate, useSearch } from "@tanstack/react-router"
 import {
     ChevronDown,
     CircleDollarSign,
@@ -13,86 +14,70 @@ import { CarDetailsRow } from "./car-detail"
 interface CarTableRowProps {
     car: CarsTypeInOrders
     index: number
-    isExpanded: boolean
-    onToggle: (id: number) => void
 }
 
-export const CarTableRow = ({
-    car,
-    index,
-    isExpanded,
-    onToggle,
-}: CarTableRowProps) => {
-    const handleClick = (e: React.MouseEvent) => {
-        if ((e.target as HTMLElement).closest("button")) return
-        onToggle(car.id)
-    }
+export const CarTableRow = ({ car, index }: CarTableRowProps) => {
+    const search = useSearch({ from: "/_main/route/" })
+    const { route_id } = search
+    const navigate = useNavigate()
+
+    const cols = [
+        { icon: <Package size={16} />, value: car.load_capacity },
+        { icon: <Route size={16} />, value: car.path },
+        {
+            icon: <CircleUser size={16} className="text-primary" />,
+            value: car.driver,
+        },
+        {
+            icon: <CircleDollarSign size={16} className="text-primary" />,
+            value: car.forwarder,
+        },
+        {
+            icon: <Truck size={16} className="text-primary" />,
+            value: car.car_model,
+        },
+        { icon: null, value: car.car_number },
+    ]
 
     return (
         <>
             <TableRow
-                className={` cursor-pointer border-b-0 ${
-                    isExpanded ? "bg-secondary" : ""
-                }`}
-                onClick={handleClick}
+                className={`cursor-pointer ${route_id == String(car.id) ? "bg-secondary" : ""}`}
+                onClick={() => {
+                    navigate({
+                        to: "/route",
+                        search: {
+                            ...search,
+                            route_id: route_id ? undefined : String(car.id),
+                        },
+                    })
+                }}
             >
                 <TableCell>{index + 1}</TableCell>
-                <TableCell>
-                    <div className="flex items-center gap-[5px] bg-accent border-slate-200 dark:border-accent border-2 rounded-[10px] p-[10px]">
-                        <Package size={16} />
-                        {car.load_capacity}
-                    </div>
-                </TableCell>
-                <TableCell>
-                    <div className="flex items-center gap-[5px] bg-accent border-slate-200 dark:border-accent border-2 rounded-[10px] p-[10px]">
-                        <Route size={16} />
-                        {car.path}
-                    </div>
-                </TableCell>
-                <TableCell className="font-mono">
-                    <div className="flex items-center gap-[5px] bg-accent border-slate-200 dark:border-accent border-2 rounded-[10px] p-[10px]">
-                        <CircleUser className="text-primary" size={16} />
-                        {car.driver}
-                    </div>
-                </TableCell>
-                <TableCell>
-                    <div className="flex items-center gap-[5px] bg-accent border-slate-200 dark:border-accent border-2 rounded-[10px] p-[10px]">
-                        <CircleDollarSign className="text-primary" size={16} />
-                        {car.forwarder}
-                    </div>
-                </TableCell>
-                <TableCell>
-                    <div className="flex items-center gap-[5px] bg-accent border-slate-200 dark:border-accent border-2 rounded-[10px] p-[10px]">
-                        <Truck className="text-primary" size={16} />
-                        {car.car_model}
-                    </div>
-                </TableCell>
-                <TableCell>
-                    <div className="flex items-center gap-[5px] bg-accent border-slate-200 dark:border-accent border-2 rounded-[10px] p-[10px]">
-                        {car.car_number}
-                    </div>
-                </TableCell>
+
+                {cols.map((cell, i) => (
+                    <TableCell key={i}>
+                        <div className="flex items-center gap-[5px] bg-secondary rounded-lg px-3 py-2">
+                            {cell.icon}
+                            {cell.value}
+                        </div>
+                    </TableCell>
+                ))}
+
                 <TableCell className="text-right p-0">
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        className="h-8 w-8 p-0"
-                        onClick={(e) => {
-                            e.stopPropagation()
-                            onToggle(car.id)
-                        }}
-                    >
+                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
                         <ChevronDown
-                            className={`h-4 w-4 transition-transform ${
-                                isExpanded ? "rotate-180" : ""
+                            className={`h-5 w-5 transition-transform ${
+                                route_id == String(car.id) ? "rotate-180" : ""
                             }`}
                         />
                     </Button>
                 </TableCell>
             </TableRow>
-            {isExpanded && (
-                <TableRow className="border-t-0">
-                    <TableCell colSpan={8} className="p-0 bg-gray-50/50">
+
+            {route_id == String(car.id) && (
+                <TableRow>
+                    <TableCell colSpan={8} className="p-0">
                         <CarDetailsRow car={car} />
                     </TableCell>
                 </TableRow>

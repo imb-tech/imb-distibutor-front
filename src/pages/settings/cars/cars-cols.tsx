@@ -1,65 +1,97 @@
 import { ColumnDef } from "@tanstack/react-table"
 import { useMemo } from "react"
+import { format } from "date-fns"
+
+// Optional: if you want to show human-readable values for enums
+const FUEL_TYPES: Record<number, string> = {
+  1: "Benzin",
+  2: "Dizel",
+  3: "Gaz",
+  4: "Elektr",
+  5: "Gibrid",
+  6: "Propan",
+}
+
+const VEHICLE_TYPES: Record<number, string> = {
+  1: "Yengil avtomobil",
+  2: "Yuk avtomobili",
+  3: "Avtobus",
+  4: "Treyler",
+  5: "Maxsus texnika",
+  // add more as needed
+}
 
 export const useColumnsCarsTable = () => {
-    return useMemo<ColumnDef<CarsType>[]>(
-        () => [
-            {
-                accessorKey: "path",
-                header: "Harakatlanish",
-                enableSorting: true,
-            },
-            {
-                accessorKey: "car_model",
-                header: "Avtomobil rusimi",
-                enableSorting: true,
-            },
-            {
-                accessorKey: "car_number",
-                header: "Avtomobil raqami",
-                enableSorting: true,
-            },
-            {
-                accessorKey: "driver",
-                header: "Haydovchi",
-                enableSorting: true,
-            },
-            {
-                accessorKey: "license_type",
-                header: "Guvohnoma turi",
-                enableSorting: true,
-            },
-            {
-                accessorKey: "forwarder",
-                header: "Ekspeditor",
-                enableSorting: true,
-            },
-            {
-                accessorKey: "series_number",
-                header: "Seriya raqami",
-                enableSorting: true,
-            },
-            {
-                accessorKey: "year",
-                header: "Ishlab chiqarilgan yili",
-                enableSorting: true,
-            },
-            {
-                accessorKey: "fuel_type",
-                header: "Yoqilg'i turi",
-                enableSorting: true,
-            },
-            {
-                accessorKey: "load_capacity",
-                header: "Yuk sig'imi",
-                enableSorting: true,
-            },
-            {
-                accessorKey: "warehouse",
-                header: "Ombor",
-                enableSorting: true,
-            },
-        ],
-        [],
-    )
+  return useMemo<ColumnDef<CarsType>[]>( // or define proper type instead of `any`
+    () => [
+      {
+        accessorKey: "number",
+        header: "Avtomobil raqami",
+        enableSorting: true,
+        cell: ({ row }) => (
+          <div className="font-medium">{row.original.number}</div>
+        ),
+      },
+      {
+        accessorKey: "type",
+        header: "Avtomobil turi",
+        enableSorting: true,
+        cell: ({ row }) => {
+          const typeId = row.original.type
+          return <span>{VEHICLE_TYPES[typeId] || `Turi ${typeId}`}</span>
+        },
+      },
+      {
+        accessorKey: "driver",
+        header: "Haydovchi ID",
+        enableSorting: true,
+        cell: ({ row }) => `ID: ${row.original.driver}`,
+      },
+      {
+        accessorKey: "license",
+        header: "Guvohnoma raqami",
+        enableSorting: true,
+      },
+      {
+        accessorKey: "serial_number",
+        header: "Seriya raqami",
+        enableSorting: true,
+      },
+      {
+        accessorKey: "year",
+        header: "Ishlab chiqarilgan yili",
+        enableSorting: true,
+        cell: ({ row }) => {
+          const date = row.original.year
+          return date ? format(new Date(date), "dd.MM.yyyy") : "-"
+        },
+      },
+      {
+        accessorKey: "fuel_type",
+        header: "Yoqilg'i turi",
+        enableSorting: true,
+        cell: ({ row }) => {
+          const fuelId = row.original.fuel_type
+          return <span>{FUEL_TYPES[fuelId] || `Noma'lum (${fuelId})`}</span>
+        },
+      },
+      {
+        accessorKey: "size",
+        header: "Yuk sig'imi (kg)",
+        enableSorting: true,
+        cell: ({ row }) => {
+          const size = row.original.size
+          return size ? `${size.toLocaleString()} kg` : "-"
+        },
+      },
+      {
+        accessorKey: "depot",
+        header: "Ombor / Depo",
+        enableSorting: true,
+        cell: ({ row }) => `Depo #${row.original.depot}`,
+      },
+     
+    ],
+    []
+  )
 }

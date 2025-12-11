@@ -14,11 +14,6 @@ import { orderTabs } from "./constants"
 import { AddOrder } from "./create"
 
 import ParamInput from "@/components/as-params/input"
-import { orders } from "./constants"
-
-const allData = Array.from({ length: 25 }, (_, i) => ({
-    ...orders[i % orders.length],
-}))
 
 const OrdersMain = () => {
     const navigate = useNavigate()
@@ -27,8 +22,10 @@ const OrdersMain = () => {
     const { openModal: createOrder } = useModal(ORDERS)
     const { openModal: deleteOrder } = useModal("delete")
     const { setData, getData, clearKey } = useGlobalStore()
+    const { data, isLoading } = useGet<ListResponse<OrderRow>>(ORDERS)
+
     const currentStaff = getData<OrderRow>(ORDERS)
-    const { isLoading } = useGet<OrderRow>(ORDERS)
+
 
     const handleDelete = (item: OrderRow) => {
         setData<OrderRow>(ORDERS, item)
@@ -49,7 +46,7 @@ const OrdersMain = () => {
             to: "/orders",
             search: {
                 ...search,
-                today: new Date().toISOString().split("T")[0], // YYYY-MM-DD
+                today: new Date().toISOString().split("T")[0],
                 from: undefined,
                 to: undefined,
             },
@@ -76,9 +73,10 @@ const OrdersMain = () => {
     return (
         <div>
             <DataTable
+                loading={isLoading}
                 numeration
                 columns={cols()}
-                data={allData}
+                data={data?.results}
                 onEdit={(row) => handleEdit(row.original)}
                 // loading={isLoading}
                 onDelete={(row) => handleDelete(row.original)}
@@ -133,7 +131,7 @@ const OrdersMain = () => {
                 title={
                     currentStaff?.id ?
                         "Buyurtma tahrirlash"
-                    :   "Buyurtma qo'shish"
+                        : "Buyurtma qo'shish"
                 }
             >
                 <div className=" max-h-[80vh] overflow-y-auto no-scrollbar-x p-0.5">

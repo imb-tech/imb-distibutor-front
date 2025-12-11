@@ -14,11 +14,11 @@ export const ORDERS_WINDOW="/order"
 
 export const SETTINGS_PRODUCTS= "setting/products"
 export const SETTINGS_DRIVERS= "setting-drivers"
-export const SETTINGS_CARS= "setting-cars"
+export const SETTINGS_CARS= "setting/vehicles"
 export const SETTINGS_FORWARDERS = "setting-forwarder"
-export const SETTINGS_WAREHOUSE = "setting_warehouse"
+export const SETTINGS_WAREHOUSE = "setting/depots"
 export const SETTINGS_LOGISTICIANS = "setting_logistician"
-export const SETTINGS_CUSTOMERS= "setting_customer"
+export const SETTINGS_CUSTOMERS= "/clients"
 
 
 

@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 
-export function DropdownMenuDialog() {
+export function DropdownMenuDialog({}) {
   const [showNewDialog, setShowNewDialog] = useState(false)
   const [showShareDialog, setShowShareDialog] = useState(false)
 

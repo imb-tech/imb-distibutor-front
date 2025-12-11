@@ -1,81 +1,59 @@
 import { ParamCombobox } from "@/components/as-params/combobox"
 import ParamInput from "@/components/as-params/input"
 import {
-  Table,
-  TableBody,
-  TableHead,
-  TableHeader,
-  TableRow,
+    Table,
+    TableBody,
+    TableHead,
+    TableHeader,
+    TableRow,
 } from "@/components/ui/table"
-import { useState } from "react"
-import { useColumnsCarsOrderTable } from "./cars-col"
 import { CarTableRow } from "./car-row"
-
-
+import { useColumnsCarsOrderTable } from "./cars-col"
 
 const RouteOrderMain = () => {
-  const columns = useColumnsCarsOrderTable()
-  const [expandedRows, setExpandedRows] = useState<number[]>([])
+    const columns = useColumnsCarsOrderTable()
 
-  const toggleRow = (id: number) => {
-    setExpandedRows((prev) =>
-      prev.includes(id) 
-        ? prev.filter((rowId) => rowId !== id)
-        : [...prev, id]
-    )
-  }
+    return (
+        <div className="border p-3 rounded-xl bg-card">
+            <div className="flex items-center justify-between gap-2 py-4">
+                <div className="flex items-center gap-3">
+                    <h1 className="text-xl">Marshrutlar</h1>
+                    <ParamInput />
+                </div>
+                <div className="flex items-center gap-2">
+                    <ParamCombobox
+                        paramName="doimiy"
+                        label="doimiy"
+                        options={[]}
+                    />
+                    <ParamCombobox
+                        paramName="excel"
+                        label="excel"
+                        options={[]}
+                    />
+                </div>
+            </div>
 
- 
-
-  return (
-    <div className="h-full w-full">
-        
-      <div className="flex items-center justify-between gap-2 py-4">
-        <ParamInput />
-        <div className="flex items-center gap-2">
-          <ParamCombobox
-            paramName="doimiy"
-            label="doimiy"
-            options={[]}
-          />
-          <ParamCombobox
-            paramName="excel"
-            label="excel"
-            options={[]}
-          />
+            <Table>
+                <TableHeader>
+                    <TableRow>
+                        {columns.map((column: any, index) => (
+                            <TableHead key={index}>{column.header}</TableHead>
+                        ))}
+                        <TableHead></TableHead>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    {carsInOrders.map((car, index) => (
+                        <CarTableRow key={car.id} car={car} index={index} />
+                    ))}
+                </TableBody>
+            </Table>
         </div>
-      </div>
-
-      <div className="rounded-md border overflow-hidden">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              {columns.map((column: any, index) => (
-                <TableHead key={index}>{column.header}</TableHead>
-              ))}
-              <TableHead className="w-[60px]"></TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {carsInOrders.map((car, index) => (
-              <CarTableRow
-                key={car.id}
-                car={car}
-                index={index}
-                isExpanded={expandedRows.includes(car.id)}
-                onToggle={toggleRow}
-              />
-            ))}
-          </TableBody>
-        </Table>
-      </div>
-    </div>
-  )
+    )
 }
 
 export default RouteOrderMain
-
-
 
 const carsInOrders: CarsTypeInOrders[] = [
     {

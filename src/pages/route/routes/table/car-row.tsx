@@ -1,14 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { TableCell, TableRow } from "@/components/ui/table"
 import { useNavigate, useSearch } from "@tanstack/react-router"
-import {
-    ChevronDown,
-    CircleDollarSign,
-    CircleUser,
-    Package,
-    Route,
-    Truck,
-} from "lucide-react"
+import { ChevronDown, CircleUser, Package, Route, Truck } from "lucide-react"
 import { CarDetailsRow } from "../table-detail"
 
 interface CarTableRowProps {
@@ -22,21 +15,27 @@ export const CarTableRow = ({ car, index }: CarTableRowProps) => {
     const navigate = useNavigate()
 
     const cols = [
-        { icon: <Package size={16} />, value: car.load_capacity },
-        { icon: <Route size={16} />, value: car.path },
+        {
+            icon: <Package className="text-primary" size={16} />,
+            value: car.load_capacity,
+        },
+        { icon: <Route className="text-primary" size={16} />, value: car.path },
         {
             icon: <CircleUser size={16} className="text-primary" />,
             value: car.driver,
         },
         {
-            icon: <CircleDollarSign size={16} className="text-primary" />,
+            icon: <CircleUser size={16} className="text-primary" />,
             value: car.forwarder,
         },
         {
             icon: <Truck size={16} className="text-primary" />,
             value: car.car_model,
         },
-        { icon: null, value: car.car_number },
+        {
+            icon: <Truck className="text-primary" size={16} />,
+            value: car.car_number,
+        },
     ]
 
     return (
@@ -57,7 +56,7 @@ export const CarTableRow = ({ car, index }: CarTableRowProps) => {
 
                 {cols.map((cell, i) => (
                     <TableCell key={i}>
-                        <div className="flex items-center gap-[5px] bg-secondary rounded-lg px-3 py-2">
+                        <div className="flex items-center gap-[5px] bg-secondary  whitespace-nowrap rounded-lg px-3 py-2">
                             {cell.icon}
                             {cell.value}
                         </div>

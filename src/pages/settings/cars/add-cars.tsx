@@ -35,23 +35,17 @@ const AddCarsModal = () => {
     const currentCar = getData<CarsType>(SETTINGS_CARS)
 
     const form = useForm<CarsType>({
-        defaultValues: {
-            driver: currentCar?.driver,
-            type: currentCar?.type ?? 1,
-            number: currentCar?.number,
-            license: currentCar?.license,
-            serial_number: currentCar?.serial_number,
-            year: currentCar?.year,
-            fuel_type: currentCar?.fuel_type,
-            size: currentCar?.size,
-            depot: currentCar?.depot,
-        },
+        defaultValues: { ...currentCar, type: currentCar?.type || 1 },
     })
 
     const { handleSubmit, reset } = form
 
     const onSuccess = () => {
-        toast.success(currentCar?.uuid ? "Avtomobil tahrirlandi!" : "Avtomobil qo'shildi!")
+        toast.success(
+            currentCar?.uuid ?
+                "Avtomobil tahrirlandi!"
+            :   "Avtomobil qo'shildi!",
+        )
         reset()
         clearKey(SETTINGS_CARS)
         closeModal()
@@ -63,18 +57,19 @@ const AddCarsModal = () => {
     const isPending = creating || updating
 
     const onSubmit = (data: CarsType) => {
-      
         if (currentCar?.uuid) {
-            update(`${SETTINGS_CARS}/${currentCar.uuid}`,data)
+            update(`${SETTINGS_CARS}/${currentCar.uuid}`, data)
         } else {
-            create(SETTINGS_CARS,data)
+            create(SETTINGS_CARS, data)
         }
     }
 
     return (
-        <div className="w-full max-w-4xl mx-auto p-6">
-            <form onSubmit={handleSubmit(onSubmit)} className="grid md:grid-cols-2 gap-5">
-
+        <div className="w-full max-w-4xl mx-auto">
+            <form
+                onSubmit={handleSubmit(onSubmit)}
+                className="grid md:grid-cols-2 gap-5"
+            >
                 <FormInput
                     required
                     name="number"
@@ -158,8 +153,13 @@ const AddCarsModal = () => {
                     placeholder="62"
                 />
 
-                <div className="md:col-span-2 flex justify-end mt-6">
-                    <Button type="submit" className="min-w-40">
+                <div className="md:col-span-2 flex justify-end ">
+                    <Button
+                        loading={isPending}
+                        type="submit"
+                        className="min-w-40"
+                        variant={"default2"}
+                    >
                         Saqlash
                     </Button>
                 </div>

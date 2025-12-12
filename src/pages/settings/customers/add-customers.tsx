@@ -1,5 +1,6 @@
 import { FormCheckbox } from "@/components/form/checkbox"
 import FormInput from "@/components/form/input"
+import FormTextarea from "@/components/form/textarea"
 import { Button } from "@/components/ui/button"
 import { SETTINGS_CUSTOMERS } from "@/constants/api-endpoints"
 import { useModal } from "@/hooks/useModal"
@@ -8,9 +9,8 @@ import { usePost } from "@/hooks/usePost"
 import { useGlobalStore } from "@/store/global-store"
 import { useQueryClient } from "@tanstack/react-query"
 import { Clock, MapPin } from "lucide-react"
-import { useFieldArray, useForm } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-
 
 const AddCustomersModal = () => {
     const queryClient = useQueryClient()
@@ -38,8 +38,8 @@ const AddCustomersModal = () => {
                 if (existingSchedule) {
                     schedules.push({
                         day_of_week: i,
-                        start_time: existingSchedule.start_time.substring(0, 5), 
-                        end_time: existingSchedule.end_time.substring(0, 5), 
+                        start_time: existingSchedule.start_time.substring(0, 5),
+                        end_time: existingSchedule.end_time.substring(0, 5),
                         enabled: true,
                     })
                 } else {
@@ -91,14 +91,9 @@ const AddCustomersModal = () => {
 
     const { handleSubmit, control, watch } = form
 
-    const { fields } = useFieldArray({
-        control,
-        name: "schedules",
-    })
-
     const onSuccess = () => {
         toast.success(
-            `Mijoz muvaffaqiyatli ${currentCustomer?.id? "tahrirlandi!" : "qo'shildi"} `,
+            `Mijoz muvaffaqiyatli ${currentCustomer?.id ? "tahrirlandi!" : "qo'shildi"} `,
         )
 
         clearKey(SETTINGS_CUSTOMERS)
@@ -160,21 +155,11 @@ const AddCustomersModal = () => {
         }
     }
 
-    const weekDays = [
-        { id: 0, label: "Yakshanba" },
-        { id: 1, label: "Dushanba" },
-        { id: 2, label: "Seshanba" },
-        { id: 3, label: "Chorshanba" },
-        { id: 4, label: "Payshanba" },
-        { id: 5, label: "Juma" },
-        { id: 6, label: "Shanba" },
-    ]
-
     return (
         <div className="max-h-[80vh] overflow-y-auto no-scrollbar-x p-1">
             <form
                 onSubmit={handleSubmit(onSubmit)}
-                className="grid grid-cols-1 lg:grid-cols-2 gap-6"
+                className="grid grid-cols-1 lg:grid-cols-2 gap-4"
             >
                 <div className="space-y-4">
                     <FormInput
@@ -208,7 +193,7 @@ const AddCustomersModal = () => {
                         methods={form}
                     />
 
-                    <div className="space-y-2">
+                    <div className="space-y-2 border p-2 rounded-md">
                         <label className="text-sm font-medium leading-none">
                             Koordinatalar (latitude, longitude)
                         </label>
@@ -234,7 +219,7 @@ const AddCustomersModal = () => {
                         </div>
                     </div>
 
-                    <div className="space-y-2">
+                    <div className="space-y-2 border p-2 rounded-md">
                         <label className="text-sm font-medium leading-none">
                             Yuk olish koordinatalari (latitude, longitude)
                         </label>
@@ -259,12 +244,12 @@ const AddCustomersModal = () => {
                             />
                         </div>
                     </div>
-
-                    <FormInput name="note" label="Izoh" methods={form} />
                 </div>
 
-                <div className="space-y-4">
-                    <div className="text-sm font-medium">Ish jadvali</div>
+                <div>
+                    <div className="text-sm font-medium mb-1.5">
+                        Ish jadvali
+                    </div>
 
                     <div className="space-y-3 max-h-[400px] pr-2">
                         {weekDays.map((day, index) => {
@@ -321,16 +306,22 @@ const AddCustomersModal = () => {
                     </div>
                 </div>
 
-                <div className="lg:col-span-2 border-t pt-4 mt-2 ">
-                    <div className="flex items-center justify-end gap-2">
-                        <Button
-                            className="min-w-36"
-                            type="submit"
-                            loading={isPending}
-                        >
-                            Saqlash
-                        </Button>
-                    </div>
+                <FormTextarea
+                    wrapperClassName={"lg:col-span-2"}
+                    name="note"
+                    label="Izoh"
+                    methods={form}
+                />
+
+                <div className="flex items-center justify-end lg:col-span-2 ">
+                    <Button
+                        variant={"default2"}
+                        className="min-w-36"
+                        type="submit"
+                        loading={isPending}
+                    >
+                        Saqlash
+                    </Button>
                 </div>
             </form>
         </div>
@@ -338,3 +329,13 @@ const AddCustomersModal = () => {
 }
 
 export default AddCustomersModal
+
+const weekDays = [
+    { id: 0, label: "Yakshanba" },
+    { id: 1, label: "Dushanba" },
+    { id: 2, label: "Seshanba" },
+    { id: 3, label: "Chorshanba" },
+    { id: 4, label: "Payshanba" },
+    { id: 5, label: "Juma" },
+    { id: 6, label: "Shanba" },
+]

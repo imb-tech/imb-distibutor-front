@@ -16,16 +16,16 @@ const AddForwarderModal = () => {
     const { closeModal } = useModal("create")
     const { getData, clearKey } = useGlobalStore()
 
-    const  currentForwarder = getData<ForwardersType>(SETTINGS_FORWARDERS)
+    const currentForwarder = getData<ForwardersType>(SETTINGS_FORWARDERS)
     const form = useForm<ForwardersType>({
-        defaultValues:  currentForwarder,
+        defaultValues: currentForwarder,
     })
 
     const { handleSubmit, reset } = form
 
     const onSuccess = () => {
-       toast.success(
-            `Avtomobil muvaffaqiyatli ${ currentForwarder?.id ? "tahrirlandi!" : "qo'shildi"} `,
+        toast.success(
+            `Avtomobil muvaffaqiyatli ${currentForwarder?.id ? "tahrirlandi!" : "qo'shildi"} `,
         )
 
         reset()
@@ -45,8 +45,11 @@ const AddForwarderModal = () => {
     const isPending = isPendingCreate || isPendingUpdate
 
     const onSubmit = (values: ForwardersType) => {
-        if ( currentForwarder?.id) {
-            updateMutate(`${SETTINGS_FORWARDERS}/${ currentForwarder.id}`, values)
+        if (currentForwarder?.id) {
+            updateMutate(
+                `${SETTINGS_FORWARDERS}/${currentForwarder.id}`,
+                values,
+            )
         } else {
             postMutate(SETTINGS_FORWARDERS, values)
         }
@@ -99,6 +102,7 @@ const AddForwarderModal = () => {
 
                     <div className="flex items-center justify-end gap-2 md:col-span-2">
                         <Button
+                            variant={"default2"}
                             className="min-w-36 w-full md:w-max"
                             type="submit"
                             loading={isPending}

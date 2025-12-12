@@ -25,11 +25,7 @@ const AddWarehouse = () => {
     const currentWarehouse = getData<WarehouseType>(SETTINGS_WAREHOUSE)
 
     const form = useForm<WarehouseType>({
-        defaultValues: {
-            name: currentWarehouse?.name ?? "",
-            address: currentWarehouse?.address ?? "",
-            location: currentWarehouse?.location,
-        },
+        defaultValues: currentWarehouse,
     })
 
     const { handleSubmit, reset, control } = form
@@ -59,10 +55,10 @@ const AddWarehouse = () => {
     }
 
     return (
-        <div className="w-full max-w-4xl mx-auto p-6">
+        <div className="w-full max-w-4xl mx-auto ">
             <form
                 onSubmit={handleSubmit(onSubmit)}
-                className="grid md:grid-cols-2 gap-6"
+                className="grid md:grid-cols-2 gap-4"
             >
                 <FormInput
                     required
@@ -77,7 +73,7 @@ const AddWarehouse = () => {
                     label="Manzil"
                     methods={form}
                 />
- 
+
                 <FormNumberInput<WarehouseType>
                     required
                     name="location.0"
@@ -110,11 +106,12 @@ const AddWarehouse = () => {
                     }}
                 />
 
-                <div className="md:col-span-2 flex justify-end gap-4 mt-4">
+                <div className="md:col-span-2 flex justify-end ">
                     <Button
                         type="submit"
                         loading={isPending}
                         className="min-w-40"
+                        variant={"default2"}
                     >
                         Saqlash
                     </Button>

@@ -5,7 +5,7 @@ export const useColumnsWarehouseTable = () => {
     return useMemo<ColumnDef<WarehouseType>[]>(
         () => [
             {
-                accessorKey: "name", // Add name column if you want it
+                accessorKey: "name", 
                 header: "Ombor nomi",
                 enableSorting: true,
             },

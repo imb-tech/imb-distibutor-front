@@ -321,9 +321,10 @@ const AddCustomersModal = () => {
                     </div>
                 </div>
 
-                <div className="lg:col-span-2 border-t pt-4 mt-2 ">
-                    <div className="flex items-center justify-end gap-2">
+                <div className="lg:col-span-2  pt-4 mt-2 ">
+                    <div className="flex items-center justify-end gap-2 ">
                         <Button
+                           variant={"default2"}
                             className="min-w-36"
                             type="submit"
                             loading={isPending}

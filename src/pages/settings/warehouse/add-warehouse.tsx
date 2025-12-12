@@ -59,7 +59,7 @@ const AddWarehouse = () => {
     }
 
     return (
-        <div className="w-full max-w-4xl mx-auto p-6">
+        <div className="w-full max-w-4xl mx-auto p-4">
             <form
                 onSubmit={handleSubmit(onSubmit)}
                 className="grid md:grid-cols-2 gap-6"
@@ -77,7 +77,7 @@ const AddWarehouse = () => {
                     label="Manzil"
                     methods={form}
                 />
- 
+
                 <FormNumberInput<WarehouseType>
                     required
                     name="location.0"
@@ -115,6 +115,7 @@ const AddWarehouse = () => {
                         type="submit"
                         loading={isPending}
                         className="min-w-40"
+                        variant={"default2"}
                     >
                         Saqlash
                     </Button>

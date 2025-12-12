@@ -83,6 +83,7 @@ const AddLogisticansModal = () => {
 
                     <div className="flex items-center justify-end gap-2 md:col-span-2">
                         <Button
+                            variant={"default2"}
                             className="min-w-36 w-full md:w-max"
                             type="submit"
                             loading={isPending}

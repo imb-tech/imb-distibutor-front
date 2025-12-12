@@ -159,7 +159,7 @@ const AddCarsModal = () => {
                 />
 
                 <div className="md:col-span-2 flex justify-end mt-6">
-                    <Button type="submit" className="min-w-40">
+                    <Button type="submit" className="min-w-40" variant={"default2"}>
                         Saqlash
                     </Button>
                 </div>

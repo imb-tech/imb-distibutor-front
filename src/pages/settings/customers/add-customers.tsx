@@ -1,4 +1,5 @@
 import { FormCheckbox } from "@/components/form/checkbox"
+import { FormFormatNumberInput } from "@/components/form/format-number-input"
 import FormInput from "@/components/form/input"
 import FormTextarea from "@/components/form/textarea"
 import { Button } from "@/components/ui/button"
@@ -180,11 +181,12 @@ const AddCustomersModal = () => {
                         label="Manzil"
                         methods={form}
                     />
-                    <FormInput
+                    <FormFormatNumberInput
+                        control={form.control}
+                        format="+998 ## ### ## ##"
                         required
-                        name="phone_number"
-                        label="Telefon raqami"
-                        methods={form}
+                        label={"Telefon"}
+                        name={"phone_number"}
                     />
                     <FormInput
                         name="email"

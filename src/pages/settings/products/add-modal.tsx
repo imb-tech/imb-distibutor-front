@@ -22,35 +22,32 @@ const AddProductModal = () => {
     })
 
     const CURRENCY_OPTIONS = [
-        { label: "US Dollar (USD)", value: 1 },
-        { label: "Euro (EUR)", value: 2 },
-        { label: "Uzbekistani Som (UZS)", value: 3 },
-        { label: "Russian Ruble (RUB)", value: 4 },
-        { label: "Kazakhstani Tenge (KZT)", value: 5 },
-        { label: "Japanese Yen (JPY)", value: 6 },
-    ];
-
-    const UNIT_OPTIONS = [
-        { value: 0, label: 'Pieces' },
-        { value: 1, label: 'Kg' },
-        { value: 2, label: 'Pound' },
-        { value: 3, label: 'Square meter' },
-        { value: 4, label: 'Liter' },
-        { value: 5, label: 'Cubic meter' },
-        { value: 6, label: 'Gallon' },
+        { label: "🇺🇸 US Dollar (USD)", value: 1 },
+        { label: "🇪🇺  Euro (EUR)", value: 2 },
+        { label: "🇺🇿  Uzbekistani Som (UZS)", value: 3 },
+        { label: "🇷🇺 Russian Ruble (RUB)", value: 4 },
+        { label: "🇰🇿 Kazakhstani Tenge (KZT)", value: 5 },
+        { label: "🇯🇵 Japanese Yen (JPY)", value: 6 },
     ]
 
+    const UNIT_OPTIONS = [
+        { value: 0, label: "Pieces" },
+        { value: 1, label: "Kg" },
+        { value: 2, label: "Pound" },
+        { value: 3, label: "Square meter" },
+        { value: 4, label: "Liter" },
+        { value: 5, label: "Cubic meter" },
+        { value: 6, label: "Gallon" },
+    ]
 
-
-    const { handleSubmit, reset, setError, formState: { errors } } = form
+    const { handleSubmit, reset, setError } = form
 
     const onSuccess = () => {
         toast.success(
             `Mahsulot muvaffaqiyatli ${currentProduct?.uuid ? "tahrirlandi!" : "qo'shildi"} `,
         )
-
         reset()
-        
+
         closeModal()
         queryClient.refetchQueries({ queryKey: [SETTINGS_PRODUCTS] })
         clearKey("create")
@@ -60,13 +57,12 @@ const AddProductModal = () => {
         if (error.response?.data) {
             const errorData = error.response.data
 
-
             Object.keys(errorData).forEach((fieldName) => {
                 const errorMessages = errorData[fieldName]
                 if (errorMessages && errorMessages.length > 0) {
                     setError(fieldName as keyof ProductsType, {
                         type: "server",
-                        message: errorMessages[0]
+                        message: errorMessages[0],
                     })
                 }
             })
@@ -75,18 +71,15 @@ const AddProductModal = () => {
         }
     }
 
-
     const { mutate: postMutate, isPending: isPendingCreate } = usePost({
         onSuccess,
-        onError
+        onError,
     })
 
     const { mutate: updateMutate, isPending: isPendingUpdate } = usePatch({
         onSuccess,
-        onError
+        onError,
     })
-
-
 
     const isPending = isPendingCreate || isPendingUpdate
 
@@ -121,18 +114,19 @@ const AddProductModal = () => {
                         name="unit"
                         label="O'lchov turlari"
                         control={form.control}
-                        options={UNIT_OPTIONS.map((o) => ({ label: o.label, value: o.value }))} labelKey="label"
+                        options={UNIT_OPTIONS}
+                        labelKey="label"
                         valueKey="value"
                         placeholder="Birlikni tanlang"
-
                     />
                     <FormCombobox
                         name="currency"
                         label="Valyuta"
                         control={form.control}
-                        options={CURRENCY_OPTIONS.map((o) => ({ label: o.label, value: o.value }))}
+                        options={CURRENCY_OPTIONS}
                         className="w-full"
                         valueKey="value"
+                        labelKey="label"
                     />
                     <FormNumberInput
                         required
@@ -140,7 +134,6 @@ const AddProductModal = () => {
                         label="Narxi"
                         control={form.control}
                     />
-
 
                     <div className="flex items-center justify-end gap-2 md:col-span-2">
                         <Button

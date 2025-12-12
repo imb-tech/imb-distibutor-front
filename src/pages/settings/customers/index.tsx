@@ -19,7 +19,7 @@ const Customers = () => {
   const item = getData<CustomersType>(SETTINGS_CUSTOMERS)
 
   const { openModal: openDeleteModal } = useModal("delete")
-  const { openModal: openCreateModal } = useModal(SETTINGS_CUSTOMERS)
+  const { openModal: openCreateModal } = useModal("create")
   const columns = useColumnsCustomersTable()
 
   const handleDelete = (row: { original: CustomersType }) => {
@@ -47,11 +47,11 @@ const Customers = () => {
           />
         }
       />
-      <DeleteModal path={SETTINGS_CUSTOMERS} id={item?.id} />
+      <DeleteModal path={SETTINGS_CUSTOMERS} id={item?.uuid} />
       <Modal
-        size="max-w-2xl"
-        title={item?.id ? "Tahrirlash" : "Qo'shish"}
-        modalKey={SETTINGS_CUSTOMERS}
+        size="max-w-4xl"
+        title={item?.uuid ? "Tahrirlash" : "Qo'shish"}
+        modalKey={"create"}
       >
         <AddCustomersModal />
       </Modal>

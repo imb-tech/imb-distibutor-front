@@ -26,7 +26,6 @@ const VEHICLE_TYPE_OPTIONS = [
     { label: "Treyler", value: 4 },
     { label: "Maxsus texnika", value: 7 },
     { label: "Refrijerator", value: 10 },
-    // add more if needed
 ]
 
 const AddCarsModal = () => {
@@ -160,7 +159,7 @@ const AddCarsModal = () => {
                 />
 
                 <div className="md:col-span-2 flex justify-end mt-6">
-                    <Button type="submit" className="min-w-40">
+                    <Button type="submit" className="min-w-40" variant={"default2"}>
                         Saqlash
                     </Button>
                 </div>

@@ -24,7 +24,7 @@ const AddDriverModal = () => {
     const { handleSubmit, reset } = form
 
     const onSuccess = () => {
-         toast.success(
+        toast.success(
             `Avtomobil muvaffaqiyatli ${currentDriver?.id ? "tahrirlandi!" : "qo'shildi"} `,
         )
 
@@ -121,6 +121,7 @@ const AddDriverModal = () => {
 
                     <div className="flex items-center justify-end gap-2 md:col-span-2">
                         <Button
+                            variant={"default2"}
                             className="min-w-36 w-full md:w-max"
                             type="submit"
                             loading={isPending}

@@ -50,9 +50,10 @@ const AddProductModal = () => {
         )
 
         reset()
-        clearKey(SETTINGS_PRODUCTS)
+        
         closeModal()
         queryClient.refetchQueries({ queryKey: [SETTINGS_PRODUCTS] })
+        clearKey("create")
     }
 
     const onError = (error: any) => {
@@ -127,11 +128,10 @@ const AddProductModal = () => {
                     />
                     <FormCombobox
                         name="currency"
+                        label="Valyuta"
                         control={form.control}
-                        placeholder="Valyuta"
                         options={CURRENCY_OPTIONS.map((o) => ({ label: o.label, value: o.value }))}
                         className="w-full"
-                        labelKey="label"
                         valueKey="value"
                     />
                     <FormNumberInput

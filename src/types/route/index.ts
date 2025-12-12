@@ -46,7 +46,7 @@ type CarsTypeInOrders = {
     info?: Info[]
     products?: Products[]
 }
- 
+
 type Info = {
     order_id: number
     location: string
@@ -64,4 +64,35 @@ type Products = {
     name: string
     quantity: number
     total_price: number
+}
+
+
+type Driver = {
+    id: string
+    name: string
+    vehicleNumber: string
+    status: "moving" | "online" | "idle" | "offline"
+    location: { lat: number; lng: number }
+    speed: number
+    fuelLevel: number
+}
+
+type FleetStats = {
+    totalDrivers: number;
+    online: number;
+    offline: number;
+    idle: number;
+    moving: number;
+    overspeed: number;
+    lowFuel: number;
+    engineOn: number;
+    engineOff: number;
+}
+
+type MapSettings = {
+    showTraffic: boolean;
+    showSatellite: boolean;
+    showMarkers: boolean;
+    showRoutes: boolean;
+    centerOnSelection: boolean;
 }

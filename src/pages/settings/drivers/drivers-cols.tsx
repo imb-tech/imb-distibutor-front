@@ -1,7 +1,6 @@
 import { ColumnDef } from "@tanstack/react-table"
 import { useMemo } from "react"
 
- 
 export const useColumnsDriverTable = () => {
     return useMemo<ColumnDef<DriversType>[]>(
         () => [
@@ -11,54 +10,64 @@ export const useColumnsDriverTable = () => {
                 enableSorting: true,
             },
             {
-                accessorKey: "phone_number",
+                accessorKey: "phone",
                 header: "Telefon raqami",
                 enableSorting: true,
             },
             {
-                accessorKey: "passport_series",
+                accessorKey: "username",
+                header: "Login",
+                enableSorting: true,
+            },
+            {
                 header: "Passport seriyasi",
                 enableSorting: true,
+                accessorFn: (row) => row.driver_profile?.passport_number || "",
+                cell: ({ row }) => {
+                    return row.getValue("passport_number") || "-"
+                },
+                id: "passport_number",
             },
             {
-                accessorKey: "jshshir",
                 header: "JShShIR",
                 enableSorting: true,
+                accessorFn: (row) => row.driver_profile?.pinfl || "",
+                cell: ({ row }) => {
+                    return row.getValue("pinfl") || "-"
+                },
+                id: "pinfl",
             },
             {
-                accessorKey: "driver_license",
-                header: "Hayodvchilik guvohnomasi",
+                header: "Haydovchilik guvohnomasi",
                 enableSorting: true,
+                accessorFn: (row) => row.driver_profile?.driver_license || "",
+                cell: ({ row }) => {
+                    return row.getValue("driver_license") || "-"
+                },
+                id: "driver_license",
             },
             {
-                accessorKey: "license_number",
-                header: "Guvohnoma raqami",
-                enableSorting: true,
-            },
-            {
-                accessorKey: "working_stage",
                 header: "Ish staji",
                 enableSorting: true,
+                accessorFn: (row) => row.driver_profile?.work_experience || 0,
+                cell: ({ row }) => {
+                    const value = row.getValue("work_experience")
+                    return value ? `${value} yil` : "-"
+                },
+                id: "work_experience",
             },
             {
-                accessorKey: "company_id",
-                header: "Kompanya ID",
+                header: "Litsenziya muddati",
                 enableSorting: true,
-            },
-            {
-                accessorKey: "login",
-                header: "login",
-                enableSorting: true,
-            },
-            {
-                accessorKey: "parol",
-                header: "parol",
-                enableSorting: true,
-            },
-            {
-                accessorKey: "activity",
-                header: "Faol",
-                enableSorting: true,
+                accessorFn: (row) => row.driver_profile?.license_expiry || "",
+                cell: ({ row }) => {
+                    const dateValue = row.getValue("license_expiry") as string
+                    if (!dateValue) return "-"
+
+                    const date = new Date(dateValue)
+                    return date.toLocaleDateString("en-GB")
+                },
+                id: "license_expiry",
             },
         ],
         [],

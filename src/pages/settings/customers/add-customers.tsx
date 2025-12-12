@@ -1,4 +1,5 @@
 import { FormCheckbox } from "@/components/form/checkbox"
+import { FormFormatNumberInput } from "@/components/form/format-number-input"
 import FormInput from "@/components/form/input"
 import { Button } from "@/components/ui/button"
 import { SETTINGS_CUSTOMERS } from "@/constants/api-endpoints"
@@ -10,7 +11,6 @@ import { useQueryClient } from "@tanstack/react-query"
 import { Clock, MapPin } from "lucide-react"
 import { useFieldArray, useForm } from "react-hook-form"
 import { toast } from "sonner"
-
 
 const AddCustomersModal = () => {
     const queryClient = useQueryClient()
@@ -38,8 +38,8 @@ const AddCustomersModal = () => {
                 if (existingSchedule) {
                     schedules.push({
                         day_of_week: i,
-                        start_time: existingSchedule.start_time.substring(0, 5), 
-                        end_time: existingSchedule.end_time.substring(0, 5), 
+                        start_time: existingSchedule.start_time.substring(0, 5),
+                        end_time: existingSchedule.end_time.substring(0, 5),
                         enabled: true,
                     })
                 } else {
@@ -98,7 +98,7 @@ const AddCustomersModal = () => {
 
     const onSuccess = () => {
         toast.success(
-            `Mijoz muvaffaqiyatli ${currentCustomer?.id? "tahrirlandi!" : "qo'shildi"} `,
+            `Mijoz muvaffaqiyatli ${currentCustomer?.id ? "tahrirlandi!" : "qo'shildi"} `,
         )
 
         clearKey(SETTINGS_CUSTOMERS)
@@ -195,11 +195,12 @@ const AddCustomersModal = () => {
                         label="Manzil"
                         methods={form}
                     />
-                    <FormInput
+                    <FormFormatNumberInput
+                        control={form.control}
+                        format="+998 ## ### ## ##"
                         required
-                        name="phone_number"
-                        label="Telefon raqami"
-                        methods={form}
+                        label={"Telefon"}
+                        name={"phone_number"}
                     />
                     <FormInput
                         name="email"
@@ -324,7 +325,7 @@ const AddCustomersModal = () => {
                 <div className="lg:col-span-2  pt-4 mt-2 ">
                     <div className="flex items-center justify-end gap-2 ">
                         <Button
-                           variant={"default2"}
+                            variant={"default2"}
                             className="min-w-36"
                             type="submit"
                             loading={isPending}

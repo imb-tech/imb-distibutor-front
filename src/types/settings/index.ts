@@ -29,18 +29,44 @@ type ProductsType = {
 
 type DriversType = {
     id: number
+    uuid: string
     full_name: string
-    phone_number: string
-    passport_series: string
-    jshshir: string
-    driver_license: string
-    license_number: string
-    working_stage: string
-    company_id: number
-    login: string
-    parol: string
-    activity: string
+    phone: string
+    username: string
+    password: string
+    driver_profile: DriverProfileType
 }
+
+type DriverProfileType = {
+    id: number
+    passport_number: string
+    pinfl: number
+    driver_license: string
+    work_experience: number
+    license_expiry: string
+}
+
+type DriverFormType = {
+    full_name: string
+    phone: string
+    username: string
+    password: string
+    uuid:number
+    driver_profile:{
+        pinfl: string
+        id:number
+        passport_number: string
+        driver_license: string
+        work_experience: number
+        license_expiry: string
+
+    }
+}
+
+
+
+
+
 
 type CarsType = {
     uuid: string
@@ -72,13 +98,17 @@ type WarehouseType = {
 }
 type LogisticiansType = {
     id: number
+    uuid:number
     full_name: string
-    phone_number: string
-    working_warehouse: string
+    phone: string
+    username:string
+    password:string
+    depot:number
+  
 }
 type CustomersType = {
     id: number
-    uuid:string
+    uuid: string
     name: string
     company_name: string
     address: string

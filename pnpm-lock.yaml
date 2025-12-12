@@ -234,6 +234,9 @@ importers:
       '@types/google-libphonenumber':
         specifier: ^7.4.30
         version: 7.4.30
+      '@types/google.maps':
+        specifier: ^3.58.1
+        version: 3.58.1
       '@types/lodash.isequal':
         specifier: ^4.5.8
         version: 4.5.8

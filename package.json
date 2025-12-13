@@ -64,6 +64,7 @@
         "@tanstack/react-router": "^1.69.1",
         "@tanstack/react-table": "^8.20.5",
         "@tanstack/router-devtools": "^1.69.1",
+        "@uidotdev/usehooks": "^2.4.1",
         "@wavesurfer/react": "^1.0.7",
         "axios": "^1.7.7",
         "browser-image-compression": "^2.0.2",

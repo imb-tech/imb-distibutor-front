@@ -96,3 +96,19 @@ type MapSettings = {
     showRoutes: boolean;
     centerOnSelection: boolean;
 }
+
+
+type OrderRoute = {
+    id: number;
+    client_address: string;
+    client_coordinates: [number, number];
+    number: number;
+}
+
+type RouteMaps = {
+    id: number;
+    name: string;
+    depot_name: string;
+    order_routes: OrderRoute[];
+    coordinates: [number, number];
+}

@@ -52,7 +52,6 @@ const Shippers = () => {
             />
             <DeleteModal path={SETTINGS_SHIPPERS} id={item?.id} />
             <Modal
-                size="max-w-2xl"
                 title={
                     item?.id ?
                         "Yetkazib beruvchilarni tahrirlash"

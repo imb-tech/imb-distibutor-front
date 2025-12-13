@@ -5,21 +5,18 @@ import FormInput from "@/components/form/input"
 import { FormNumberInput } from "@/components/form/number-input"
 import { UseFormReturn } from "react-hook-form"
 import { useGet } from "@/hooks/useGet"
-import { SETTINGS_CUSTOMERS } from "@/constants/api-endpoints"
-import { GoogleAddressAutocomplete } from "@/components/form/address-complete"
+import { SETTINGS_CUSTOMERS, SETTINGS_PAYMENT_TYPES } from "@/constants/api-endpoints"
+
 type Props = {
-    form: UseFormReturn<Delivery>
-    orderType: "extra" | "redular"
-    onOrderTypeChange: (value: "extra" | "regular") => void
+    form: UseFormReturn<any>
+}
+type PaymentMethod = {
+    id: number
+    name: string
 }
 export const ExtraOrders = ({ form }: Props) => {
-
-    const { control} = form
-    
-
     const { data: clientsData } = useGet<ListResponse<CustomersType>>(SETTINGS_CUSTOMERS)
-
-
+    const { data: paymentsData } = useGet<ListResponse<PaymentMethod>>(SETTINGS_PAYMENT_TYPES)
     return (
         <div className="space-y-4">
             <div className="grid grid-cols-4 gap-4 items-center">
@@ -29,8 +26,6 @@ export const ExtraOrders = ({ form }: Props) => {
                     placeholder="Buyurtma ID"
                     className="max-w-sm"
                 />
-
-
                 <div>
                     <FormDatePicker
                         className={"!w-full"}
@@ -40,30 +35,20 @@ export const ExtraOrders = ({ form }: Props) => {
                     />
                 </div>
             </div>
-
             <div className="space-y-2">
                 <h2>Mijoz Tafsilotlari</h2>
                 <div className="grid grid-cols-2 gap-4 items-center">
-
 
                     <FormCombobox
                         placeholder="Xaridor"
                         required
                         options={clientsData?.results}
                         name="client"
-                        control={control}
+                        control={form.control}
                         className="w-full"
                     />
-                  // Add to your form
-                    <GoogleAddressAutocomplete
-                        form={form}
-                        coordinatesFieldName="loading_coordinates"
-                        addressFieldName="loading_address"
-                        label="Yuklash manzili"
-                        placeholder="Manzilni qidiring..."
-                        apiKey="AIzaSyDE1X4ckZsrfsMRRN2yN0NlXfdrS8kibAE"
-                        required
-                    />
+
+
                     <FormCombobox
                         placeholder="Ustuvor transport"
                         required
@@ -73,19 +58,16 @@ export const ExtraOrders = ({ form }: Props) => {
                             { name: "Box", id: 3 },
                         ]}
                         name="priority_vehicle"
-                        control={control}
+                        control={form.control}
                         className="w-full"
                     />
 
                     <FormCombobox
                         placeholder="To'lov turi"
                         required
-                        options={[
-                            { name: "Naqd pul", id: 1 },
-                            { name: "Karta orqali", id: 2 },
-                        ]}
+                        options={paymentsData?.results}
                         name="payment_type"
-                        control={control}
+                        control={form.control}
                         className="w-full flex"
                     />
 
@@ -102,18 +84,14 @@ export const ExtraOrders = ({ form }: Props) => {
             <div className="space-y-2">
                 <h2>Yuk tavsilotlari</h2>
 
-                <div className="grid grid-cols-2 gap-4">                    <FormNumberInput
-                    thousandSeparator={" "}
-                    control={form.control}
-                    name="weight"
-                    placeholder="Og’irligi kg"
-                />
-                    {/* <FormNumberInput
+                <div className="grid grid-cols-2 gap-4">
+                    <FormNumberInput
                         thousandSeparator={" "}
                         control={form.control}
-                        name="cargo_type"
-                        placeholder="Yuk turi : "
-                    /> */}
+                        name="weight"
+                        placeholder="Og’irligi kg"
+                    />
+
                     <FormNumberInput
                         thousandSeparator={" "}
                         control={form.control}

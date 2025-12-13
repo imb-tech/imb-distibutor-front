@@ -1,186 +1,183 @@
 // order-main-section.tsx
 import { FormCombobox } from "@/components/form/combobox"
 import { FormDatePicker } from "@/components/form/date-picker"
-import { FormFormatNumberInput } from "@/components/form/format-number-input"
 import { FormInput } from "@/components/form/input"
 import { FormNumberInput } from "@/components/form/number-input"
-import { Clock, MapPin } from "lucide-react"
-import { UseFormReturn } from "react-hook-form"
+import { useEffect } from "react"
+import { useFieldArray, UseFormReturn } from "react-hook-form"
+import { useGet } from "@/hooks/useGet"
+import { SETTINGS_CUSTOMERS } from "@/constants/api-endpoints"
+import { ProductsSection } from "./add-products"
 
 type Props = {
-    form: UseFormReturn<OrderRow>
-    orderType: "regular" | "extra"
-    onOrderTypeChange: (value: "regular" | "extra") => void
+    form: UseFormReturn<any>
+}
+
+type ListResponse<T> = {
+    total_pages: number;
+    count: number;
+    results: T[];
+}
+
+type CustomersType = {
+    id: number
+    name: string
+    // Add other customer fields as needed
 }
 
 export const RegularOrders = ({ form }: Props) => {
     const { control, watch } = form
-    const date = watch("date")
+
+    // useFieldArray hook'ini ishlatish - loads nomi bilan
+    const { fields, append, remove, update } = useFieldArray({
+        control,
+        name: "loads",
+    })
+
+    const { data: clientsData } = useGet<ListResponse<CustomersType>>(SETTINGS_CUSTOMERS)
+
+    // Form submit uchun tayyorlash - faqat backend uchun kerakli field'larni qoldirish
+    const prepareDataForSubmit = (data: any) => {
+        if (data.loads && Array.isArray(data.loads)) {
+            // Faqat backend uchun kerakli 4 ta field'larni qoldirish
+            const cleanedLoads = data.loads.map((load: any) => {
+                return {
+                    quantity: load.quantity || 0,
+                    price: load.price || "0",
+                    product: load.product || 0,
+                    order: load.order || 1
+                }
+            })
+            return { ...data, loads: cleanedLoads }
+        }
+        return data
+    }
+
+    // Form submit handler
+    useEffect(() => {
+        // Form submit handler ni o'rnatish
+        const originalSubmit = form.handleSubmit
+        form.handleSubmit = (onValid) => {
+            return originalSubmit((data) => {
+                const preparedData = prepareDataForSubmit(data)
+                console.log("Backendga yuboriladigan loads:", preparedData.loads)
+                onValid(preparedData)
+            })
+        }
+    }, [form, prepareDataForSubmit])
 
     return (
-        <div className="space-y-4">
-            <div className="grid grid-cols-4 gap-4 items-center">
+        <div className="space-y-6">
+            {/* Asosiy ma'lumotlar */}
+            <div className="grid grid-cols-4 gap-4">
                 <FormInput
                     methods={form}
-                    name="order_id"
+                    name="code"
                     placeholder="Buyurtma ID"
-                    className="max-w-sm"
                 />
 
                 <FormCombobox
                     placeholder="Ustuvorlik"
                     required
                     options={[
-                        { name: "High", id: "high" },
-                        { name: "Normal", id: "normal" },
-                        { name: "Low", id: "low" },
+                        { name: "High", id: 3 },
+                        { name: "Normal", id: 2 },
+                        { name: "Low", id: 1 },
                     ]}
                     name="priority"
                     control={control}
-                    className="max-w-sm"
                 />
 
-                <div>
-                    <FormDatePicker
-                        className={"!w-full"}
-                        control={form.control}
-                        name="date"
-                        placeholder="Sanani tanlang"
-                    />
-                </div>
+                <FormDatePicker
+                    className="w-full"
+                    control={form.control}
+                    name="scheduled_delivery_date"
+                    placeholder="Sanani tanlang"
+                />
+
                 <FormCombobox
                     placeholder="Ombor"
                     required
                     options={[
-                        { name: "Main Warehouse", id: "main" },
-                        { name: "Warehouse B", id: "b" },
+                        { name: "Main Warehouse", id: 1 },
+                        { name: "Warehouse B", id: 2 },
                     ]}
-                    name="warehouse"
+                    name="depot"
                     control={control}
                 />
             </div>
 
-            <div className="space-y-2">
-                <h2>Mijoz Tafsilotlari</h2>
-                <div className="grid grid-cols-2 gap-4 items-center">
-                    <div className="flex flex-col gap-4 ">
+            {/* Mijoz ma'lumotlari */}
+            <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-4">
+                    <FormCombobox
+                        placeholder="Xaridor"
+                        required
+                        options={clientsData?.results}
+                        name="client"
+                        control={control}
+                        className="w-full"
+                    />
+                    <div className="grid grid-cols-2 gap-4">
                         <FormInput
                             methods={form}
-                            name="customer"
-                            placeholder="Mijoz: Tashkilot nomi"
+                            name="note"
+                            placeholder="Eslatma"
                         />
-                        <FormInput
-                            methods={form}
-                            name="contact_name"
-                            placeholder="Kontakt nomi"
+                        <FormCombobox
+                            placeholder="Ustuvor transport"
+                            options={[
+                                { name: "Truck", id: 1 },
+                                { name: "Van", id: 2 },
+                            ]}
+                            name="priority_vehicle"
+                            control={control}
+                            className="w-full"
                         />
-                        <FormFormatNumberInput
-                            control={form.control}
-                            format="+998 ## ### ## ##"
-                            required
-                            name={"phone"}
-                        />
-                        <div className="grid grid-cols-2 items-center gap-4">
-                            <FormInput
-                                methods={form}
-                                name="note"
-                                placeholder="Eslatma"
-                            />
-                            <FormCombobox
-                                placeholder="Ustuvor transport"
-                                required
-                                options={[
-                                    { name: "Truck", id: "truck" },
-                                    { name: "Van", id: "van" },
-                                    { name: "Box", id: "box" },
-                                ]}
-                                name="preferred_transport"
-                                control={control}
-                                className="w-full"
-                            />
-                        </div>
-                    </div>
-
-                    <div className="flex flex-col items-center gap-4 ">
-                        <FormInput
-                            methods={form}
-                            name="address"
-                            placeholder="Manzil"
-                            prefixIcon={<MapPin className="text-primary h-5" />}
-
-                        />
-
-                        <FormInput
-                            methods={form}
-                            name="route_region"
-                            placeholder="Manzil hududi"
-                            prefixIcon={<MapPin className="text-primary h-5" />}
-
-                        />
-                        <div className="grid grid-cols-2 justify-between w-full gap-4 ">
-                            <FormInput
-                                methods={form}
-                                name="start_time"
-                                placeholder="Yuk tushirish vaqti"
-                                type="time"
-                                prefixIcon={<Clock className="text-primary h-5" />}
-                            />
-                            <FormInput
-                                methods={form}
-                                name="end_time"
-                                placeholder="Yuk tushirish vaqti"
-                                type="time"
-                                prefixIcon={<Clock className="text-primary h-5" />}
-
-                            />
-
-                            <FormInput
-                                methods={form}
-                                name="unloading_time"
-                                placeholder="Yuk tushirish vaqti"
-
-                            />
-
-                            <FormNumberInput
-                                thousandSeparator={" "}
-                                control={form.control}
-                                name="cash_payment"
-                                placeholder="To'lov naqd summasi"
-                            />
-                        </div>
                     </div>
                 </div>
 
-            </div>
-
-            <div className="space-y-2">
-                <h2>Yuk tavsilotlari</h2>
-
-                <div className="grid grid-cols-2 gap-4">
-
+                <div className="space-y-4">
                     <FormNumberInput
-                        thousandSeparator={" "}
+                        thousandSeparator=" "
                         control={form.control}
-                        name="weight"
-                        placeholder="Og’irligi kg"
+                        name="cod"
+                        placeholder="To'lov naqd summasi"
                     />
-                    <FormNumberInput
-                        thousandSeparator={" "}
-                        control={form.control}
-                        name="product_count"
-                        placeholder="Maxsulot soni"
-                    />
-                    <FormNumberInput
-                        thousandSeparator={" "}
-                        control={form.control}
-                        name="volume"
-                        placeholder="Hajm m3"
-                    />
-
                 </div>
             </div>
 
+            {/* Yuk ma'lumotlari */}
+            <div className="grid grid-cols-3 gap-4">
+                <FormNumberInput
+                    thousandSeparator=" "
+                    control={form.control}
+                    name="weight"
+                    placeholder="Og'irligi (kg)"
+                />
+                <FormNumberInput
+                    thousandSeparator=" "
+                    control={form.control}
+                    name="product_count"
+                    placeholder="Mahsulot soni"
+                    value={watch("product_count") || 0}
+                />
+                <FormNumberInput
+                    thousandSeparator=" "
+                    control={form.control}
+                    name="volume"
+                    placeholder="Hajm (m³)"
+                />
+            </div>
 
+            {/* Products Section */}
+            <ProductsSection
+                form={form}
+                fields={fields}
+                append={append}
+                remove={remove}
+                update={update}
+            />
         </div>
     )
 }

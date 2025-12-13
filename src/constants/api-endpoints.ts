@@ -6,9 +6,9 @@ export const PROFILE = "hr/"
 /** ===== WORKING-SCHEDULE ===== */
 export const WORKING_SCHEDULE = "working-schedule"
 
-export const ORDERS="/order"
-export const ORDERS_WINDOW="/order"
-
+export const ORDERS="order"
+export const ORDERS_WINDOW="order"
+export const SHIPPERS = "setting/shippers"
 
 /** ===== SETTINGS ===== */
 
@@ -19,7 +19,6 @@ export const SETTINGS_FORWARDERS = "setting-forwarder"
 export const SETTINGS_WAREHOUSE = "setting/depots"
 export const SETTINGS_LOGISTICIANS = "setting_logistician"
 export const SETTINGS_CUSTOMERS= "clients"
-
 
 
 

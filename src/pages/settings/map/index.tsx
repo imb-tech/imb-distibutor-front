@@ -4,8 +4,6 @@ import { MapPin, Navigation, X } from "lucide-react"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { useGoogleMaps } from "./useGoogleMaps"
 
-
-
 export const MapComponent: React.FC<MapComponentProps> = ({
     coordinates,
     onCoordinatesChange,
@@ -387,7 +385,6 @@ export const MapComponent: React.FC<MapComponentProps> = ({
                     </button>
                 </div>
 
-              
                 {showSuggestions &&
                     suggestions.length > 0 &&
                     !hasUserSelected && (

@@ -75,7 +75,6 @@ const AddCarsModal = () => {
                     name="number"
                     label="Avtomobil raqami"
                     methods={form}
-                    placeholder="87 LCC 386"
                     maxLength={20}
                 />
 
@@ -84,7 +83,6 @@ const AddCarsModal = () => {
                     name="license"
                     label="Guvohnoma raqami"
                     methods={form}
-                    placeholder="VL164456"
                     maxLength={50}
                 />
 
@@ -93,7 +91,6 @@ const AddCarsModal = () => {
                     name="serial_number"
                     label="Seriya raqami"
                     methods={form}
-                    placeholder="SN9760527"
                     maxLength={100}
                 />
 
@@ -102,7 +99,6 @@ const AddCarsModal = () => {
                     name="year"
                     label="Ishlab chiqarilgan yili"
                     methods={form}
-                    placeholder="2025-12-11"
                 />
 
                 <FormCombobox
@@ -111,7 +107,6 @@ const AddCarsModal = () => {
                     name="type"
                     control={form.control}
                     options={VEHICLE_TYPE_OPTIONS}
-                    placeholder="Turini tanlang"
                     labelKey="label"
                     valueKey="value"
                 />
@@ -122,7 +117,6 @@ const AddCarsModal = () => {
                     name="fuel_type"
                     control={form.control}
                     options={FUEL_TYPE_OPTIONS}
-                    placeholder="Yoqilg'i turini tanlang"
                     labelKey="label"
                     valueKey="value"
                 />
@@ -133,7 +127,6 @@ const AddCarsModal = () => {
                     label="Yuk sig'imi (kg)"
                     type="number"
                     methods={form}
-                    placeholder="5000"
                 />
 
                 <FormInput
@@ -141,7 +134,6 @@ const AddCarsModal = () => {
                     label="Ombor ID (ixtiyoriy)"
                     type="number"
                     methods={form}
-                    placeholder="101 (bo'sh qoldirsangiz null bo'ladi)"
                 />
 
                 <FormInput
@@ -150,7 +142,6 @@ const AddCarsModal = () => {
                     label="Haydovchi ID"
                     type="number"
                     methods={form}
-                    placeholder="62"
                 />
 
                 <div className="md:col-span-2 flex justify-end ">

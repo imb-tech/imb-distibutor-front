@@ -51,22 +51,16 @@ type DriverFormType = {
     phone: string
     username: string
     password: string
-    uuid:number
-    driver_profile:{
+    uuid: number
+    driver_profile: {
         pinfl: string
-        id:number
+        id: number
         passport_number: string
         driver_license: string
         work_experience: number
         license_expiry: string
-
     }
 }
-
-
-
-
-
 
 type CarsType = {
     uuid: string
@@ -98,13 +92,12 @@ type WarehouseType = {
 }
 type LogisticiansType = {
     id: number
-    uuid:number
+    uuid: number
     full_name: string
     phone: string
-    username:string
-    password:string
-    depot:number
-  
+    username: string
+    password: string
+    depot: number
 }
 type CustomersType = {
     id: number
@@ -145,4 +138,21 @@ type CustomerFormType = {
     email: string
     note: string
     schedules: ScheduleFormType[]
+}
+
+type ShippersType = {
+    id: number
+    name: string
+}
+type MapComponentProps = {
+    coordinates: { lat: number; lng: number }
+    onCoordinatesChange: (coords: { lat: number; lng: number }) => void
+    onAddressFilled: (addressData: any) => void
+}
+
+type AddressData ={
+    street: string
+    city: string
+    region: string
+    fullAddress: string
 }

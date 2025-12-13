@@ -24,6 +24,8 @@ export const SETTINGS_WAREHOUSE = "setting/depots"
 export const SETTINGS_LOGISTICIANS = "logist/list"
 export const SETTINGS_LOGISTICIANS_UPDATE = "logist/update"
 
+export const SETTINGS_SHIPPERS = "setting/shippers"
+
 
 
 export const SETTINGS_CUSTOMERS = "clients"

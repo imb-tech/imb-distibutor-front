@@ -198,17 +198,7 @@ export const ProductsSection = ({
                             Jami: {loads.length} ta mahsulot • {totalProductCount} dona
                         </p>
                     </div>
-                    <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={addLoadRow}
-                        className="w-full sm:w-auto"
-                    >
-                        <Plus className="h-4 w-4 mr-2" />
-                        <span className="hidden sm:inline">Mahsulot qo'shish</span>
-                        <span className="sm:hidden">Qo'shish</span>
-                    </Button>
+                  
                 </div>
             </CardHeader>
             <CardContent className="px-3 sm:px-6 py-3 sm:py-4">

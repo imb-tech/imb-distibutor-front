@@ -1,13 +1,13 @@
 // components/products-section.tsx
-import { useCallback, useEffect } from "react"
-import {UseFormReturn } from "react-hook-form"
+import { useCallback, useEffect, useState } from "react"
+import { UseFormReturn } from "react-hook-form"
 import { Button } from "@/components/ui/button"
 import { Plus } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useGet } from "@/hooks/useGet"
 import { SETTINGS_PRODUCTS } from "@/constants/api-endpoints"
 import { ProductsTable } from "../products-table"
-
+import { toast } from "sonner"
 
 type ProductsType = {
     id: number
@@ -47,17 +47,17 @@ type ProductsSectionProps = {
     update: any
 }
 
-export const ProductsSection = ({ 
-    form, 
-    fields, 
-    append, 
-    remove, 
-    update 
+export const ProductsSection = ({
+    form,
+    fields,
+    append,
+    remove,
+    update
 }: ProductsSectionProps) => {
     const { getValues, setValue, watch } = form
     const { data: productsData } = useGet<ListResponse<ProductsType>>(SETTINGS_PRODUCTS)
-    
-    // Mahsulotlar ro'yxatini formatlash
+    const [hasEmptyProduct, setHasEmptyProduct] = useState(false)
+
     const productOptions = productsData?.results?.map(product => ({
         id: product.id,
         name: product.name,
@@ -67,10 +67,16 @@ export const ProductsSection = ({
         currency: product.currency
     })) || []
 
-    // Yuklar qiymatlarini kuzatish
     const loads = watch("loads") || []
 
-    // Yangi mahsulot qo'shilganda yoki o'chirilganda order raqamlarini yangilash
+    // Bo'sh mahsulot borligini tekshirish
+    useEffect(() => {
+        const emptyProductExists = loads.some((load: LoadRow) => 
+            !load.product || load.product === 0
+        )
+        setHasEmptyProduct(emptyProductExists)
+    }, [loads])
+
     useEffect(() => {
         const updatedLoads = loads.map((load: LoadRow, index: number) => {
             const order = index + 1
@@ -80,14 +86,12 @@ export const ProductsSection = ({
             return load
         })
 
-        // Agar order raqamlari o'zgarsa, formni yangilash
         const needsUpdate = updatedLoads.some((load: { order: any }, index: string | number) => load.order !== loads[index]?.order)
         if (needsUpdate) {
             setValue("loads", updatedLoads)
         }
     }, [loads, setValue])
 
-    // Mahsulot tanlanganda avtomatik to'ldirish
     useEffect(() => {
         loads.forEach((load: { product: any }, index: any) => {
             const productId = load.product
@@ -96,9 +100,6 @@ export const ProductsSection = ({
                 if (selectedProduct) {
                     const currentLoad = getValues(`loads.${index}`)
                     const unit = getUnitById(selectedProduct.unit)
-                    const currency = getCurrencyById(selectedProduct.currency)
-
-                    // Faqat zarur field'lar yangilansa update qilish
                     if (
                         currentLoad.product_name !== selectedProduct.name ||
                         currentLoad.description !== selectedProduct.description ||
@@ -125,7 +126,6 @@ export const ProductsSection = ({
         })
     }, [loads, productOptions, update, getValues])
 
-    // Miqdor yoki narx o'zgarganda total amount ni hisoblash
     useEffect(() => {
         loads.forEach((load: { price: string; quantity: number }, index: any) => {
             const price = typeof load.price === 'string' ? parseFloat(load.price) : load.price || 0
@@ -139,23 +139,21 @@ export const ProductsSection = ({
         })
     }, [loads, update, getValues])
 
-    // Umumiy summani hisoblash
-    const totalAmount = loads.reduce((sum: number, load: { price: string; quantity: number }) => {
-        const price = typeof load.price === 'string' ? parseFloat(load.price) : load.price || 0
-        const quantity = load.quantity || 0
-        return sum + (price * quantity)
-    }, 0)
-
-    // Mahsulot sonini hisoblash
     const totalProductCount = loads.reduce((sum: any, load: { quantity: any }) => sum + (load.quantity || 0), 0)
 
-    // Mahsulot sonini formga yozish
     useEffect(() => {
         setValue("product_count", totalProductCount)
     }, [totalProductCount, setValue])
 
-    // Yangi yuk qo'shish
     const addLoadRow = useCallback(() => {
+        if (hasEmptyProduct) {
+            toast.warning("Avval tanlangan mahsulotni to'ldiring", {
+                description: "Yangi mahsulot qo'shish uchun mavjud mahsulotlarni tanlang",
+                duration: 3000,
+            })
+            return
+        }
+
         const newLoad: LoadRow = {
             id: `load-${Date.now()}`,
             product: 0,
@@ -170,36 +168,87 @@ export const ProductsSection = ({
             total_amount: 0,
         }
         append(newLoad)
-    }, [append, fields.length])
+        
+        toast.info("Yangi mahsulot qator qo'shildi", {
+            description: "Endi mahsulotni tanlang va miqdorini kiriting",
+            duration: 2000,
+        })
+    }, [append, fields.length, hasEmptyProduct])
+
+    // Mahsulot o'chirilganda toast ko'rsatish
+    const handleRemove = useCallback((index: number) => {
+        const productName = loads[index]?.product_name || "Mahsulot"
+        remove(index)
+        
+        toast.info(`${productName} o'chirildi`, {
+            description: "Mahsulot ro'yxatdan olib tashlandi",
+            duration: 2000,
+        })
+    }, [remove, loads])
 
     return (
-        <Card>
-            <CardHeader className="pb-3">
-                <div className="flex justify-between items-center">
-                    <CardTitle className="text-lg">
-                        Mahsulotlar (Loads)
-                    </CardTitle>
-                    <div className="flex gap-2 items-center">
+        <Card className="w-full max-w-full overflow-hidden border shadow-sm">
+            <CardHeader className="px-4 py-3 sm:px-6 sm:py-4">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                    <div>
+                        <CardTitle className="text-base sm:text-lg font-semibold">
+                            Mahsulotlar
+                        </CardTitle>
+                        <p className="text-sm text-muted-foreground mt-1">
+                            Jami: {loads.length} ta mahsulot • {totalProductCount} dona
+                        </p>
+                    </div>
+                    <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={addLoadRow}
+                        className="w-full sm:w-auto"
+                    >
+                        <Plus className="h-4 w-4 mr-2" />
+                        <span className="hidden sm:inline">Mahsulot qo'shish</span>
+                        <span className="sm:hidden">Qo'shish</span>
+                    </Button>
+                </div>
+            </CardHeader>
+            <CardContent className="px-3 sm:px-6 py-3 sm:py-4">
+                {loads.length === 0 ? (
+                    <div className="text-center py-8 border-2 border-dashed rounded-lg">
+                        <p className="text-muted-foreground mb-4">Hali mahsulot qo'shilmagan</p>
                         <Button
                             type="button"
-                            variant="outline"
+                            variant="default"
                             size="sm"
                             onClick={addLoadRow}
                         >
                             <Plus className="h-4 w-4 mr-2" />
-                            Mahsulot qo'shish
+                            Birinchi mahsulotni qo'shish
                         </Button>
                     </div>
-                </div>
-            </CardHeader>
-            <CardContent>
-                {/* Jadval */}
-                <ProductsTable
-                    form={form}
-                    fields={fields}
-                    productOptions={productOptions}
-                    remove={remove}
-                />
+                ) : (
+                    <>
+                        <div className="overflow-x-auto -mx-3 sm:-mx-6">
+                            <div className="inline-block min-w-full align-middle">
+                                <ProductsTable
+                                    form={form}
+                                    fields={fields}
+                                    productOptions={productOptions}
+                                    remove={handleRemove}
+                                />
+                            </div>
+                        </div>
+                        
+                        {/* Bo'sh mahsulot borligini eslatish */}
+                        {hasEmptyProduct && (
+                            <div className="mt-4 text-center">
+                                <p className="text-sm text-amber-600">
+                                    ⚠️ Iltimos, barcha mahsulotlarni tanlang. 
+                                    Yangi mahsulot qo'shish uchun avval mavjud mahsulotlarni to'ldiring.
+                                </p>
+                            </div>
+                        )}
+                    </>
+                )}
             </CardContent>
         </Card>
     )

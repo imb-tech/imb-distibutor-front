@@ -84,3 +84,5 @@ type Delivery = {
   loads?: DeliveryLoad[]; // Optional since not in JSON
   phone_number:number|string
 };
+
+

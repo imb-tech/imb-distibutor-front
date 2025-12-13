@@ -1,7 +1,6 @@
 import ParamInput from "@/components/as-params/input"
 import DownloadAsExcel from "@/components/download-as-excel"
 import { Button } from "@/components/ui/button"
-import { SETTINGS_CUSTOMERS } from "@/constants/api-endpoints"
 import { useModal } from "@/hooks/useModal"
 import { useGlobalStore } from "@/store/global-store"
 import { CirclePlus } from "lucide-react"
@@ -13,7 +12,7 @@ interface TableHeaderProps {
 }
 
 const TableHeader = ({ fileName, storeKey }: TableHeaderProps) => {
-    const { openModal: openCreateModal } = useModal(SETTINGS_CUSTOMERS)
+    const { openModal: openCreateModal } = useModal("create")
     const { clearKey } = useGlobalStore()
 
     const handleAdd = () => {

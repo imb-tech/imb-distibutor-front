@@ -5,24 +5,24 @@ import { SETTINGS_PRODUCTS } from "@/constants/api-endpoints"
 import { useGet } from "@/hooks/useGet"
 import { useModal } from "@/hooks/useModal"
 import { useGlobalStore } from "@/store/global-store"
+import { useSearch } from "@tanstack/react-router"
 import TableHeader from "../table-header"
 import AddProductModal from "./add-modal"
 import { useoColumns } from "./cols"
-import { count } from "console"
-import { useSearch } from "@tanstack/react-router"
-
-
 
 const Products = () => {
-    const { getData, setData } = useGlobalStore()
+    const { getData, setData, clearKey } = useGlobalStore()
     const item = getData<ProductsType>(SETTINGS_PRODUCTS)
-    const search = useSearch({ from: '/_main/settings/products' })
+    const search = useSearch({ from: "/_main/settings/products" })
 
-    const { data, isLoading } = useGet<ListResponse<ProductsType>>(SETTINGS_PRODUCTS, {
-        params: search
-    })
+    const { data, isLoading } = useGet<ListResponse<ProductsType>>(
+        SETTINGS_PRODUCTS,
+        {
+            params: search,
+        },
+    )
 
-    const { openModal: openDeleteModal } = useModal("delete")
+    const { openModal: openDeleteModal } = useModal()
     const { openModal: openCreateModal } = useModal(`create`)
     const handleDelete = (row: { original: ProductsType }) => {
         setData(SETTINGS_PRODUCTS, row.original)

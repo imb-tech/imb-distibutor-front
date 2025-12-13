@@ -50,9 +50,10 @@ const AddProductModal = () => {
         )
 
         reset()
-        clearKey(SETTINGS_PRODUCTS)
+        
         closeModal()
         queryClient.refetchQueries({ queryKey: [SETTINGS_PRODUCTS] })
+        clearKey("create")
     }
 
     const onError = (error: any) => {
@@ -95,9 +96,8 @@ const AddProductModal = () => {
         } else {
             postMutate(SETTINGS_PRODUCTS, values)
         }
-    }
-
-    return (
+    }   
+     return (
         <>
             <div className="w-full max-w-4xl mx-auto p-1">
                 <form

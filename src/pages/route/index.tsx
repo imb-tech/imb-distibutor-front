@@ -1,5 +1,6 @@
 import ParamTabs from "@/components/as-params/tabs"
 import { useSearch } from "@tanstack/react-router"
+import { FleetDashboard } from "./map"
 import RoutesMain from "./orders-window"
 import RouteOrderMain from "./routes"
 
@@ -12,8 +13,8 @@ const RouteMain = () => {
                 options={paramOptions}
                 className={"mb-2 bg-background"}
             />
-            <div className="grid lg:grid-cols-1 gap-3">
-                {/* <RouteOrderMap /> */}
+            <div className="grid lg:grid-cols-2 gap-3">
+                <FleetDashboard />
                 {page_tabs === "routes" ?
                     <RouteOrderMain />
                 :   <RoutesMain />}

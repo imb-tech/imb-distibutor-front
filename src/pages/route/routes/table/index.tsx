@@ -11,12 +11,17 @@ import { useColumnsCarsOrderTable } from "./cars-col"
 export const CarsTable = () => {
     const columns = useColumnsCarsOrderTable()
     return (
-        <>
+        <div className="overflow-x-auto  no-scrollbar-x">
             <Table>
                 <TableHeader>
                     <TableRow>
                         {columns.map((column: any, index) => (
-                            <TableHead key={index}>{column.header}</TableHead>
+                            <TableHead
+                                key={index}
+                                className=" whitespace-nowrap"
+                            >
+                                {column.header}
+                            </TableHead>
                         ))}
                         <TableHead></TableHead>
                     </TableRow>
@@ -27,7 +32,7 @@ export const CarsTable = () => {
                     ))}
                 </TableBody>
             </Table>
-        </>
+        </div>
     )
 }
 

@@ -9,7 +9,7 @@ import { useQueryClient } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 
-const  AddShippersModal = () => {
+const AddShippersModal = () => {
     const queryClient = useQueryClient()
     const { closeModal } = useModal("create")
     const { getData, clearKey } = useGlobalStore()
@@ -50,26 +50,21 @@ const  AddShippersModal = () => {
     }
 
     return (
-        <div className="w-full max-w-4xl mx-auto p-1">
-            <form
-                onSubmit={handleSubmit(onSubmit)}
-                className="grid md:grid-cols-2 gap-4"
-            >
-                <FormInput required name="name" label="F.I.O" methods={form} />
+        <form onSubmit={handleSubmit(onSubmit)}>
+            <FormInput required name="name" label="F.I.O" methods={form} />
 
-                <div className="flex items-center justify-end gap-2 md:col-span-2">
-                    <Button
-                        variant={"default2"}
-                        className="min-w-36 w-full md:w-max"
-                        type="submit"
-                        loading={isPending}
-                    >
-                        {"Saqlash"}
-                    </Button>
-                </div>
-            </form>
-        </div>
+            <div className="flex items-center justify-end  mt-3">
+                <Button
+                    variant={"default2"}
+                    className="min-w-36 w-full md:w-max"
+                    type="submit"
+                    loading={isPending}
+                >
+                    {"Saqlash"}
+                </Button>
+            </div>
+        </form>
     )
 }
 
-export default  AddShippersModal
+export default AddShippersModal

@@ -7,7 +7,7 @@ import { usePatch } from "@/hooks/usePatch"
 import { usePost } from "@/hooks/usePost"
 import { useGlobalStore } from "@/store/global-store"
 import { useQueryClient } from "@tanstack/react-query"
-import { useCallback, useEffect } from "react"
+import { useCallback } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { MapComponent } from "../map"
@@ -30,21 +30,16 @@ const AddWarehouse = () => {
         defaultValues: currentWarehouse || {
             name: "",
             address: "",
-            location: [69.2401, 41.2995],  
+            location: [69.2401, 41.2995],
         },
     })
 
-    const { handleSubmit, reset, control, watch, setValue, getValues } = form
+    const { handleSubmit, reset, control, watch, setValue } = form
 
     const coordinates = {
         lat: watch("location.1") ?? 41.2995,
         lng: watch("location.0") ?? 69.2401,
     }
-
-    useEffect(() => {
-        console.log("Current coordinates in form:", coordinates)
-        console.log("Full location array:", getValues("location"))
-    }, [coordinates, getValues])
 
     const onSuccess = () => {
         toast.success(
@@ -63,32 +58,15 @@ const AddWarehouse = () => {
     const isPending = creating || updating
 
     const onSubmit = (data: WarehouseType) => {
-        console.log("Submitting data:", data)
         if (currentWarehouse?.uuid) {
             update(`${SETTINGS_WAREHOUSE}/${currentWarehouse.uuid}`, data)
         } else {
             create(SETTINGS_WAREHOUSE, data)
         }
     }
-    const handleLocationSelect = useCallback(
-        ({ lat, lng }: { lat: number; lng: number }) => {
-            console.log("handleLocationSelect called with:", { lat, lng })
-
-            setValue("location.0", lng, {
-                shouldDirty: true,
-                shouldValidate: true,
-            })
-            setValue("location.1", lat, {
-                shouldDirty: true,
-                shouldValidate: true,
-            })
-        },
-        [setValue],
-    )
 
     const handleAddressFilled = useCallback(
         (addressData: any) => {
-            console.log("handleAddressFilled called with:", addressData)
             setValue("address", addressData.fullAddress ?? "", {
                 shouldDirty: true,
                 shouldValidate: true,
@@ -99,7 +77,6 @@ const AddWarehouse = () => {
 
     const handleCoordinatesChange = useCallback(
         (coords: { lat: number; lng: number }) => {
-            console.log("handleCoordinatesChange called with:", coords)
             setValue("location.0", coords.lng, { shouldDirty: true })
             setValue("location.1", coords.lat, { shouldDirty: true })
         },
@@ -119,13 +96,6 @@ const AddWarehouse = () => {
                         label="Ombor nomi"
                         methods={form}
                     />
-
-                    <div className="space-y-2">
-                        <label className="block text-sm font-medium">
-                            Manzil <span className="text-red-500">*</span>
-                        </label>
-                 
-                    </div>
 
                     <div className="grid grid-cols-2 gap-4">
                         <FormNumberInput<WarehouseType>

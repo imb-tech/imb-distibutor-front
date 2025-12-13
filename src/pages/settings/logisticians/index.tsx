@@ -15,7 +15,7 @@ import { useColumnsLogisticiansTable } from "./logisticians-cols"
 
 const Logisticians = () => {
     const search = useSearch({ from: "/_main/settings/logisticians" })
-    const { data } = useGet<ListResponse<LogisticiansType>>(
+    const { data, isLoading } = useGet<ListResponse<LogisticiansType>>(
         SETTINGS_LOGISTICIANS,
         {
             params: search,
@@ -39,6 +39,7 @@ const Logisticians = () => {
     return (
         <>
             <DataTable
+                loading={isLoading}
                 columns={columns}
                 data={data?.results}
                 onDelete={handleDelete}

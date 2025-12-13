@@ -9,9 +9,11 @@ import { usePatch } from "@/hooks/usePatch"
 import { usePost } from "@/hooks/usePost"
 import { useGlobalStore } from "@/store/global-store"
 import { useQueryClient } from "@tanstack/react-query"
-import { Clock, MapPin } from "lucide-react"
+import { Clock } from "lucide-react"
+import { useCallback } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
+import { MapSearch } from "../map/map-search"
 
 const AddCustomersModal = () => {
     const queryClient = useQueryClient()
@@ -90,7 +92,7 @@ const AddCustomersModal = () => {
         defaultValues: getDefaultValues(),
     })
 
-    const { handleSubmit, control, watch } = form
+    const { handleSubmit, control, watch, setValue } = form
 
     const onSuccess = () => {
         toast.success(
@@ -111,6 +113,27 @@ const AddCustomersModal = () => {
     })
 
     const isPending = isPendingCreate || isPendingUpdate
+    const handleAddressFilled = useCallback(
+        (address: string) => {
+            setValue("address", address)
+        },
+        [setValue],
+    )
+    const handleCoordinatesChange = useCallback(
+        (coords: [string, string]) => {
+            setValue("coordinates.0", coords[0])
+            setValue("coordinates.1", coords[1])
+        },
+        [setValue],
+    )
+
+    const handleLoadingCoordinatesChange = useCallback(
+        (coords: [string, string]) => {
+            setValue("loading_coordinates.0", coords[0])
+            setValue("loading_coordinates.1", coords[1])
+        },
+        [setValue],
+    )
 
     const onSubmit = (values: CustomerFormType) => {
         const enabledSchedules = values.schedules
@@ -175,12 +198,18 @@ const AddCustomersModal = () => {
                         label="Tashkilot nomi"
                         methods={form}
                     />
-                    <FormInput
-                        required
-                        name="address"
-                        label="Manzil"
-                        methods={form}
-                    />
+                    <div className="space-y-2">
+                        <MapSearch
+                            onCoordinatesChange={handleCoordinatesChange}
+                            onAddressFilled={handleAddressFilled}
+                            initialCoordinates={[
+                                watch("coordinates.0") || "",
+                                watch("coordinates.1") || "",
+                            ]}
+                            initialAddress={watch("address") || ""}
+                        />
+                    </div>
+
                     <FormFormatNumberInput
                         control={form.control}
                         format="+998 ## ### ## ##"
@@ -189,62 +218,25 @@ const AddCustomersModal = () => {
                         name={"phone_number"}
                     />
                     <FormInput
+                        required
                         name="email"
                         label="Email"
                         type="email"
                         methods={form}
                     />
-
-                    <div className="space-y-2 border p-2 rounded-md">
+                    <div className="space-y-2 border p-3 rounded-md">
                         <label className="text-sm font-medium leading-none">
-                            Koordinatalar (latitude, longitude)
+                            Yuk olish manzili (ixtiyoriy)
                         </label>
-                        <div className="grid grid-cols-2 gap-2">
-                            <FormInput
-                                name="coordinates.0"
-                                label="Latitude"
-                                prefixIcon={<MapPin className="h-4 w-4" />}
-                                methods={form}
-                                placeholder="41.314677"
-                                type="number"
-                                step="0.000001"
-                            />
-                            <FormInput
-                                name="coordinates.1"
-                                label="Longitude"
-                                prefixIcon={<MapPin className="h-4 w-4" />}
-                                methods={form}
-                                placeholder="68.087721"
-                                type="number"
-                                step="0.000001"
-                            />
-                        </div>
-                    </div>
 
-                    <div className="space-y-2 border p-2 rounded-md">
-                        <label className="text-sm font-medium leading-none">
-                            Yuk olish koordinatalari (latitude, longitude)
-                        </label>
-                        <div className="grid grid-cols-2 gap-2">
-                            <FormInput
-                                name="loading_coordinates.0"
-                                label="Latitude"
-                                prefixIcon={<MapPin className="h-4 w-4" />}
-                                methods={form}
-                                placeholder="41.314677"
-                                type="number"
-                                step="0.000001"
-                            />
-                            <FormInput
-                                name="loading_coordinates.1"
-                                label="Longitude"
-                                prefixIcon={<MapPin className="h-4 w-4" />}
-                                methods={form}
-                                placeholder="68.087721"
-                                type="number"
-                                step="0.000001"
-                            />
-                        </div>
+                        <MapSearch
+                            onCoordinatesChange={handleLoadingCoordinatesChange}
+                            onAddressFilled={(address) => {}}
+                            initialCoordinates={[
+                                watch("loading_coordinates.0") || "",
+                                watch("loading_coordinates.1") || "",
+                            ]}
+                        />
                     </div>
                 </div>
 

@@ -26,4 +26,8 @@ export const SETTINGS_LOGISTICIANS = "logist/list"
 export const SETTINGS_LOGISTICIANS_UPDATE = "logist/update"
 export const ROUTE_MAPS = "order/all/route"
 
+export const SETTINGS_SHIPPERS = "setting/shippers"
+
+
+
 export const SETTINGS_CUSTOMERS = "clients"

@@ -11,7 +11,6 @@ import { useCallback, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { MapComponent } from "../map"
-import { AddressSearch } from "../map/address-search"
 
 export type WarehouseType = {
     uuid?: string
@@ -31,7 +30,7 @@ const AddWarehouse = () => {
         defaultValues: currentWarehouse || {
             name: "",
             address: "",
-            location: [69.2401, 41.2995], // [lng, lat]
+            location: [69.2401, 41.2995],  
         },
     })
 
@@ -71,9 +70,6 @@ const AddWarehouse = () => {
             create(SETTINGS_WAREHOUSE, data)
         }
     }
-
-    // In your AddWarehouse component, update the handleLocationSelect function:
-
     const handleLocationSelect = useCallback(
         ({ lat, lng }: { lat: number; lng: number }) => {
             console.log("handleLocationSelect called with:", { lat, lng })
@@ -128,15 +124,7 @@ const AddWarehouse = () => {
                         <label className="block text-sm font-medium">
                             Manzil <span className="text-red-500">*</span>
                         </label>
-                        <AddressSearch
-                            onLocationSelect={handleLocationSelect}
-                            onAddressFilled={handleAddressFilled}
-                            onSearchByLocation={() => {}}
-                            isEditing={!!currentWarehouse?.uuid}
-                            editingLocation={null}
-                            onBackToForm={() => {}}
-                            compactMode={true}
-                        />
+                 
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">

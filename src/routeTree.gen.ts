@@ -29,6 +29,9 @@ const MainFinanceIndexLazyImport = createFileRoute('/_main/finance/')()
 const MainSettingsWarehouseLazyImport = createFileRoute(
   '/_main/settings/warehouse',
 )()
+const MainSettingsShippersLazyImport = createFileRoute(
+  '/_main/settings/shippers',
+)()
 const MainSettingsProductsLazyImport = createFileRoute(
   '/_main/settings/products',
 )()
@@ -114,6 +117,13 @@ const MainSettingsWarehouseLazyRoute = MainSettingsWarehouseLazyImport.update({
   getParentRoute: () => MainRoute,
 } as any).lazy(() =>
   import('./routes/_main/settings/warehouse.lazy').then((d) => d.Route),
+)
+
+const MainSettingsShippersLazyRoute = MainSettingsShippersLazyImport.update({
+  path: '/settings/shippers',
+  getParentRoute: () => MainRoute,
+} as any).lazy(() =>
+  import('./routes/_main/settings/shippers.lazy').then((d) => d.Route),
 )
 
 const MainSettingsProductsLazyRoute = MainSettingsProductsLazyImport.update({
@@ -280,6 +290,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainSettingsProductsLazyImport
       parentRoute: typeof MainImport
     }
+    '/_main/settings/shippers': {
+      id: '/_main/settings/shippers'
+      path: '/settings/shippers'
+      fullPath: '/settings/shippers'
+      preLoaderRoute: typeof MainSettingsShippersLazyImport
+      parentRoute: typeof MainImport
+    }
     '/_main/settings/warehouse': {
       id: '/_main/settings/warehouse'
       path: '/settings/warehouse'
@@ -373,6 +390,7 @@ interface MainRouteChildren {
   MainSettingsFreightForwardersLazyRoute: typeof MainSettingsFreightForwardersLazyRoute
   MainSettingsLogisticiansLazyRoute: typeof MainSettingsLogisticiansLazyRoute
   MainSettingsProductsLazyRoute: typeof MainSettingsProductsLazyRoute
+  MainSettingsShippersLazyRoute: typeof MainSettingsShippersLazyRoute
   MainSettingsWarehouseLazyRoute: typeof MainSettingsWarehouseLazyRoute
   MainFinanceIndexLazyRoute: typeof MainFinanceIndexLazyRoute
   MainOrdersIndexLazyRoute: typeof MainOrdersIndexLazyRoute
@@ -394,6 +412,7 @@ const MainRouteChildren: MainRouteChildren = {
     MainSettingsFreightForwardersLazyRoute,
   MainSettingsLogisticiansLazyRoute: MainSettingsLogisticiansLazyRoute,
   MainSettingsProductsLazyRoute: MainSettingsProductsLazyRoute,
+  MainSettingsShippersLazyRoute: MainSettingsShippersLazyRoute,
   MainSettingsWarehouseLazyRoute: MainSettingsWarehouseLazyRoute,
   MainFinanceIndexLazyRoute: MainFinanceIndexLazyRoute,
   MainOrdersIndexLazyRoute: MainOrdersIndexLazyRoute,
@@ -419,6 +438,7 @@ export interface FileRoutesByFullPath {
   '/settings/freight-forwarders': typeof MainSettingsFreightForwardersLazyRoute
   '/settings/logisticians': typeof MainSettingsLogisticiansLazyRoute
   '/settings/products': typeof MainSettingsProductsLazyRoute
+  '/settings/shippers': typeof MainSettingsShippersLazyRoute
   '/settings/warehouse': typeof MainSettingsWarehouseLazyRoute
   '/finance': typeof MainFinanceIndexLazyRoute
   '/orders': typeof MainOrdersIndexLazyRoute
@@ -441,6 +461,7 @@ export interface FileRoutesByTo {
   '/settings/freight-forwarders': typeof MainSettingsFreightForwardersLazyRoute
   '/settings/logisticians': typeof MainSettingsLogisticiansLazyRoute
   '/settings/products': typeof MainSettingsProductsLazyRoute
+  '/settings/shippers': typeof MainSettingsShippersLazyRoute
   '/settings/warehouse': typeof MainSettingsWarehouseLazyRoute
   '/finance': typeof MainFinanceIndexLazyRoute
   '/orders': typeof MainOrdersIndexLazyRoute
@@ -465,6 +486,7 @@ export interface FileRoutesById {
   '/_main/settings/freight-forwarders': typeof MainSettingsFreightForwardersLazyRoute
   '/_main/settings/logisticians': typeof MainSettingsLogisticiansLazyRoute
   '/_main/settings/products': typeof MainSettingsProductsLazyRoute
+  '/_main/settings/shippers': typeof MainSettingsShippersLazyRoute
   '/_main/settings/warehouse': typeof MainSettingsWarehouseLazyRoute
   '/_main/finance/': typeof MainFinanceIndexLazyRoute
   '/_main/orders/': typeof MainOrdersIndexLazyRoute
@@ -489,6 +511,7 @@ export interface FileRouteTypes {
     | '/settings/freight-forwarders'
     | '/settings/logisticians'
     | '/settings/products'
+    | '/settings/shippers'
     | '/settings/warehouse'
     | '/finance'
     | '/orders'
@@ -510,6 +533,7 @@ export interface FileRouteTypes {
     | '/settings/freight-forwarders'
     | '/settings/logisticians'
     | '/settings/products'
+    | '/settings/shippers'
     | '/settings/warehouse'
     | '/finance'
     | '/orders'
@@ -532,6 +556,7 @@ export interface FileRouteTypes {
     | '/_main/settings/freight-forwarders'
     | '/_main/settings/logisticians'
     | '/_main/settings/products'
+    | '/_main/settings/shippers'
     | '/_main/settings/warehouse'
     | '/_main/finance/'
     | '/_main/orders/'
@@ -587,6 +612,7 @@ export const routeTree = rootRoute
         "/_main/settings/freight-forwarders",
         "/_main/settings/logisticians",
         "/_main/settings/products",
+        "/_main/settings/shippers",
         "/_main/settings/warehouse",
         "/_main/finance/",
         "/_main/orders/",
@@ -629,6 +655,10 @@ export const routeTree = rootRoute
     },
     "/_main/settings/products": {
       "filePath": "_main/settings/products.lazy.tsx",
+      "parent": "/_main"
+    },
+    "/_main/settings/shippers": {
+      "filePath": "_main/settings/shippers.lazy.tsx",
       "parent": "/_main"
     },
     "/_main/settings/warehouse": {

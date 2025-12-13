@@ -10,7 +10,7 @@ import { useQueryClient } from "@tanstack/react-query"
 import { useCallback } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-import { MapComponent } from "../map"
+import { MapSearch } from "../map/map-search"
 
 export type WarehouseType = {
     uuid?: string
@@ -66,8 +66,8 @@ const AddWarehouse = () => {
     }
 
     const handleAddressFilled = useCallback(
-        (addressData: any) => {
-            setValue("address", addressData.fullAddress ?? "", {
+        (address: string) => {
+            setValue("address", address, {
                 shouldDirty: true,
                 shouldValidate: true,
             })
@@ -76,19 +76,19 @@ const AddWarehouse = () => {
     )
 
     const handleCoordinatesChange = useCallback(
-        (coords: { lat: number; lng: number }) => {
-            setValue("location.0", coords.lng, { shouldDirty: true })
-            setValue("location.1", coords.lat, { shouldDirty: true })
+        (coords: [string, string]) => {
+            const lat = parseFloat(coords[0]) || 41.2995
+            const lng = parseFloat(coords[1]) || 69.2401
+
+            setValue("location.0", lng, { shouldDirty: true })
+            setValue("location.1", lat, { shouldDirty: true })
         },
         [setValue],
     )
 
     return (
         <div className="max-h-[80vh] overflow-y-auto no-scrollbar-x p-1">
-            <form
-                onSubmit={handleSubmit(onSubmit)}
-                className="grid grid-cols-1 lg:grid-cols-2 gap-6"
-            >
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                 <div className="space-y-4">
                     <FormInput
                         required
@@ -97,7 +97,20 @@ const AddWarehouse = () => {
                         methods={form}
                     />
 
-                    <div className="grid grid-cols-2 gap-4">
+                    {/* Map Search Component */}
+                    <div className="space-y-3">
+                        <MapSearch
+                            onCoordinatesChange={handleCoordinatesChange}
+                            onAddressFilled={handleAddressFilled}
+                            initialCoordinates={[
+                                coordinates.lat.toString(),
+                                coordinates.lng.toString(),
+                            ]}
+                            initialAddress={watch("address") || ""}
+                        />
+                    </div>
+
+                    <div className="hidden">
                         <FormNumberInput<WarehouseType>
                             required
                             name="location.0"
@@ -113,7 +126,6 @@ const AddWarehouse = () => {
                                 maximumFractionDigits: 6,
                             }}
                         />
-
                         <FormNumberInput<WarehouseType>
                             required
                             name="location.1"
@@ -132,15 +144,7 @@ const AddWarehouse = () => {
                     </div>
                 </div>
 
-                <div className="h-[400px] lg:h-[500px]">
-                    <MapComponent
-                        coordinates={coordinates}
-                        onCoordinatesChange={handleCoordinatesChange}
-                        onAddressFilled={handleAddressFilled}
-                    />
-                </div>
-
-                <div className="lg:col-span-2 flex justify-end">
+                <div className="flex justify-end pt-4">
                     <Button
                         type="submit"
                         loading={isPending}

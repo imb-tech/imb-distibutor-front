@@ -56,7 +56,6 @@ interface MapSearchProps {
         }
     }, [])
 
-    // Fetch suggestions - ONLY if user hasn't selected yet
     useEffect(() => {
         if (!autocompleteServiceRef.current || !searchQuery.trim() || isSelecting || hasSelected) {
             setSuggestions([])
@@ -86,13 +85,12 @@ interface MapSearchProps {
         return () => clearTimeout(timer)
     }, [searchQuery, isSelecting, hasSelected]) 
 
-    // Handle place selection
     const handlePlaceSelect = useCallback((placeId: string) => {
         if (!placesServiceRef.current) return
 
         setIsSelecting(true)
         setShowSuggestions(false)
-        setHasSelected(true) // Mark as selected
+        setHasSelected(true) 
 
         placesServiceRef.current.getDetails(
             {
@@ -117,7 +115,6 @@ interface MapSearchProps {
         )
     }, [onCoordinatesChange, onAddressFilled])
 
-    // Get current location
     const handleGetCurrentLocation = useCallback(() => {
         if (!navigator.geolocation) {
             toast.error("Geolokatsiya qo'llab-quvvatlanmaydi")
@@ -126,7 +123,7 @@ interface MapSearchProps {
 
         setIsSelecting(true)
         setShowSuggestions(false)
-        setHasSelected(true) // Mark as selected
+        setHasSelected(true) 
         toast.info("Joylashuv aniqlanmoqda...")
         
         navigator.geolocation.getCurrentPosition(
@@ -136,7 +133,6 @@ interface MapSearchProps {
                     position.coords.longitude.toString(),
                 ]
                 
-                // Reverse geocode to get address
                 if (window.google?.maps) {
                     const geocoder = new google.maps.Geocoder()
                     geocoder.geocode(
@@ -167,7 +163,6 @@ interface MapSearchProps {
         )
     }, [onCoordinatesChange, onAddressFilled])
 
-    // Click outside handler
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             const target = event.target as Node
@@ -255,16 +250,6 @@ interface MapSearchProps {
                     </button>
                 </div>
 
-                {isSelecting && (
-                    <div className="absolute z-50 left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg p-3">
-                        <div className="flex items-center justify-center space-x-2">
-                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
-                            <span className="text-sm text-gray-600">Manzil yuklanmoqda...</span>
-                        </div>
-                    </div>
-                )}
-
-                {/* Only show suggestions if user hasn't selected yet */}
                 {showSuggestions && suggestions.length > 0 && !hasSelected && (
                     <div className="absolute z-50 left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
                         {suggestions.map((suggestion) => (
@@ -285,9 +270,6 @@ interface MapSearchProps {
                 )}
             </div>
             
-            <p className="text-xs text-gray-500">
-                Manzilni kiriting yoki joylashuv tugmasi orqali aniqlang
-            </p> 
         </div>
     )
 }

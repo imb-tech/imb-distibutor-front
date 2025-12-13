@@ -1,3 +1,4 @@
+import { FormDatePicker } from "@/components/form/date-picker"
 import { FormFormatNumberInput } from "@/components/form/format-number-input"
 import FormInput from "@/components/form/input"
 import { FormNumberInput } from "@/components/form/number-input"
@@ -133,12 +134,11 @@ const AddDriverModal = () => {
                     control={form.control}
                     min={0}
                 />
-                <FormInput
-                    required
-                    type="date"
+                <FormDatePicker
+                    required 
                     name="driver_profile.license_expiry"
                     label="Guvohnoma amal qilish muddati"
-                    methods={form}
+                    control={form.control}
                 />
 
                 <div className="flex items-center justify-end gap-2 md:col-span-2">

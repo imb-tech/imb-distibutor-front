@@ -8,16 +8,31 @@ export const useColumnsCustomersTable = () => {
                 accessorKey: "name",
                 header: "F.I.O",
                 enableSorting: true,
+                cell: ({ row }) => (
+                    <div className="min-w-[180px] w-[220px] truncate">
+                        {row.original.name}
+                    </div>
+                ),
             },
             {
                 accessorKey: "company_name",
                 header: "Tashkilot",
                 enableSorting: true,
+                cell: ({ row }) => (
+                    <div className="min-w-[180px] w-[220px] truncate">
+                        {row.original.company_name}
+                    </div>
+                ),
             },
             {
                 accessorKey: "address",
                 header: "Manzil",
                 enableSorting: true,
+                cell: ({ row }) => (
+                    <div className="min-w-[220px] w-[300px] truncate">
+                        {row.original.address}
+                    </div>
+                ),
             },
             {
                 accessorKey: "loading_coordinates",
@@ -26,7 +41,7 @@ export const useColumnsCustomersTable = () => {
                 cell: ({ row }) => {
                     const coords = row.original.loading_coordinates as number[]
                     if (!coords || coords.length !== 2) return "-"
-                    return `${coords[0]?.toFixed(6)}, ${coords[1]?.toFixed(6)}`
+                    return `${coords[0]?.toFixed(6)},${coords[1]?.toFixed(6)}`
                 },
             },
             {

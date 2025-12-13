@@ -1,10 +1,9 @@
 // components/products-section.tsx
 import { useCallback, useEffect } from "react"
-import { useFieldArray, UseFormReturn } from "react-hook-form"
+import {UseFormReturn } from "react-hook-form"
 import { Button } from "@/components/ui/button"
 import { Plus } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { DataTable } from "@/components/ui/datatable"
 import { useGet } from "@/hooks/useGet"
 import { SETTINGS_PRODUCTS } from "@/constants/api-endpoints"
 import { ProductsTable } from "../products-table"

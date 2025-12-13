@@ -6,7 +6,6 @@ import { FormNumberInput } from "@/components/form/number-input"
 import { UseFormReturn } from "react-hook-form"
 import { useGet } from "@/hooks/useGet"
 import { SETTINGS_CUSTOMERS } from "@/constants/api-endpoints"
-import { SimpleCoordinatesInput } from "@/components/form/coordinates-input-simple"
 import { GoogleAddressAutocomplete } from "@/components/form/address-complete"
 type Props = {
     form: UseFormReturn<Delivery>

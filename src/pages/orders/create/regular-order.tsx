@@ -22,13 +22,11 @@ type ListResponse<T> = {
 type CustomersType = {
     id: number
     name: string
-    // Add other customer fields as needed
 }
 
 export const RegularOrders = ({ form }: Props) => {
-    const { control, watch } = form
+    const { control} = form
 
-    // useFieldArray hook'ini ishlatish - loads nomi bilan
     const { fields, append, remove, update } = useFieldArray({
         control,
         name: "loads",
@@ -36,10 +34,8 @@ export const RegularOrders = ({ form }: Props) => {
 
     const { data: clientsData } = useGet<ListResponse<CustomersType>>(SETTINGS_CUSTOMERS)
 
-    // Form submit uchun tayyorlash - faqat backend uchun kerakli field'larni qoldirish
     const prepareDataForSubmit = (data: any) => {
         if (data.loads && Array.isArray(data.loads)) {
-            // Faqat backend uchun kerakli 4 ta field'larni qoldirish
             const cleanedLoads = data.loads.map((load: any) => {
                 return {
                     quantity: load.quantity || 0,
@@ -53,9 +49,7 @@ export const RegularOrders = ({ form }: Props) => {
         return data
     }
 
-    // Form submit handler
     useEffect(() => {
-        // Form submit handler ni o'rnatish
         const originalSubmit = form.handleSubmit
         form.handleSubmit = (onValid) => {
             return originalSubmit((data) => {
@@ -68,7 +62,6 @@ export const RegularOrders = ({ form }: Props) => {
 
     return (
         <div className="space-y-6">
-            {/* Asosiy ma'lumotlar */}
             <div className="grid grid-cols-4 gap-4">
                 <FormInput
                     methods={form}
@@ -85,7 +78,7 @@ export const RegularOrders = ({ form }: Props) => {
                         { name: "Low", id: 1 },
                     ]}
                     name="priority"
-                    control={control}
+                    control={form.control}
                 />
 
                 <FormDatePicker
@@ -103,11 +96,10 @@ export const RegularOrders = ({ form }: Props) => {
                         { name: "Warehouse B", id: 2 },
                     ]}
                     name="depot"
-                    control={control}
+                    control={form.control}
                 />
             </div>
 
-            {/* Mijoz ma'lumotlari */}
             <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-4">
                     <FormCombobox
@@ -115,7 +107,7 @@ export const RegularOrders = ({ form }: Props) => {
                         required
                         options={clientsData?.results}
                         name="client"
-                        control={control}
+                        control={form.control}
                         className="w-full"
                     />
                     <div className="grid grid-cols-2 gap-4">
@@ -131,7 +123,7 @@ export const RegularOrders = ({ form }: Props) => {
                                 { name: "Van", id: 2 },
                             ]}
                             name="priority_vehicle"
-                            control={control}
+                            control={form.control}
                             className="w-full"
                         />
                     </div>
@@ -147,7 +139,6 @@ export const RegularOrders = ({ form }: Props) => {
                 </div>
             </div>
 
-            {/* Yuk ma'lumotlari */}
             <div className="grid grid-cols-3 gap-4">
                 <FormNumberInput
                     thousandSeparator=" "
@@ -160,7 +151,6 @@ export const RegularOrders = ({ form }: Props) => {
                     control={form.control}
                     name="product_count"
                     placeholder="Mahsulot soni"
-                    value={watch("product_count") || 0}
                 />
                 <FormNumberInput
                     thousandSeparator=" "
@@ -170,7 +160,6 @@ export const RegularOrders = ({ form }: Props) => {
                 />
             </div>
 
-            {/* Products Section */}
             <ProductsSection
                 form={form}
                 fields={fields}

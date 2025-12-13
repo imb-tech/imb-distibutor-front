@@ -2,11 +2,12 @@
 import { useState, useRef, useEffect } from "react"
 import { UseFormReturn } from "react-hook-form"
 import { Input } from "@/components/ui/input"
-import { MapPin, Search, Loader2, Navigation } from "lucide-react"
+import { MapPin, Search, Loader2, Navigation, X } from "lucide-react"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { useJsApiLoader, Autocomplete } from "@react-google-maps/api"
 import { Card, CardContent } from "@/components/ui/card"
+import { cn } from "@/lib/utils"
 
 const libraries: ("places" | "drawing" | "geometry" | "visualization")[] = ["places"]
 
@@ -18,6 +19,7 @@ interface GoogleAddressAutocompleteProps {
   placeholder?: string
   required?: boolean
   apiKey: string
+  className?: string
 }
 
 export const GoogleAddressAutocomplete = ({
@@ -28,11 +30,13 @@ export const GoogleAddressAutocomplete = ({
   placeholder = "Manzilni kiriting yoki tanlang...",
   required = false,
   apiKey,
+  className,
 }: GoogleAddressAutocompleteProps) => {
   const { setValue, watch } = form
   const [autocomplete, setAutocomplete] = useState<google.maps.places.Autocomplete | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [selectedAddress, setSelectedAddress] = useState("")
+  const [mapError, setMapError] = useState<string | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const [map, setMap] = useState<google.maps.Map | null>(null)
   const [marker, setMarker] = useState<google.maps.Marker | null>(null)
@@ -90,42 +94,72 @@ export const GoogleAddressAutocomplete = ({
 
   // Mapni initialize qilish
   const initMap = () => {
-    if (isLoaded && !map) {
-      const defaultCenter = coordinates && coordinates.length === 2
-        ? { lat: coordinates[1], lng: coordinates[0] }
-        : { lat: 41.311081, lng: 69.240562 } // Tashkent default
+    try {
+      if (isLoaded && !map) {
+        const defaultCenter = coordinates && coordinates.length === 2
+          ? { lat: coordinates[1], lng: coordinates[0] }
+          : { lat: 41.311081, lng: 69.240562 } // Tashkent default
 
-      const mapInstance = new google.maps.Map(document.getElementById("map") as HTMLElement, {
-        center: defaultCenter,
-        zoom: coordinates && coordinates.length === 2 ? 15 : 12,
-        mapTypeControl: false,
-        streetViewControl: false,
-        fullscreenControl: false,
-      })
-
-      const markerInstance = new google.maps.Marker({
-        map: mapInstance,
-        position: defaultCenter,
-        draggable: true,
-        animation: google.maps.Animation.DROP,
-      })
-
-      // Marker drag bo'lganda koordinatalarni yangilash
-      google.maps.event.addListener(markerInstance, "dragend", () => {
-        const position = markerInstance.getPosition()
-        if (position) {
-          const lat = position.lat()
-          const lng = position.lng()
-          
-          setValue(coordinatesFieldName, [lng, lat], { shouldValidate: true })
-          
-          // Reverse geocoding - address ni topish
-          reverseGeocode(lat, lng)
+        const mapContainer = document.getElementById("map")
+        if (!mapContainer) {
+          setMapError("Xarita konteyneri topilmadi")
+          return
         }
-      })
 
-      setMap(mapInstance)
-      setMarker(markerInstance)
+        const mapInstance = new google.maps.Map(mapContainer, {
+          center: defaultCenter,
+          zoom: coordinates && coordinates.length === 2 ? 15 : 12,
+          mapTypeControl: false,
+          streetViewControl: false,
+          fullscreenControl: true,
+          fullscreenControlOptions: {
+            position: google.maps.ControlPosition.RIGHT_TOP,
+          },
+          zoomControl: true,
+          zoomControlOptions: {
+            position: google.maps.ControlPosition.RIGHT_BOTTOM,
+          },
+          styles: [
+            {
+              featureType: "poi.business",
+              stylers: [{ visibility: "off" }]
+            }
+          ]
+        })
+
+        const markerInstance = new google.maps.Marker({
+          map: mapInstance,
+          position: defaultCenter,
+          draggable: true,
+          animation: google.maps.Animation.DROP,
+          title: "Yuklash joyi",
+          icon: {
+            url: "http://maps.google.com/mapfiles/ms/icons/red-dot.png",
+            scaledSize: new google.maps.Size(40, 40)
+          }
+        })
+
+        // Marker drag bo'lganda koordinatalarni yangilash
+        google.maps.event.addListener(markerInstance, "dragend", () => {
+          const position = markerInstance.getPosition()
+          if (position) {
+            const lat = position.lat()
+            const lng = position.lng()
+            
+            setValue(coordinatesFieldName, [lng, lat], { shouldValidate: true })
+            
+            // Reverse geocoding - address ni topish
+            reverseGeocode(lat, lng)
+          }
+        })
+
+        setMap(mapInstance)
+        setMarker(markerInstance)
+        setMapError(null)
+      }
+    } catch (error) {
+      console.error("Map initialization error:", error)
+      setMapError("Xaritani yuklashda xatolik yuz berdi")
     }
   }
 
@@ -189,23 +223,15 @@ export const GoogleAddressAutocomplete = ({
     }
   }, [isLoaded, loadError])
 
-  // Format coordinates for display
-  const formatCoordinates = () => {
-    if (Array.isArray(coordinates) && coordinates.length === 2) {
-      const [lng, lat] = coordinates
-      return `[${lng.toFixed(6)}, ${lat.toFixed(6)}]`
-    }
-    return "Koordinatalar kiritilmagan"
-  }
-
   if (loadError) {
     return (
-      <div className="space-y-3">
+      <div className={cn("space-y-3", className)}>
         <Label className="flex items-center gap-2 text-destructive">
           <MapPin className="h-4 w-4" />
           {label}
+          {required && <span className="text-destructive">*</span>}
         </Label>
-        <div className="p-4 bg-destructive/10 rounded-md border border-destructive">
+        <div className="p-4 bg-destructive/10 rounded-lg border border-destructive">
           <p className="text-sm text-destructive">
             Google Maps yuklanmadi. Iltimos, internet aloqasini tekshiring.
           </p>
@@ -215,13 +241,37 @@ export const GoogleAddressAutocomplete = ({
   }
 
   return (
-    <div className="space-y-4">
+    <div className={cn("space-y-4", className)}>
       {/* Label */}
-      <Label className="flex items-center gap-2">
-        <MapPin className="h-4 w-4 text-primary" />
-        {label}
-        {required && <span className="text-destructive">*</span>}
-      </Label>
+      <div className="flex items-center justify-between">
+        <Label className="flex items-center gap-2 font-medium">
+          <MapPin className="h-4 w-4 text-primary" />
+          {label}
+          {required && <span className="text-destructive ml-1">*</span>}
+        </Label>
+        
+        {selectedAddress && (
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={() => {
+              setValue(coordinatesFieldName, [], { shouldValidate: true })
+              if (addressFieldName) {
+                setValue(addressFieldName, "", { shouldValidate: true })
+              }
+              if (inputRef.current) {
+                inputRef.current.value = ""
+              }
+              setSelectedAddress("")
+            }}
+            className="h-7 text-xs flex items-center gap-1"
+          >
+            <X className="h-3 w-3" />
+            Tozalash
+          </Button>
+        )}
+      </div>
 
       {/* Search Input with Google Autocomplete */}
       <div className="space-y-3">
@@ -231,14 +281,14 @@ export const GoogleAddressAutocomplete = ({
             onPlaceChanged={onPlaceChanged}
             options={{
               types: ["address"],
-              componentRestrictions: { country: "uz" }, // O'zbekiston uchun
+              componentRestrictions: { country: "uz" },
             }}
           >
             <div className="relative">
               <Input
                 ref={inputRef}
                 placeholder={placeholder}
-                className="pl-10 pr-10"
+                className="pl-10 pr-10 h-11"
                 onChange={(e) => {
                   if (!e.target.value.trim()) {
                     setValue(coordinatesFieldName, [], { shouldValidate: true })
@@ -263,95 +313,77 @@ export const GoogleAddressAutocomplete = ({
           </div>
         )}
 
-        {/* Use My Location Button */}
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          onClick={handleUseMyLocation}
-          disabled={!isLoaded || isLoading}
-          className="w-full"
-        >
-          <Navigation className="h-4 w-4 mr-2" />
-          Mening joylashuvimdan foydalanish
-        </Button>
+        {/* Action Buttons */}
+        <div className="flex gap-2">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={handleUseMyLocation}
+            disabled={!isLoaded || isLoading}
+            className="flex-1"
+          >
+            <Navigation className="h-4 w-4 mr-2" />
+            Mening joylashuvim
+          </Button>
+        </div>
       </div>
 
       {/* Map Container */}
-      <Card>
+      <Card className="overflow-hidden border-2">
         <CardContent className="p-0">
-          <div id="map" className="w-full h-[300px] rounded-lg overflow-hidden" />
+          <div className="relative">
+            <div 
+              id="map" 
+              className="w-full h-[300px] bg-gray-100"
+            />
+            {mapError && (
+              <div className="absolute inset-0 flex items-center justify-center bg-black/50">
+                <div className="text-white text-center p-4">
+                  <p>{mapError}</p>
+                </div>
+              </div>
+            )}
+          </div>
         </CardContent>
       </Card>
 
       {/* Coordinates Display */}
       {Array.isArray(coordinates) && coordinates.length === 2 && (
-        <div className="space-y-3">
-          <div className="grid grid-cols-2 gap-3">
+        <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div className="space-y-1">
-              <Label className="text-xs">Longitude (Uzunlik)</Label>
-              <div className="border rounded-md px-3 py-2 bg-muted">
-                <code className="font-mono text-sm">
+              <Label className="text-xs font-medium text-gray-600">Longitude (Uzunlik)</Label>
+              <div className="border rounded-md px-3 py-2 bg-gray-50">
+                <code className="font-mono text-sm text-gray-800">
                   {coordinates[0].toFixed(6)}
                 </code>
               </div>
             </div>
             <div className="space-y-1">
-              <Label className="text-xs">Latitude (Kenglik)</Label>
-              <div className="border rounded-md px-3 py-2 bg-muted">
-                <code className="font-mono text-sm">
+              <Label className="text-xs font-medium text-gray-600">Latitude (Kenglik)</Label>
+              <div className="border rounded-md px-3 py-2 bg-gray-50">
+                <code className="font-mono text-sm text-gray-800">
                   {coordinates[1].toFixed(6)}
                 </code>
               </div>
             </div>
           </div>
 
-         
-
           {/* Selected Address Preview */}
           {selectedAddress && (
-            <div className="p-3 bg-blue-50 rounded-md border border-blue-200">
-              <div className="font-medium text-sm mb-1 flex items-center gap-2">
-                <MapPin className="h-3 w-3" />
+            <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+              <div className="font-medium text-sm mb-2 flex items-center gap-2 text-blue-800">
+                <MapPin className="h-4 w-4" />
                 Tanlangan manzil:
               </div>
-              <div className="text-sm text-gray-700">
+              <div className="text-sm text-gray-700 bg-white p-3 rounded border">
                 {selectedAddress}
               </div>
             </div>
           )}
         </div>
       )}
-
-      {/* Clear Button */}
-      <div className="flex justify-end">
-        <Button
-          type="button"
-          variant="ghost"
-          size="sm"
-          onClick={() => {
-            setValue(coordinatesFieldName, [], { shouldValidate: true })
-            if (addressFieldName) {
-              setValue(addressFieldName, "", { shouldValidate: true })
-            }
-            if (inputRef.current) {
-              inputRef.current.value = ""
-            }
-            setSelectedAddress("")
-            
-            // Mapni reset qilish
-            if (map && marker) {
-              const defaultCenter = { lat: 41.311081, lng: 69.240562 }
-              marker.setPosition(defaultCenter)
-              map.panTo(defaultCenter)
-              map.setZoom(12)
-            }
-          }}
-          className="h-7 text-xs"
-        >
-          Tozalash
-        </Button>
-      </div>
     </div>
   )
 }

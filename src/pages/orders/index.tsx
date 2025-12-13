@@ -18,11 +18,12 @@ import ParamInput from "@/components/as-params/input"
 const OrdersMain = () => {
     const navigate = useNavigate()
     const search = useSearch({ from: "/_main/orders/" })
-
-    const { openModal: createOrder } = useModal(ORDERS)
+    const { openModal: createOrder } = useModal("create")
     const { openModal: deleteOrder } = useModal("delete")
     const { setData, getData, clearKey } = useGlobalStore()
-    const { data, isLoading } = useGet<ListResponse<OrderRow>>(ORDERS)
+    const { data, isLoading } = useGet<ListResponse<OrderRow>>(ORDERS,{
+        params:search
+    })
 
     const currentStaff = getData<OrderRow>(ORDERS)
 
@@ -125,11 +126,11 @@ const OrdersMain = () => {
             />
 
             <Modal
-                modalKey={ORDERS}
+                modalKey="create"
                 size="max-w-5xl"
                 classNameTitle={"font-medium text-xl "}
                 title={
-                    currentStaff?.id ?
+                    currentStaff?.uuid ?
                         "Buyurtma tahrirlash"
                         : "Buyurtma qo'shish"
                 }
@@ -138,7 +139,7 @@ const OrdersMain = () => {
                     <AddOrder />
                 </div>
             </Modal>
-            <DeleteModal path={ORDERS} id={currentStaff?.id} />
+            <DeleteModal path={ORDERS} id={currentStaff?.uuid} />
         </div>
     )
 }

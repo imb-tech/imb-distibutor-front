@@ -47,7 +47,7 @@ const AddProductModal = () => {
             `Mahsulot muvaffaqiyatli ${currentProduct?.uuid ? "tahrirlandi!" : "qo'shildi"} `,
         )
         reset()
-
+        
         closeModal()
         queryClient.refetchQueries({ queryKey: [SETTINGS_PRODUCTS] })
         clearKey("create")
@@ -89,9 +89,8 @@ const AddProductModal = () => {
         } else {
             postMutate(SETTINGS_PRODUCTS, values)
         }
-    }
-
-    return (
+    }   
+     return (
         <>
             <div className="w-full max-w-4xl mx-auto p-1">
                 <form

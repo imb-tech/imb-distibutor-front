@@ -22,7 +22,7 @@ const Products = () => {
         },
     )
 
-    const { openModal: openDeleteModal } = useModal("delete")
+    const { openModal: openDeleteModal } = useModal()
     const { openModal: openCreateModal } = useModal(`create`)
     const handleDelete = (row: { original: ProductsType }) => {
         setData(SETTINGS_PRODUCTS, row.original)

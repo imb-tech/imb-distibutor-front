@@ -9,7 +9,7 @@ import { AddOrder } from "@/pages/orders/create"
 import { useGlobalStore } from "@/store/global-store"
 import { useSearch } from "@tanstack/react-router"
 import HeaderRoute from "./header"
-import { cols } from "./constant-cols"
+import { useRouteColumns } from "@/hooks/use-router-column"
 
 
 
@@ -23,6 +23,8 @@ function RoutesMain() {
         params: search,
     })
 
+      const columns = useRouteColumns()
+    
     const handleDelete = (item:OrderRow) => {
         setData<OrderRow>(ORDERS_WINDOW, item)
         deleteOrder()
@@ -39,7 +41,7 @@ function RoutesMain() {
                 <HeaderRoute />
                 <DataTable
                     numeration
-                    columns={cols()}
+                    columns={columns}
                     loading={isLoading}
                     data={ordersData?.results}
                     onEdit={(row) => handleEdit(row.original)}

@@ -47,7 +47,7 @@ const AddProductModal = () => {
             `Mahsulot muvaffaqiyatli ${currentProduct?.uuid ? "tahrirlandi!" : "qo'shildi"} `,
         )
         reset()
-        
+
         closeModal()
         queryClient.refetchQueries({ queryKey: [SETTINGS_PRODUCTS] })
         clearKey("create")
@@ -89,8 +89,8 @@ const AddProductModal = () => {
         } else {
             postMutate(SETTINGS_PRODUCTS, values)
         }
-    }   
-     return (
+    }
+    return (
         <>
             <div className="w-full max-w-4xl mx-auto p-1">
                 <form
@@ -102,13 +102,17 @@ const AddProductModal = () => {
                         name="name"
                         label="Nomi"
                         methods={form}
+                        placeholder="Misol: Bolt M12, 50mm"
                     />
+
                     <FormInput
                         required
                         name="description"
                         label="Eslatma"
                         methods={form}
+                        placeholder="Misol: Po'lat bolt, M12, uzunligi 50mm"
                     />
+
                     <FormCombobox
                         name="unit"
                         label="O'lchov turlari"
@@ -118,6 +122,7 @@ const AddProductModal = () => {
                         valueKey="value"
                         placeholder="Birlikni tanlang"
                     />
+
                     <FormCombobox
                         name="currency"
                         label="Valyuta"
@@ -126,12 +131,15 @@ const AddProductModal = () => {
                         className="w-full"
                         valueKey="value"
                         labelKey="label"
+                        placeholder="Valyutani tanlang"
                     />
+
                     <FormNumberInput
                         required
                         name="price"
                         label="Narxi"
                         control={form.control}
+                        placeholder="Misol: 15000"
                     />
 
                     <div className="flex items-center justify-end gap-2 md:col-span-2">

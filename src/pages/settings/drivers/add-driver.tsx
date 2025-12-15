@@ -70,13 +70,16 @@ const AddDriverModal = () => {
                     name="full_name"
                     label="F.I.O"
                     methods={form}
+                    placeholder="Misol: Karimov Ali Aliyevich"
                 />
+
                 <FormFormatNumberInput
                     control={form.control}
                     format="+998 ## ### ## ##"
                     required
                     label={"Telefon"}
                     name={"phone"}
+                    placeholder="+998 __ ___ __ __"
                 />
 
                 <FormInput
@@ -84,7 +87,9 @@ const AddDriverModal = () => {
                     name="username"
                     label="Login"
                     methods={form}
+                    placeholder="Misol: ali.karimov"
                 />
+
                 <FormInput
                     required={currentDriver?.uuid ? false : true}
                     type="password"
@@ -94,14 +99,16 @@ const AddDriverModal = () => {
                     placeholder={
                         currentDriver?.uuid ?
                             "O'zgartirish uchun kiriting"
-                        :   "Parol kiriting"
+                        :   "Misol: SecurePass123!"
                     }
                 />
+
                 <FormInput
                     required
                     name="driver_profile.passport_number"
                     label="Pasport raqami"
                     methods={form}
+                    placeholder="Misol: AA1234567"
                 />
 
                 <FormNumberInput
@@ -120,25 +127,32 @@ const AddDriverModal = () => {
                     name="driver_profile.pinfl"
                     label="PINFL"
                     control={form.control}
+                    placeholder="Misol: 12345678901234"
                 />
+
                 <FormInput
                     required
                     name="driver_profile.driver_license"
                     label="Haydovchilik guvohnomasi"
                     methods={form}
+                    placeholder="Misol: ABC1234567"
                 />
+
                 <FormNumberInput
                     required
                     name="driver_profile.work_experience"
                     label="Ish tajribasi (yil)"
                     control={form.control}
                     min={0}
+                    placeholder="Misol: 5"
                 />
+
                 <FormDatePicker
-                    required 
+                    required
                     name="driver_profile.license_expiry"
                     label="Guvohnoma amal qilish muddati"
                     control={form.control}
+                    placeholder="15/12/2025"
                 />
 
                 <div className="flex items-center justify-end gap-2 md:col-span-2">

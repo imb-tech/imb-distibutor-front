@@ -8,6 +8,12 @@ export const MapComponent: React.FC<MapComponentProps> = ({
     coordinates,
     onCoordinatesChange,
     onAddressFilled,
+    showSearch = true,
+    showMapControls = true,
+    showCurrentLocationBtn = true,
+    searchPlaceholder = "Manzilni qidirish...",
+    className = "",
+    mapHeight = "400px",
 }) => {
     const mapRef = useRef<HTMLDivElement>(null)
     const markerRef = useRef<google.maps.Marker | null>(null)
@@ -45,32 +51,34 @@ export const MapComponent: React.FC<MapComponentProps> = ({
                     clickableIcons: false,
                 })
 
-                const mapTypeControlDiv = document.createElement("div")
-                mapTypeControlDiv.className =
-                    "flex gap-1 bg-white p-1 rounded-md shadow-md"
+                if (showMapControls) {
+                    const mapTypeControlDiv = document.createElement("div")
+                    mapTypeControlDiv.className =
+                        "flex gap-1 bg-white p-1 rounded-md shadow-md"
 
-                const createMapTypeButton = (
-                    text: string,
-                    mapTypeId: string,
-                ) => {
-                    const button = document.createElement("button")
-                    button.textContent = text
-                    button.className =
-                        "px-2 py-1 text-xs font-medium rounded transition-colors hover:bg-gray-100"
-                    button.style.minWidth = "80px"
-                    button.onclick = () => map.setMapTypeId(mapTypeId)
-                    return button
+                    const createMapTypeButton = (
+                        text: string,
+                        mapTypeId: string,
+                    ) => {
+                        const button = document.createElement("button")
+                        button.textContent = text
+                        button.className =
+                            "px-2 py-1 text-xs font-medium rounded transition-colors hover:bg-gray-100"
+                        button.style.minWidth = "80px"
+                        button.onclick = () => map.setMapTypeId(mapTypeId)
+                        return button
+                    }
+
+                    mapTypeControlDiv.appendChild(
+                        createMapTypeButton("Xarita", "roadmap"),
+                    )
+                    mapTypeControlDiv.appendChild(
+                        createMapTypeButton("Sun'iy yo'ldosh", "hybrid"),
+                    )
+                    map.controls[
+                        google.maps.ControlPosition.BOTTOM_CENTER
+                    ].push(mapTypeControlDiv)
                 }
-
-                mapTypeControlDiv.appendChild(
-                    createMapTypeButton("Xarita", "roadmap"),
-                )
-                mapTypeControlDiv.appendChild(
-                    createMapTypeButton("Sun'iy yo'ldosh", "hybrid"),
-                )
-                map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(
-                    mapTypeControlDiv,
-                )
 
                 const marker = new google.maps.Marker({
                     position: coordinates,
@@ -88,11 +96,14 @@ export const MapComponent: React.FC<MapComponentProps> = ({
                     },
                 })
 
-                autocompleteServiceRef.current =
-                    new google.maps.places.AutocompleteService()
-                placesServiceRef.current = new google.maps.places.PlacesService(
-                    document.createElement("div"),
-                )
+                if (showSearch) {
+                    autocompleteServiceRef.current =
+                        new google.maps.places.AutocompleteService()
+                    placesServiceRef.current =
+                        new google.maps.places.PlacesService(
+                            document.createElement("div"),
+                        )
+                }
 
                 marker.addListener("dragend", () => {
                     const position = marker.getPosition()!
@@ -101,7 +112,9 @@ export const MapComponent: React.FC<MapComponentProps> = ({
                         lng: position.lng(),
                     }
                     onCoordinatesChange(newCoords)
-                    reverseGeocode(newCoords)
+                    if (onAddressFilled) {
+                        reverseGeocode(newCoords)
+                    }
                     setHasUserSelected(true)
                 })
 
@@ -113,7 +126,9 @@ export const MapComponent: React.FC<MapComponentProps> = ({
                         }
                         marker.setPosition(newCoords)
                         onCoordinatesChange(newCoords)
-                        reverseGeocode(newCoords)
+                        if (onAddressFilled) {
+                            reverseGeocode(newCoords)
+                        }
                         setHasUserSelected(true)
                     }
                 })
@@ -127,10 +142,19 @@ export const MapComponent: React.FC<MapComponentProps> = ({
         }
 
         initMap()
-    }, [isLoaded, isInitialized, coordinates, onCoordinatesChange])
+    }, [
+        isLoaded,
+        isInitialized,
+        coordinates,
+        onCoordinatesChange,
+        showMapControls,
+        showSearch,
+        onAddressFilled,
+    ])
 
     useEffect(() => {
         if (
+            !showSearch ||
             !isLoaded ||
             !autocompleteServiceRef.current ||
             !searchQuery.trim() ||
@@ -164,11 +188,11 @@ export const MapComponent: React.FC<MapComponentProps> = ({
         }, 300)
 
         return () => clearTimeout(timer)
-    }, [searchQuery, isLoaded, isSelecting, hasUserSelected])
+    }, [searchQuery, isLoaded, isSelecting, hasUserSelected, showSearch])
 
     const handlePlaceSelect = useCallback(
         (placeId: string) => {
-            if (!isLoaded || !placesServiceRef.current) return
+            if (!showSearch || !isLoaded || !placesServiceRef.current) return
 
             setIsSelecting(true)
             setShowSuggestions(false)
@@ -202,35 +226,42 @@ export const MapComponent: React.FC<MapComponentProps> = ({
 
                         onCoordinatesChange(newCoords)
 
-                        const addressData: AddressData = {
-                            street: "",
-                            city: "",
-                            region: "",
-                            fullAddress: place.formatted_address || "",
+                        if (onAddressFilled) {
+                            const addressData: AddressData = {
+                                street: "",
+                                city: "",
+                                region: "",
+                                fullAddress: place.formatted_address || "",
+                            }
+
+                            place.address_components?.forEach((component) => {
+                                const types = component.types
+                                if (types.includes("route"))
+                                    addressData.street = component.long_name
+                                if (types.includes("locality"))
+                                    addressData.city = component.long_name
+                                if (
+                                    types.includes(
+                                        "administrative_area_level_1",
+                                    )
+                                )
+                                    addressData.region = component.long_name
+                            })
+
+                            onAddressFilled(addressData)
                         }
 
-                        place.address_components?.forEach((component) => {
-                            const types = component.types
-                            if (types.includes("route"))
-                                addressData.street = component.long_name
-                            if (types.includes("locality"))
-                                addressData.city = component.long_name
-                            if (types.includes("administrative_area_level_1"))
-                                addressData.region = component.long_name
-                        })
-
-                        onAddressFilled(addressData)
                         setSearchQuery(place.formatted_address || "")
                     }
                 },
             )
         },
-        [isLoaded, onCoordinatesChange, onAddressFilled],
+        [isLoaded, onCoordinatesChange, onAddressFilled, showSearch],
     )
 
     const reverseGeocode = useCallback(
         (coords: { lat: number; lng: number }) => {
-            if (!window.google || isGeocoding) return
+            if (!onAddressFilled || !window.google || isGeocoding) return
 
             setIsGeocoding(true)
             const geocoder = new google.maps.Geocoder()
@@ -256,17 +287,17 @@ export const MapComponent: React.FC<MapComponentProps> = ({
                     })
 
                     onAddressFilled(addressData)
-                    if (!hasUserSelected) {
+                    if (!hasUserSelected && showSearch) {
                         setSearchQuery(results[0].formatted_address ?? "")
                     }
                 }
             })
         },
-        [hasUserSelected, isGeocoding, onAddressFilled],
+        [hasUserSelected, isGeocoding, onAddressFilled, showSearch],
     )
 
     const handleGetCurrentLocation = useCallback(() => {
-        if (!navigator.geolocation) return
+        if (!navigator.geolocation || !showCurrentLocationBtn) return
 
         navigator.geolocation.getCurrentPosition(
             (position) => {
@@ -279,14 +310,21 @@ export const MapComponent: React.FC<MapComponentProps> = ({
                 }
 
                 onCoordinatesChange(newCoords)
-                reverseGeocode(newCoords)
+                if (onAddressFilled) {
+                    reverseGeocode(newCoords)
+                }
                 setHasUserSelected(true)
             },
             (error) => {
                 console.error("Geolocation error:", error)
             },
         )
-    }, [onCoordinatesChange, reverseGeocode])
+    }, [
+        onCoordinatesChange,
+        reverseGeocode,
+        showCurrentLocationBtn,
+        onAddressFilled,
+    ])
 
     useEffect(() => {
         if (!isInitialized || !markerRef.current || !mapInstanceRef.current)
@@ -301,6 +339,8 @@ export const MapComponent: React.FC<MapComponentProps> = ({
     }, [coordinates.lat, coordinates.lng, isInitialized])
 
     useEffect(() => {
+        if (!showSearch) return
+
         const handleClickOutside = (event: MouseEvent) => {
             const target = event.target as Node
             if (
@@ -316,13 +356,18 @@ export const MapComponent: React.FC<MapComponentProps> = ({
         document.addEventListener("mousedown", handleClickOutside)
         return () =>
             document.removeEventListener("mousedown", handleClickOutside)
-    }, [])
+    }, [showSearch])
 
     const handleSearchFocus = useCallback(() => {
-        if (suggestions.length > 0 && !isSelecting && !hasUserSelected) {
+        if (
+            showSearch &&
+            suggestions.length > 0 &&
+            !isSelecting &&
+            !hasUserSelected
+        ) {
             setShowSuggestions(true)
         }
-    }, [suggestions.length, isSelecting, hasUserSelected])
+    }, [suggestions.length, isSelecting, hasUserSelected, showSearch])
 
     const clearSearch = useCallback(() => {
         setSearchQuery("")
@@ -331,7 +376,6 @@ export const MapComponent: React.FC<MapComponentProps> = ({
         setHasUserSelected(false)
     }, [])
 
-    // Loading state
     if (!isLoaded) {
         return (
             <div className="h-full flex flex-col items-center justify-center space-y-3">
@@ -342,83 +386,92 @@ export const MapComponent: React.FC<MapComponentProps> = ({
     }
 
     return (
-        <div className="h-full flex flex-col">
-            {/* Search Input */}
-            <div className="mb-4 relative" ref={suggestionsRef}>
-                <div className="relative">
-                    <Input
-                        ref={searchInputRef}
-                        value={searchQuery}
-                        onChange={(e) => {
-                            setSearchQuery(e.target.value)
-                            setHasUserSelected(false)
-                        }}
-                        onFocus={handleSearchFocus}
-                        placeholder="Manzilni qidirish..."
-                        className="pr-20 pl-10 py-2 text-sm"
-                        disabled={isSelecting}
-                    />
-
-                    <div className="absolute left-3 top-1/2 -translate-y-1/2">
-                        <MapPin className="w-4 h-4 text-gray-400" />
+        <div
+            className={`flex flex-col ${className}`}
+            style={{ height: mapHeight }}
+        >
+            {showSearch && (
+                <div className="relative mb-4" ref={suggestionsRef}>
+                    <div className="relative">
+                        <div className="relative">
+                            <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+                            <Input
+                            fullWidth
+                                ref={searchInputRef}
+                                value={searchQuery}
+                                onChange={(e) => {
+                                    setSearchQuery(e.target.value)
+                                    setHasUserSelected(false)
+                                }}
+                                onFocus={handleSearchFocus}
+                                placeholder={searchPlaceholder}
+                                className="h-10 text-sm"
+                                disabled={isSelecting}
+                            />
+                            <div className="absolute right-0 top-0 h-full flex items-center gap-1 px-3">
+                                {searchQuery && (
+                                    <button
+                                        type="button"
+                                        onClick={clearSearch}
+                                        className="p-1.5 hover:bg-muted rounded-md transition-colors"
+                                        disabled={isSelecting}
+                                        aria-label="Tozalash"
+                                    >
+                                        <X className="h-4 w-4 text-muted-foreground" />
+                                    </button>
+                                )}
+                                {showCurrentLocationBtn && (
+                                    <button
+                                        type="button"
+                                        onClick={handleGetCurrentLocation}
+                                        className="p-1.5 hover:bg-muted rounded-md transition-colors"
+                                        title="Joriy joylashuv"
+                                        disabled={isSelecting}
+                                        aria-label="Joriy joylashuv"
+                                    >
+                                        <Navigation className="h-4 w-4 text-primary" />
+                                    </button>
+                                )}
+                            </div>
+                        </div>
                     </div>
 
-                    {searchQuery && (
-                        <button
-                            type="button"
-                            onClick={clearSearch}
-                            className="absolute right-10 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors"
-                            disabled={isSelecting}
-                        >
-                            <X className="w-4 h-4 text-gray-400" />
-                        </button>
-                    )}
-
-                    <button
-                        type="button"
-                        onClick={handleGetCurrentLocation}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors"
-                        title="Joriy joylashuv"
-                        disabled={isSelecting}
-                    >
-                        <Navigation className="w-4 h-4 text-blue-600" />
-                    </button>
+                    {showSuggestions &&
+                        suggestions.length > 0 &&
+                        !hasUserSelected && (
+                            <div className="absolute z-50 w-full mt-1 bg-background border rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                                {suggestions.map((suggestion) => (
+                                    <button
+                                        key={suggestion.place_id}
+                                        type="button"
+                                        onClick={() =>
+                                            handlePlaceSelect(
+                                                suggestion.place_id,
+                                            )
+                                        }
+                                        className="w-full text-left px-4 py-3 hover:bg-accent focus:bg-accent focus:outline-none text-sm border-b last:border-b-0 transition-colors"
+                                        title={suggestion.description}
+                                        disabled={isSelecting}
+                                    >
+                                        <div className="font-medium">
+                                            {
+                                                suggestion.structured_formatting
+                                                    .main_text
+                                            }
+                                        </div>
+                                        <div className="text-xs text-muted-foreground mt-0.5 truncate">
+                                            {
+                                                suggestion.structured_formatting
+                                                    .secondary_text
+                                            }
+                                        </div>
+                                    </button>
+                                ))}
+                            </div>
+                        )}
                 </div>
-
-                {showSuggestions &&
-                    suggestions.length > 0 &&
-                    !hasUserSelected && (
-                        <div className="absolute z-50 left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
-                            {suggestions.map((suggestion) => (
-                                <button
-                                    key={suggestion.place_id}
-                                    type="button"
-                                    onClick={() =>
-                                        handlePlaceSelect(suggestion.place_id)
-                                    }
-                                    className="w-full text-left px-4 py-3 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none text-gray-700 text-sm border-b border-gray-100 last:border-b-0 truncate transition-colors"
-                                    title={suggestion.description}
-                                    disabled={isSelecting}
-                                >
-                                    <div className="font-medium">
-                                        {
-                                            suggestion.structured_formatting
-                                                .main_text
-                                        }
-                                    </div>
-                                    <div className="text-xs text-gray-500 mt-0.5 truncate">
-                                        {
-                                            suggestion.structured_formatting
-                                                .secondary_text
-                                        }
-                                    </div>
-                                </button>
-                            ))}
-                        </div>
-                    )}
-            </div>
-
-            <div className="flex-1 rounded-lg overflow-hidden border border-gray-300 bg-gray-100">
+            )}
+            <div className="flex-1 min-h-0 rounded-lg overflow-hidden border border-gray-300 bg-gray-100">
                 <div ref={mapRef} className="w-full h-full" />
             </div>
         </div>

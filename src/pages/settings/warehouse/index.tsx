@@ -52,7 +52,7 @@ const Warehouse = () => {
             />
             <DeleteModal path={SETTINGS_WAREHOUSE} id={item?.uuid} />
             <Modal
-                size="max-w-4xl"
+                size="max-w-xl"
                 title={`Ombor ${item?.uuid ? "tahrirlash" : "qo'shish"}`}
                 modalKey="create"
             >

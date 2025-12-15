@@ -1,3 +1,27 @@
+type LoadRow = {
+    id: string
+    product: number
+    quantity: number
+    price: string
+    order: number
+    product_name?: string
+    description?: string
+    unit?: number
+    unit_name?: string
+    currency?: number
+    total_amount?: number
+}
+
+type ProductsType = {
+    id: number
+    uuid: string
+    name: string
+    unit: number
+    price: string
+    description: string
+    currency: number
+}
+
 
 
 type PaginationProps = {

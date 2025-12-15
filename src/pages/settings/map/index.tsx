@@ -396,6 +396,7 @@ export const MapComponent: React.FC<MapComponentProps> = ({
                         <div className="relative">
                             <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
                             <Input
+                            fullWidth
                                 ref={searchInputRef}
                                 value={searchQuery}
                                 onChange={(e) => {
@@ -404,7 +405,7 @@ export const MapComponent: React.FC<MapComponentProps> = ({
                                 }}
                                 onFocus={handleSearchFocus}
                                 placeholder={searchPlaceholder}
-                                className="pl-10 pr-20 h-10 text-sm"
+                                className="h-10 text-sm"
                                 disabled={isSelecting}
                             />
                             <div className="absolute right-0 top-0 h-full flex items-center gap-1 px-3">

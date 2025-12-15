@@ -6,6 +6,7 @@ import { FormNumberInput } from "@/components/form/number-input"
 import { UseFormReturn } from "react-hook-form"
 import { useGet } from "@/hooks/useGet"
 import { SETTINGS_CUSTOMERS, SETTINGS_PAYMENT_TYPES } from "@/constants/api-endpoints"
+import { MapComponent } from "./map"
 
 type Props = {
     form: UseFormReturn<any>
@@ -78,7 +79,9 @@ export const ExtraOrders = ({ form }: Props) => {
                     />
 
                 </div>
-
+ <div>
+    <MapComponent/>
+ </div>
             </div>
 
             <div className="space-y-2">

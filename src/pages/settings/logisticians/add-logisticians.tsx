@@ -1,6 +1,11 @@
+import { FormFormatNumberInput } from "@/components/form/format-number-input"
 import FormInput from "@/components/form/input"
 import { Button } from "@/components/ui/button"
-import { SETTINGS_LOGISTICIANS } from "@/constants/api-endpoints"
+import {
+    SETTINGS_LOGISTICIANS,
+    SETTINGS_LOGISTICIANS_UPDATE,
+    SETTINGS_WAREHOUSE,
+} from "@/constants/api-endpoints"
 import { useModal } from "@/hooks/useModal"
 import { usePatch } from "@/hooks/usePatch"
 import { usePost } from "@/hooks/usePost"
@@ -8,9 +13,12 @@ import { useGlobalStore } from "@/store/global-store"
 import { useQueryClient } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
 
+import { FormCombobox } from "@/components/form/combobox"
+import { useGet } from "@/hooks/useGet"
 import { toast } from "sonner"
 
 const AddLogisticansModal = () => {
+    const { data } = useGet(SETTINGS_WAREHOUSE)
     const queryClient = useQueryClient()
     const { closeModal } = useModal("create")
     const { getData, clearKey } = useGlobalStore()
@@ -24,9 +32,8 @@ const AddLogisticansModal = () => {
 
     const onSuccess = () => {
         toast.success(
-            `Logist muvaffaqiyatli ${currentLogistician?.id ? "tahrirlandi!" : "qo'shildi"} `,
+            `Logist muvaffaqiyatli ${currentLogistician?.uuid ? "tahrirlandi!" : "qo'shildi"} `,
         )
-
         reset()
         clearKey(SETTINGS_LOGISTICIANS)
         closeModal()
@@ -44,9 +51,9 @@ const AddLogisticansModal = () => {
     const isPending = isPendingCreate || isPendingUpdate
 
     const onSubmit = (values: LogisticiansType) => {
-        if (currentLogistician?.id) {
+        if (currentLogistician?.uuid) {
             updateMutate(
-                `${SETTINGS_LOGISTICIANS}/${currentLogistician.id}`,
+                `${SETTINGS_LOGISTICIANS_UPDATE}/${currentLogistician?.uuid}`,
                 values,
             )
         } else {
@@ -69,20 +76,36 @@ const AddLogisticansModal = () => {
                     />
                     <FormInput
                         required
-                        name="phone_number"
-                        label="Telefon raqami"
+                        name="username"
+                        label="Login"
                         methods={form}
                     />
-
                     <FormInput
                         required
-                        name="working_warehouse"
-                        label="Ombor"
+                        name="password"
+                        label="Parol"
                         methods={form}
+                    />
+                    <FormFormatNumberInput
+                        control={form.control}
+                        format="+998 ## ### ## ##"
+                        required
+                        label={"Telefon"}
+                        name={"phone"}
+                    />
+
+                    <FormCombobox
+                        name="depot"
+                        label="Ombor"
+                        options={data?.results}
+                        control={form.control}
+                        valueKey="id"
+                        labelKey="name"
                     />
 
                     <div className="flex items-center justify-end gap-2 md:col-span-2">
                         <Button
+                            variant={"default2"}
                             className="min-w-36 w-full md:w-max"
                             type="submit"
                             loading={isPending}

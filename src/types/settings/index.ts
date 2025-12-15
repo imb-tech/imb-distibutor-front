@@ -29,17 +29,37 @@ type ProductsType = {
 
 type DriversType = {
     id: number
+    uuid: string
     full_name: string
-    phone_number: string
-    passport_series: string
-    jshshir: string
+    phone: string
+    username: string
+    password: string
+    driver_profile: DriverProfileType
+}
+
+type DriverProfileType = {
+    id: number
+    passport_number: string
+    pinfl: number
     driver_license: string
-    license_number: string
-    working_stage: string
-    company_id: number
-    login: string
-    parol: string
-    activity: string
+    work_experience: number
+    license_expiry: string
+}
+
+type DriverFormType = {
+    full_name: string
+    phone: string
+    username: string
+    password: string
+    uuid: number
+    driver_profile: {
+        pinfl: string
+        id: number
+        passport_number: string
+        driver_license: string
+        work_experience: number
+        license_expiry: string
+    }
 }
 
 type CarsType = {
@@ -68,21 +88,71 @@ type WarehouseType = {
     uuid: string
     name: string
     address: string
+    location: number[]
 }
 type LogisticiansType = {
     id: number
+    uuid: number
     full_name: string
-    phone_number: string
-    working_warehouse: string
+    phone: string
+    username: string
+    password: string
+    depot: number
 }
 type CustomersType = {
     id: number
-    full_name: string
-    organization: string
-    location: string
-    map_location: string
-    koordination: string
-    working_days: string
+    uuid: string
+    name: string
+    company_name: string
+    address: string
+    loading_coordinates: number[]
+    coordinates: number[]
     phone_number: string
     email: string
+    note: string
+    schedules: SchedulesType[]
+}
+
+type SchedulesType = {
+    id: number
+    client: number
+    day_of_week: number
+    start_time: string
+    end_time: string
+}
+
+type ScheduleFormType = {
+    day_of_week: number
+    start_time: string
+    end_time: string
+    enabled?: boolean
+}
+
+type CustomerFormType = {
+    name: string
+    company_name: string
+    address: string
+    loading_coordinates: string[]
+    coordinates: string[]
+    phone_number: string
+    email: string
+    note: string
+    schedules: ScheduleFormType[]
+}
+
+type ShippersType = {
+    id: number
+    name: string
+}
+type MapComponentProps = {
+    coordinates: { lat: number; lng: number }
+    onCoordinatesChange: (coords: { lat: number; lng: number }) => void
+    onAddressFilled: (addressData: any) => void
+}
+
+type AddressData ={
+    street: string
+    city: string
+    region: string
+    fullAddress: string
 }

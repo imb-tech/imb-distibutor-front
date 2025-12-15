@@ -1,33 +1,37 @@
+import { FormDatePicker } from "@/components/form/date-picker"
+import { FormFormatNumberInput } from "@/components/form/format-number-input"
 import FormInput from "@/components/form/input"
 import { FormNumberInput } from "@/components/form/number-input"
 import { Button } from "@/components/ui/button"
-import { SETTINGS_DRIVERS } from "@/constants/api-endpoints"
+import {
+    SETTINGS_DRIVERS,
+    SETTINGS_DRIVERS_CREATE,
+    SETTINGS_DRIVERS_UPDATE,
+} from "@/constants/api-endpoints"
 import { useModal } from "@/hooks/useModal"
 import { usePatch } from "@/hooks/usePatch"
 import { usePost } from "@/hooks/usePost"
 import { useGlobalStore } from "@/store/global-store"
 import { useQueryClient } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
-
 import { toast } from "sonner"
 
 const AddDriverModal = () => {
     const queryClient = useQueryClient()
     const { closeModal } = useModal("create")
     const { getData, clearKey } = useGlobalStore()
+    const currentDriver = getData<DriverFormType>(SETTINGS_DRIVERS)
 
-    const currentDriver = getData<DriversType>(SETTINGS_DRIVERS)
-    const form = useForm<DriversType>({
+    const form = useForm<DriverFormType>({
         defaultValues: currentDriver,
     })
 
     const { handleSubmit, reset } = form
 
     const onSuccess = () => {
-         toast.success(
-            `Avtomobil muvaffaqiyatli ${currentDriver?.id ? "tahrirlandi!" : "qo'shildi"} `,
+        toast.success(
+            `Haydovchi muvaffaqiyatli ${currentDriver?.uuid ? "tahrirlandi!" : "qo'shildi"}`,
         )
-
         reset()
         clearKey(SETTINGS_DRIVERS)
         closeModal()
@@ -44,93 +48,111 @@ const AddDriverModal = () => {
 
     const isPending = isPendingCreate || isPendingUpdate
 
-    const onSubmit = (values: DriversType) => {
-        if (currentDriver?.id) {
-            updateMutate(`${SETTINGS_DRIVERS}/${currentDriver.id}`, values)
+    const onSubmit = (values: DriverFormType) => {
+        if (currentDriver?.uuid) {
+            updateMutate(
+                `${SETTINGS_DRIVERS_UPDATE}/${currentDriver.uuid}`,
+                values,
+            )
         } else {
-            postMutate(SETTINGS_DRIVERS, values)
+            postMutate(SETTINGS_DRIVERS_CREATE, values)
         }
     }
 
     return (
-        <>
-            <div className="w-full max-w-4xl mx-auto p-1">
-                <form
-                    onSubmit={handleSubmit(onSubmit)}
-                    className="grid md:grid-cols-2 gap-4"
-                >
-                    <FormInput
-                        required
-                        name="full_name"
-                        label="F.I.O"
-                        methods={form}
-                    />
-                    <FormInput
-                        required
-                        name="phone_number"
-                        label="Telefon raqami"
-                        methods={form}
-                    />
-                    <FormInput
-                        required
-                        name="passport_series"
-                        label="Pasport seriya va raqami"
-                        methods={form}
-                    />
-                    <FormNumberInput
-                        registerOptions={{
-                            max: {
-                                value: 14,
-                                message: "14 xonali bo'lishi kerak",
-                            },
-                            min: {
-                                value: 14,
-                                message: "14 xonali bo'lishi kerak",
-                            },
-                        }}
-                        thousandSeparator={""}
-                        required
-                        name="jshshir"
-                        label="JShShIR"
-                        control={form.control}
-                    />
-                    <FormInput
-                        required
-                        name="driver_license"
-                        label="Haydovchilik quvohnomasi"
-                        methods={form}
-                    />
-                    <FormInput
-                        required
-                        name="company_id"
-                        label="Kompanya ID"
-                        methods={form}
-                    />
-                    <FormInput
-                        required
-                        name="login"
-                        label="Login"
-                        methods={form}
-                    />
-                    <FormInput
-                        required
-                        name="parol"
-                        label="Parol"
-                        methods={form}
-                    />
+        <div className="w-full max-w-4xl mx-auto p-1">
+            <form
+                onSubmit={handleSubmit(onSubmit)}
+                className="grid md:grid-cols-2 gap-4"
+            >
+                <FormInput
+                    required
+                    name="full_name"
+                    label="F.I.O"
+                    methods={form}
+                />
+                <FormFormatNumberInput
+                    control={form.control}
+                    format="+998 ## ### ## ##"
+                    required
+                    label={"Telefon"}
+                    name={"phone"}
+                />
 
-                    <div className="flex items-center justify-end gap-2 md:col-span-2">
-                        <Button
-                            className="min-w-36 w-full md:w-max"
-                            type="submit"
-                            loading={isPending}
-                        >
-                            {"Saqlash"}
-                        </Button>
-                    </div>
-                </form>
-            </div>
-        </>
+                <FormInput
+                    required
+                    name="username"
+                    label="Login"
+                    methods={form}
+                />
+                <FormInput
+                    required={currentDriver?.uuid ? false : true}
+                    type="password"
+                    name="password"
+                    label="Parol"
+                    methods={form}
+                    placeholder={
+                        currentDriver?.uuid ?
+                            "O'zgartirish uchun kiriting"
+                        :   "Parol kiriting"
+                    }
+                />
+                <FormInput
+                    required
+                    name="driver_profile.passport_number"
+                    label="Pasport raqami"
+                    methods={form}
+                />
+
+                <FormNumberInput
+                    registerOptions={{
+                        maxLength: {
+                            value: 14,
+                            message: "14 xonali bo'lishi kerak",
+                        },
+                        minLength: {
+                            value: 14,
+                            message: "14 xonali bo'lishi kerak",
+                        },
+                    }}
+                    thousandSeparator={""}
+                    required
+                    name="driver_profile.pinfl"
+                    label="PINFL"
+                    control={form.control}
+                />
+                <FormInput
+                    required
+                    name="driver_profile.driver_license"
+                    label="Haydovchilik guvohnomasi"
+                    methods={form}
+                />
+                <FormNumberInput
+                    required
+                    name="driver_profile.work_experience"
+                    label="Ish tajribasi (yil)"
+                    control={form.control}
+                    min={0}
+                />
+                <FormDatePicker
+                    required 
+                    name="driver_profile.license_expiry"
+                    label="Guvohnoma amal qilish muddati"
+                    control={form.control}
+                />
+
+                <div className="flex items-center justify-end gap-2 md:col-span-2">
+                    <Button
+                        variant={"default2"}
+                        className="min-w-36 w-full md:w-max"
+                        type="submit"
+                        loading={isPending}
+                    >
+                        {"Saqlash"}
+                    </Button>
+                </div>
+            </form>
+        </div>
     )
 }
 

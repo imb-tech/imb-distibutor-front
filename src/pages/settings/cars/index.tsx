@@ -5,16 +5,16 @@ import { SETTINGS_CARS } from "@/constants/api-endpoints"
 import { useGet } from "@/hooks/useGet"
 import { useModal } from "@/hooks/useModal"
 import { useGlobalStore } from "@/store/global-store"
-import TableHeader from "../table-header"
-import { useColumnsCarsTable } from "./cars-cols"
-import AddCarsModal from "./add-cars"
 import { useSearch } from "@tanstack/react-router"
+import TableHeader from "../table-header"
+import AddCarsModal from "./add-cars"
+import { useColumnsCarsTable } from "./cars-cols"
 
 const Cars = () => {
-    const search = useSearch({ from: '/_main/settings/cars' })
+    const search = useSearch({ from: "/_main/settings/cars" })
 
     const { data, isLoading } = useGet<ListResponse<CarsType>>(SETTINGS_CARS, {
-        params: search
+        params: search,
     })
     const { getData, setData } = useGlobalStore()
     const item = getData<ProductsType>(SETTINGS_CARS)
@@ -55,7 +55,7 @@ const Cars = () => {
             <DeleteModal path={SETTINGS_CARS} id={item?.uuid} />
             <Modal
                 size="max-w-2xl"
-                title={item?.uuid ? "Tahrirlash" : "Qo'shish"}
+                title={`Avtomobil ${item?.uuid ? "tahrirlash" : "qo'shish"}`}
                 modalKey="create"
             >
                 <AddCarsModal />
@@ -65,5 +65,3 @@ const Cars = () => {
 }
 
 export default Cars
-
-

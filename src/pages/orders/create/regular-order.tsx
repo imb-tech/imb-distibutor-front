@@ -3,10 +3,10 @@ import { FormCombobox } from "@/components/form/combobox"
 import { FormDatePicker } from "@/components/form/date-picker"
 import { FormInput } from "@/components/form/input"
 import { FormNumberInput } from "@/components/form/number-input"
-import { useEffect } from "react"
-import { useFieldArray, UseFormReturn } from "react-hook-form"
-import { useGet } from "@/hooks/useGet"
 import { SETTINGS_CUSTOMERS } from "@/constants/api-endpoints"
+import { useGet } from "@/hooks/useGet"
+import { useEffect } from "react"
+import { UseFormReturn } from "react-hook-form"
 import { ProductsSection } from "./add-products"
 
 type Props = {
@@ -14,9 +14,9 @@ type Props = {
 }
 
 type ListResponse<T> = {
-    total_pages: number;
-    count: number;
-    results: T[];
+    total_pages: number
+    count: number
+    results: T[]
 }
 
 type CustomersType = {
@@ -25,14 +25,8 @@ type CustomersType = {
 }
 
 export const RegularOrders = ({ form }: Props) => {
-    const { control} = form
-
-    const { fields, append, remove, update } = useFieldArray({
-        control,
-        name: "loads",
-    })
-
-    const { data: clientsData } = useGet<ListResponse<CustomersType>>(SETTINGS_CUSTOMERS)
+    const { data: clientsData } =
+        useGet<ListResponse<CustomersType>>(SETTINGS_CUSTOMERS)
 
     const prepareDataForSubmit = (data: any) => {
         if (data.loads && Array.isArray(data.loads)) {
@@ -41,7 +35,7 @@ export const RegularOrders = ({ form }: Props) => {
                     quantity: load.quantity || 0,
                     price: load.price || "0",
                     product: load.product || 0,
-                    order: load.order || 1
+                    order: load.order || 1,
                 }
             })
             return { ...data, loads: cleanedLoads }
@@ -54,7 +48,10 @@ export const RegularOrders = ({ form }: Props) => {
         form.handleSubmit = (onValid) => {
             return originalSubmit((data) => {
                 const preparedData = prepareDataForSubmit(data)
-                console.log("Backendga yuboriladigan loads:", preparedData.loads)
+                console.log(
+                    "Backendga yuboriladigan loads:",
+                    preparedData.loads,
+                )
                 onValid(preparedData)
             })
         }
@@ -160,13 +157,7 @@ export const RegularOrders = ({ form }: Props) => {
                 />
             </div>
 
-            <ProductsSection
-                form={form}
-                fields={fields}
-                append={append}
-                remove={remove}
-                update={update}
-            />
+            <ProductsSection form={form} />
         </div>
     )
 }

@@ -507,14 +507,6 @@ const AddCustomersModal = () => {
                                 : currentLoadingAddress || "Tanlanmagan"}
                             </div>
                         </div>
-                        <div className="flex gap-3">
-                            <Button
-                                type="button"
-                                variant="outline"
-                                onClick={closeMap}
-                            >
-                                Bekor qilish
-                            </Button>
                             <Button
                                 type="button"
                                 variant="default2"
@@ -523,7 +515,7 @@ const AddCustomersModal = () => {
                             >
                                 Tanlashni tasdiqlash
                             </Button>
-                        </div>
+                       
                     </div>
                 </div>
             </Modal>

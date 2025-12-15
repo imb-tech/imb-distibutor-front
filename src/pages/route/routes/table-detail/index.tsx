@@ -11,7 +11,9 @@ interface CarDetailsRowProps {
 export const CarDetailsRow = ({ car }: CarDetailsRowProps) => {
     const navigate = useNavigate()
     const search = useSearch({ from: "/_main/route/" })
-    const { data } = useGet<RouteTypes>(`${ROUTE_VEHICLES}/${car.uuid}`)
+    const { data } = useGet<RouteTypes>(`${ROUTE_VEHICLES}/${car.uuid}`, {
+        enabled: !!car.uuid,
+    })
 
     useEffect(() => {
         if (data?.order_routes?.length) {

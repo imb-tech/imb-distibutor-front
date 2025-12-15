@@ -8,7 +8,9 @@ export const LeftSideCars = () => {
     const navigate = useNavigate()
     const search = useSearch({ from: "/_main/route/" })
     const { route_id, order_id } = search
-    const { data } = useGet<RouteTypes>(`${ROUTE_VEHICLES}/${route_id}`)
+    const { data } = useGet<RouteTypes>(`${ROUTE_VEHICLES}/${route_id}`, {
+        enabled: !!route_id,
+    })
 
     return (
         <Card>

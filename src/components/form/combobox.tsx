@@ -27,6 +27,7 @@ type ComboboxProps<TForm extends FieldValues, T extends Record<string, any>> = {
     sorting?: boolean
     isClearIcon?: boolean
     wrapperClassName?: string
+      handleItem?: (val: T) => void
 }
 
 export function FormCombobox<
@@ -51,6 +52,7 @@ export function FormCombobox<
     isClearIcon,
     isSearch = true,
     wrapperClassName,
+    handleItem,
 }: ComboboxProps<TForm, T>) {
     const error = getNestedValue(control._formState.errors, name)
     return (
@@ -86,6 +88,7 @@ export function FormCombobox<
                         className={className}
                         isSearch={isSearch}
                         isClearIcon={isClearIcon}
+                        handleItem={handleItem}
                         addButtonProps={{
                             disabled: control._formState.disabled,
                             ...addButtonProps,

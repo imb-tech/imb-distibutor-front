@@ -30,7 +30,7 @@ export const RegularOrders = ({ form }: Props) => {
 
     const prepareDataForSubmit = (data: any) => {
         if (data.loads && Array.isArray(data.loads)) {
-            const cleanedLoads = data.loads.map((load: any) => {
+            const cleanedLoads = data.loads.map((load: LoadRow) => {
                 return {
                     quantity: load.quantity || 0,
                     price: load.price || "0",
@@ -83,6 +83,8 @@ export const RegularOrders = ({ form }: Props) => {
                     control={form.control}
                     name="scheduled_delivery_date"
                     placeholder="Sanani tanlang"
+                    required
+
                 />
 
                 <FormCombobox
@@ -112,6 +114,8 @@ export const RegularOrders = ({ form }: Props) => {
                             methods={form}
                             name="note"
                             placeholder="Eslatma"
+                            required
+
                         />
                         <FormCombobox
                             placeholder="Ustuvor transport"
@@ -122,6 +126,7 @@ export const RegularOrders = ({ form }: Props) => {
                             name="priority_vehicle"
                             control={form.control}
                             className="w-full"
+                            required
                         />
                     </div>
                 </div>
@@ -132,6 +137,8 @@ export const RegularOrders = ({ form }: Props) => {
                         control={form.control}
                         name="cod"
                         placeholder="To'lov naqd summasi"
+                        required
+
                     />
                 </div>
             </div>
@@ -142,18 +149,24 @@ export const RegularOrders = ({ form }: Props) => {
                     control={form.control}
                     name="weight"
                     placeholder="Og'irligi (kg)"
+                    required
+
                 />
                 <FormNumberInput
                     thousandSeparator=" "
                     control={form.control}
                     name="product_count"
                     placeholder="Mahsulot soni"
+                    required
+
                 />
                 <FormNumberInput
                     thousandSeparator=" "
                     control={form.control}
                     name="volume"
                     placeholder="Hajm (m³)"
+                    required
+
                 />
             </div>
 

@@ -45,16 +45,25 @@ type CarsTypeInOrders = {
     finished_order_count: number
     order_weight: number
 }
-
-
-type RouteTypes ={
-    id:number
-    uuid:number
-    name:string
-    depot_name:string
-    order_routes:[]
+type OrderRoute = {
+  id: number;
+  client_address: string;
+  client_coordinates: [number, number];
+  number: number;
+  order_uuid: string;
 }
 
+type RouteTypes = {
+  id: number;
+  uuid: string;
+  name: string;
+  depot_name: string;
+  order_routes: OrderRoute[];
+  coordinates: [number, number][];
+  depot_type: 1 | 2 | 3;
+}
+
+ 
 type OrderRoutesType ={
     id:number
     client_address:string
@@ -112,12 +121,7 @@ type MapSettings = {
     centerOnSelection: boolean
 }
 
-type OrderRoute = {
-    id: number
-    client_address: string
-    client_coordinates: [number, number]
-    number: number
-}
+ 
 
 type RouteMaps = {
     id: number

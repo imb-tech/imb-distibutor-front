@@ -17,15 +17,7 @@ type Profile = {
     password: string
 }
 
-type ProductsType = {
-    uuid: string
-    id: number
-    name: string
-    description: string
-    unit: number
-    price: string
-    currency: number
-}
+
 
 type DriversType = {
     id: number
@@ -164,7 +156,7 @@ type MapComponentProps ={
     mapHeight?: string  
 }
 
-type AddressData ={
+type AddressData = {
     street: string
     city: string
     region: string

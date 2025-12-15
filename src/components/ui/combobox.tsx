@@ -33,6 +33,7 @@ export type ComboboxProps<T extends Record<string, any>> = {
     valueKey?: keyof T
     skeletonCount?: number
     onSearchChange?: (val: string) => void
+    handleItem?: (val: T) => void
     addButtonProps?: ButtonProps
     isSearch?: boolean
     isClearIcon?: boolean
@@ -54,6 +55,7 @@ export function Combobox<T extends Record<string, any>>({
     addButtonProps,
     isClearIcon = true,
     isSearch = true,
+    handleItem,
 }: ComboboxProps<T>) {
     const [open, setOpen] = useState(false)
     const [inputValue, setInputValue] = useState("")
@@ -63,6 +65,9 @@ export function Combobox<T extends Record<string, any>>({
         setValue(returnValue)
         setOpen(false)
         setInputValue("")
+        if (handleItem) {
+            handleItem(option)
+        }
         if (onSearchChange) {
             onSearchChange("")
         }
@@ -77,8 +82,8 @@ export function Combobox<T extends Record<string, any>>({
         const isBSelected = b[valueKey] == value
         return (
             isASelected === isBSelected ? 0
-            : isASelected ? -1
-            : 1
+                : isASelected ? -1
+                    : 1
         )
     })
 
@@ -107,7 +112,7 @@ export function Combobox<T extends Record<string, any>>({
                                 options
                                     ?.find((d) => d[valueKey] == value)
                                     ?.[labelKey]?.toString() || value
-                            :   label}
+                                : label}
                         </div>
                         {!value && (
                             <ChevronDown className=" h-4 w-4  text-primary  " />
@@ -170,7 +175,7 @@ export function Combobox<T extends Record<string, any>>({
                                             "ml-auto h-4 w-4",
                                             value == d[valueKey] ?
                                                 "opacity-100"
-                                            :   "opacity-0",
+                                                : "opacity-0",
                                         )}
                                     />
                                 </CommandItem>
@@ -189,7 +194,7 @@ export function Combobox<T extends Record<string, any>>({
                                         ),
                                     )}
                                 </div>
-                            :   null}
+                                : null}
                         </CommandGroup>
                     </CommandList>
                 </Command>

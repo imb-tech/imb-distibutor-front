@@ -5,13 +5,10 @@ import { useSearch } from "@tanstack/react-router"
 import InfoTable from "./info-table"
 import { ProductTable } from "./product-table"
 
-interface RightSideCarsType {
-    uuid: string
-}
+export const RightSideCars = () => {
+    const { tabs, order_id } = useSearch({ from: "/_main/route/" })
 
-export const RightSideCars = ({ uuid }: RightSideCarsType) => {
-    const { data } = useGet(`${ORDERS}/${uuid}`)
-    const { tabs } = useSearch({ from: "/_main/route/" })
+    const { data } = useGet(`${ORDERS}/${order_id}`, { enabled: !!order_id })
 
     return (
         <div>

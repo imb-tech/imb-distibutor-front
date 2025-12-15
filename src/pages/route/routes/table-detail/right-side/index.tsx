@@ -1,14 +1,16 @@
 import ParamTabs from "@/components/as-params/tabs"
+import { ORDERS } from "@/constants/api-endpoints"
+import { useGet } from "@/hooks/useGet"
 import { useSearch } from "@tanstack/react-router"
 import InfoTable from "./info-table"
 import { ProductTable } from "./product-table"
 
 interface RightSideCarsType {
-    info: CarsTypeInOrders["info"]
-    products: CarsTypeInOrders["products"]
+    uuid: string
 }
 
-export const RightSideCars = ({ info, products }: RightSideCarsType) => {
+export const RightSideCars = ({ uuid }: RightSideCarsType) => {
+    const { data } = useGet(`${ORDERS}/${uuid}`)
     const { tabs } = useSearch({ from: "/_main/route/" })
 
     return (
@@ -19,8 +21,8 @@ export const RightSideCars = ({ info, products }: RightSideCarsType) => {
                 options={options}
             />
             {tabs === "product" ?
-                <ProductTable products={products} />
-            :   <InfoTable info={info} />}
+                <ProductTable products={data?.loads} />
+            :   <InfoTable info={data?.client_data} />}
         </div>
     )
 }

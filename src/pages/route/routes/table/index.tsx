@@ -5,14 +5,13 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
+import { ROUTE_VEHICLES } from "@/constants/api-endpoints"
+import { useGet } from "@/hooks/useGet"
 import { CarTableRow } from "./car-row"
 import { useColumnsCarsOrderTable } from "./cars-col"
-import { useGet } from "@/hooks/useGet"
-import { ROUTE_VEHICLES } from "@/constants/api-endpoints"
-import { useSearch } from "@tanstack/react-router"
 
-export const CarsTable = () => {  
-    const {data}= useGet<ListResponse<CarsTypeInOrders>>(ROUTE_VEHICLES )
+export const CarsTable = () => {
+    const { data } = useGet<ListResponse<CarsTypeInOrders>>(ROUTE_VEHICLES)
     const columns = useColumnsCarsOrderTable()
     return (
         <div className="overflow-x-auto  no-scrollbar-x">
@@ -39,5 +38,3 @@ export const CarsTable = () => {
         </div>
     )
 }
-
- 

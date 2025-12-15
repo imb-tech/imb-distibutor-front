@@ -6,7 +6,7 @@ import { useMemo } from "react"
 export const useAdditionColumns = () => {
     const search = useSearch({ from: "/_main/route/" })
     const { type } = search
-
+ 
     return useMemo<ColumnDef<RouteAddition>[]>(
         () => [
             {

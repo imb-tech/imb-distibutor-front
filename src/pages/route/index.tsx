@@ -14,7 +14,7 @@ const RouteMain = () => {
                 className={"mb-2 bg-background"}
             />
             <div className="grid lg:grid-cols-1 gap-3">
-                <FleetDashboard />
+                {/* <FleetDashboard /> */}
                 {page_tabs === "routes" ?
                     <RouteOrderMain />
                 :   <RoutesMain />}

@@ -73,25 +73,32 @@ const AddLogisticansModal = () => {
                         name="full_name"
                         label="F.I.O"
                         methods={form}
+                        placeholder="Misol: Ismoilov Islom Islomovich"
                     />
+
                     <FormInput
                         required
                         name="username"
                         label="Login"
                         methods={form}
+                        placeholder="Misol: islom.ismoilov"
                     />
+
                     <FormInput
-                        required
+                        required={currentLogistician?.uuid ? false : true}
                         name="password"
                         label="Parol"
                         methods={form}
+                        placeholder="Misol: StrongPass123!"
                     />
+
                     <FormFormatNumberInput
                         control={form.control}
                         format="+998 ## ### ## ##"
                         required
                         label={"Telefon"}
                         name={"phone"}
+                        placeholder="+998 __ ___ __ __"
                     />
 
                     <FormCombobox
@@ -101,6 +108,7 @@ const AddLogisticansModal = () => {
                         control={form.control}
                         valueKey="id"
                         labelKey="name"
+                        placeholder="Ombor tanlang"
                     />
 
                     <div className="flex items-center justify-end gap-2 md:col-span-2">

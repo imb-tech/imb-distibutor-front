@@ -1,13 +1,12 @@
 // components/products-table.tsx
-import { ColumnDef } from "@tanstack/react-table"
-import { DataTable } from "@/components/ui/datatable"
 import { FormCombobox } from "@/components/form/combobox"
 import { FormNumberInput } from "@/components/form/number-input"
-import { Button } from "@/components/ui/button"
-import { Trash2 } from "lucide-react"
-import { UseFormReturn } from "react-hook-form"
-import { Control } from "react-hook-form"
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { DataTable } from "@/components/ui/datatable"
+import { ColumnDef } from "@tanstack/react-table"
+import { Trash2 } from "lucide-react"
+import { Control, UseFormReturn } from "react-hook-form"
 
 type LoadRow = {
     id: string
@@ -34,7 +33,12 @@ type ProductsTableProps = {
     remove: (index: number) => void
 }
 
-export const ProductsTable = ({ form, fields, productOptions, remove }: ProductsTableProps) => {
+export const ProductsTable = ({
+    form,
+    fields,
+    productOptions,
+    remove,
+}: ProductsTableProps) => {
     const { control } = form
 
     const columns: ColumnDef<LoadRow>[] = [
@@ -54,7 +58,6 @@ export const ProductsTable = ({ form, fields, productOptions, remove }: Products
             accessorKey: "product",
             header: "Mahsulot",
             cell: ({ row }) => {
-                const load = row.original
                 return (
                     <div className="space-y-1">
                         <FormCombobox
@@ -111,8 +114,6 @@ export const ProductsTable = ({ form, fields, productOptions, remove }: Products
             accessorKey: "price",
             header: "Narx",
             cell: ({ row }) => {
-                const load = row.original
-                const currency = getCurrencyById(load.currency || 1)
                 return (
                     <div className="space-y-1">
                         <FormNumberInput
@@ -132,21 +133,14 @@ export const ProductsTable = ({ form, fields, productOptions, remove }: Products
             accessorKey: "total_amount",
             header: "Jami",
             cell: ({ row }) => {
-                const load = row.original
-                const currency = getCurrencyById(load.currency || 1)
-                const totalAmount = load.total_amount || 0
-                
                 return (
                     <div className="text-right flex items-center justify-between">
-                        <div className="font-medium">
-                            {totalAmount.toLocaleString('en-US', {
-                                minimumFractionDigits: 0,
-                                maximumFractionDigits: 2
-                            })}
-                        </div>
-                        <p className="text-xs text-muted-foreground">
-                            {currency.symbol}
-                        </p>
+                        <FormNumberInput
+                            control={control as Control<any>}
+                            name={`loads.${row.index}.total_amount`}
+                            placeholder="0"
+                            className="w-28"
+                        />
                     </div>
                 )
             },
@@ -193,14 +187,26 @@ const getUnitById = (id: number) => {
         { id: 4, name: "Quti", short_name: "quti" },
         { id: 5, name: "Paket", short_name: "paket" },
     ]
-    return units.find(u => u.id === id) || { id: 0, name: "Dona", short_name: "dona" }
+    return (
+        units.find((u) => u.id === id) || {
+            id: 0,
+            name: "Dona",
+            short_name: "dona",
+        }
+    )
 }
 
 const getCurrencyById = (id: number) => {
     const currencies = [
         { id: 1, code: "USD", name: "US Dollar", symbol: "$", flag: "🇺🇸" },
         { id: 2, code: "EUR", name: "Euro", symbol: "€", flag: "🇪🇺" },
-        { id: 3, code: "UZS", name: "Uzbekistani Som", symbol: "so'm", flag: "🇺🇿" },
+        {
+            id: 3,
+            code: "UZS",
+            name: "Uzbekistani Som",
+            symbol: "so'm",
+            flag: "🇺🇿",
+        },
     ]
-    return currencies.find(c => c.id === id) || currencies[0]
+    return currencies.find((c) => c.id === id) || currencies[0]
 }

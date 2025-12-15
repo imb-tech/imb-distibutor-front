@@ -90,7 +90,6 @@ const OrdersMain = () => {
                 columns={cols()}
                 data={data?.results}
                 onEdit={(row) => handleEdit(row.original)}
-                // loading={isLoading}
                 onDelete={(row) => handleDelete(row.original)}
                 head={
                     <div className="flex  items-center justify-between gap-3 mb-3">

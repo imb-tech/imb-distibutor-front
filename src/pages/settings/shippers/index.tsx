@@ -7,8 +7,8 @@ import { useModal } from "@/hooks/useModal"
 import { useGlobalStore } from "@/store/global-store"
 import { useSearch } from "@tanstack/react-router"
 import TableHeader from "../table-header"
-import { useColumnsShippersTable } from "./shippers-cols"
 import AddShippersModal from "./add-shippers"
+import { useColumnsShippersTable } from "./shippers-cols"
 
 const Shippers = () => {
     const search = useSearch({ from: "/_main/settings/shippers" })
@@ -59,8 +59,7 @@ const Shippers = () => {
                 }
                 modalKey="create"
             >
-                <AddShippersModal/>
-                
+                <AddShippersModal />
             </Modal>
         </>
     )

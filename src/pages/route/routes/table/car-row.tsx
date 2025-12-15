@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { TableCell, TableRow } from "@/components/ui/table"
 import { useNavigate, useSearch } from "@tanstack/react-router"
-import { ChevronDown, CircleUser, Package, Route, Truck } from "lucide-react"
+import { ChevronDown, CircleUser, Package, Truck } from "lucide-react"
 import { CarDetailsRow } from "../table-detail"
 
 interface CarTableRowProps {
@@ -16,38 +16,46 @@ export const CarTableRow = ({ car, index }: CarTableRowProps) => {
 
     const cols = [
         {
-            icon: <Package className="text-primary" size={16} />,
-            value: car.load_capacity,
-        },
-        { icon: <Route className="text-primary" size={16} />, value: car.path },
-        {
             icon: <CircleUser size={16} className="text-primary" />,
-            value: car.driver,
-        },
-        {
-            icon: <CircleUser size={16} className="text-primary" />,
-            value: car.forwarder,
+            value: car.driver_name,
         },
         {
             icon: <Truck size={16} className="text-primary" />,
-            value: car.car_model,
+            value: car.vehicle_name,
         },
         {
             icon: <Truck className="text-primary" size={16} />,
-            value: car.car_number,
+            value: car.vehicle_number,
+        },
+        {
+            icon: <CircleUser size={16} className="text-primary" />,
+            value: car.name,
+        },
+        {
+            icon: <Package className="text-primary" size={16} />,
+            value: car.progress_order_count,
+        },
+        {
+            icon: <Package className="text-primary" size={16} />,
+            value: car.finished_order_count,
+        },
+
+        {
+            icon: <Package className="text-primary" size={16} />,
+            value: car.order_weight,
         },
     ]
 
     return (
         <>
             <TableRow
-                className={`cursor-pointer ${route_id == String(car.id) ? "bg-secondary" : ""}`}
+                className={`cursor-pointer ${route_id == String(car.uuid) ? "bg-secondary" : ""}`}
                 onClick={() => {
                     navigate({
                         to: "/route",
                         search: {
                             ...search,
-                            route_id: route_id ? undefined : String(car.id),
+                            route_id: route_id ? undefined : String(car.uuid),
                         },
                     })
                 }}
@@ -57,8 +65,8 @@ export const CarTableRow = ({ car, index }: CarTableRowProps) => {
                 {cols.map((cell, i) => (
                     <TableCell key={i}>
                         <div className="flex items-center gap-[5px] bg-secondary  whitespace-nowrap rounded-lg px-3 py-2">
-                            {cell.icon}
-                            {cell.value}
+                            {cell?.icon}
+                            {cell?.value}
                         </div>
                     </TableCell>
                 ))}
@@ -67,14 +75,14 @@ export const CarTableRow = ({ car, index }: CarTableRowProps) => {
                     <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
                         <ChevronDown
                             className={`h-5 w-5 transition-transform ${
-                                route_id == String(car.id) ? "rotate-180" : ""
+                                route_id == String(car.uuid) ? "rotate-180" : ""
                             }`}
                         />
                     </Button>
                 </TableCell>
             </TableRow>
 
-            {route_id == String(car.id) && (
+            {route_id == String(car.uuid) && (
                 <TableRow>
                     <TableCell colSpan={8} className="p-0">
                         <CarDetailsRow car={car} />

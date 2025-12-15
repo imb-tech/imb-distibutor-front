@@ -1,3 +1,5 @@
+import { ROUTE_VEHICLES } from "@/constants/api-endpoints"
+import { useGet } from "@/hooks/useGet"
 import { LeftSideCars } from "./left-side"
 import { RightSideCars } from "./right-side"
 interface CarDetailsRowProps {
@@ -5,6 +7,9 @@ interface CarDetailsRowProps {
 }
 
 export const CarDetailsRow = ({ car }: CarDetailsRowProps) => {
+    const { data } = useGet<RouteTypes>(`${ROUTE_VEHICLES}/${car.uuid}`)
+    const orderUuid = (data as any)?.order_routes?.[0]?.order_uuid
+
     return (
         <div className="py-3 px-2">
             <div>
@@ -13,8 +18,8 @@ export const CarDetailsRow = ({ car }: CarDetailsRowProps) => {
                 </h1>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4  ">
-                <LeftSideCars shop={car?.shop} />
-                <RightSideCars products={car?.products} info={car?.info} />
+                <LeftSideCars uuid={car?.uuid} />
+                <RightSideCars uuid={orderUuid} />
             </div>
         </div>
     )

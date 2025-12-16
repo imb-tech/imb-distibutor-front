@@ -71,20 +71,25 @@ export const AddOrder = () => {
 
     const isPending = isPendingCreate || isPendingUpdate
 
-    const onSubmit = (values: Delivery) => {
+  const onSubmit = (values: Delivery) => {
+  const cleanedValues = Object.fromEntries(
+    Object.entries(values).filter(
+      ([_, value]) => value !== "" && value !== undefined
+    )
+  )
 
-        const orderRow: OrderRow = {
-            ...values,
-            type: Number(values.type),
-            shipper: values.shipper,
-        }
+  const orderRow: OrderRow = {
+    ...cleanedValues,
+    type: Number(values.type),
+  }
 
-        if (currentOrder?.uuid) {
-            updateMutate(`${ORDERS}/${currentOrder.uuid}`, orderRow)
-        } else {
-            postMutate(ORDERS, orderRow)
-        }
-    }
+  if (currentOrder?.uuid) {
+    updateMutate(`${ORDERS}/${currentOrder.uuid}`, orderRow)
+  } else {
+    postMutate(ORDERS, orderRow)
+  }
+}
+
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">

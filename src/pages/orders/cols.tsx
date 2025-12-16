@@ -7,19 +7,19 @@ import { useMemo } from "react"
 export const cols = () => {
     return useMemo<ColumnDef<OrderRow>[]>(
         () => [
-            {
-                header: "Sana",
-                accessorKey: "created_at",
-                enableSorting: true,
-                cell: ({ getValue }) => {
-                    const date = getValue<string>()
-                    return (
-                        <div className="whitespace-nowrap">
-                            {format(date, "yyyy-MM-dd HH:mm")}
-                        </div>
-                    )
-                },
-            },
+            // {
+            //     header: "Sana",
+            //     accessorKey: "created_at",
+            //     enableSorting: true,
+            //     cell: ({ getValue }) => {
+            //         const date = getValue<string>()
+            //         return (
+            //             <div className="whitespace-nowrap">
+            //                 {format(date, "yyyy-MM-dd HH:mm")}
+            //             </div>
+            //         )
+            //     },
+            // },
 
             {
                 header: "Mijoz",
@@ -70,19 +70,19 @@ export const cols = () => {
                     )
                 },
             },
-            {
-                header: "Vaqt",
-                accessorKey: "eta",
-                enableSorting: true,
-                cell: ({ getValue }) => {
-                    const time = getValue<string>()
-                    return (
-                        <div className="whitespace-nowrap">
-                            {format(time, "yyyy-MM-dd HH:mm")}
-                        </div>
-                    )
-                },
-            },
+            // {
+            //     header: "Vaqt",
+            //     accessorKey: "eta",
+            //     enableSorting: true,
+            //     cell: ({ getValue }) => {
+            //         const time = getValue<string>()
+            //         return (
+            //             <div className="whitespace-nowrap">
+            //                 {format(time, "yyyy-MM-dd HH:mm")}
+            //             </div>
+            //         )
+            //     },
+            // },
 
             {
                 header: "Rad etish sababi",

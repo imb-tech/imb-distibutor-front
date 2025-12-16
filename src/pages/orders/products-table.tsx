@@ -141,7 +141,7 @@ export const ProductsTable = ({
                             name={`loads.${index}.quantity`}
                             placeholder="1"
                             className="w-20"
-
+                            required
                         />
 
                     </div>

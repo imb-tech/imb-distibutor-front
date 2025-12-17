@@ -5,7 +5,7 @@ export const useColumnsWarehouseTable = () => {
     return useMemo<ColumnDef<WarehouseType>[]>(
         () => [
             {
-                accessorKey: "name", 
+                accessorKey: "name",
                 header: "Ombor nomi",
                 enableSorting: true,
             },
@@ -20,8 +20,9 @@ export const useColumnsWarehouseTable = () => {
                 enableSorting: true,
                 cell: ({ row }) => {
                     const location = row.original.location
-                    // location[1] is latitude (second element in [longitude, latitude])
-                    return location && location[1] ? location[1].toFixed(6) : "—"
+                    return location && location[1] ?
+                            location[1].toFixed(6)
+                        :   "—"
                 },
             },
             {
@@ -30,8 +31,10 @@ export const useColumnsWarehouseTable = () => {
                 enableSorting: true,
                 cell: ({ row }) => {
                     const location = row.original.location
-                    
-                    return location && location[0] ? location[0].toFixed(6) : "—"
+
+                    return location && location[0] ?
+                            location[0].toFixed(6)
+                        :   "—"
                 },
             },
         ],

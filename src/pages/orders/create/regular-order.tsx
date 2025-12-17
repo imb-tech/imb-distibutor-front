@@ -3,72 +3,34 @@ import { FormCombobox } from "@/components/form/combobox"
 import { FormDatePicker } from "@/components/form/date-picker"
 import { FormInput } from "@/components/form/input"
 import { FormNumberInput } from "@/components/form/number-input"
-import { useEffect } from "react"
-import { useFieldArray, UseFormReturn } from "react-hook-form"
-import { useGet } from "@/hooks/useGet"
 import { SETTINGS_CUSTOMERS } from "@/constants/api-endpoints"
+import { useGet } from "@/hooks/useGet"
+import { useEffect } from "react"
+import { UseFormReturn } from "react-hook-form"
 import { ProductsSection } from "./add-products"
+import { Clock } from "lucide-react"
 
 type Props = {
     form: UseFormReturn<any>
 }
 
 type ListResponse<T> = {
-    total_pages: number;
-    count: number;
-    results: T[];
+    total_pages: number
+    count: number
+    results: T[]
 }
 
 type CustomersType = {
     id: number
     name: string
-    // Add other customer fields as needed
 }
 
 export const RegularOrders = ({ form }: Props) => {
-    const { control, watch } = form
-
-    // useFieldArray hook'ini ishlatish - loads nomi bilan
-    const { fields, append, remove, update } = useFieldArray({
-        control,
-        name: "loads",
-    })
-
-    const { data: clientsData } = useGet<ListResponse<CustomersType>>(SETTINGS_CUSTOMERS)
-
-    // Form submit uchun tayyorlash - faqat backend uchun kerakli field'larni qoldirish
-    const prepareDataForSubmit = (data: any) => {
-        if (data.loads && Array.isArray(data.loads)) {
-            // Faqat backend uchun kerakli 4 ta field'larni qoldirish
-            const cleanedLoads = data.loads.map((load: any) => {
-                return {
-                    quantity: load.quantity || 0,
-                    price: load.price || "0",
-                    product: load.product || 0,
-                    order: load.order || 1
-                }
-            })
-            return { ...data, loads: cleanedLoads }
-        }
-        return data
-    }
-
-    // Form submit handler
-    useEffect(() => {
-        // Form submit handler ni o'rnatish
-        const originalSubmit = form.handleSubmit
-        form.handleSubmit = (onValid) => {
-            return originalSubmit((data) => {
-                const preparedData = prepareDataForSubmit(data)
-                console.log("Backendga yuboriladigan loads:", preparedData.loads)
-                onValid(preparedData)
-            })
-        }
-    }, [form, prepareDataForSubmit])
+    const { data: clientsData } =
+        useGet<ListResponse<CustomersType>>(SETTINGS_CUSTOMERS)
 
     return (
         <div className="space-y-6">
-            {/* Asosiy ma'lumotlar */}
             <div className="grid grid-cols-4 gap-4">
                 <FormInput
                     methods={form}
@@ -85,7 +47,7 @@ export const RegularOrders = ({ form }: Props) => {
                         { name: "Low", id: 1 },
                     ]}
                     name="priority"
-                    control={control}
+                    control={form.control}
                 />
 
                 <FormDatePicker
@@ -93,6 +55,8 @@ export const RegularOrders = ({ form }: Props) => {
                     control={form.control}
                     name="scheduled_delivery_date"
                     placeholder="Sanani tanlang"
+                    required
+
                 />
 
                 <FormCombobox
@@ -103,11 +67,10 @@ export const RegularOrders = ({ form }: Props) => {
                         { name: "Warehouse B", id: 2 },
                     ]}
                     name="depot"
-                    control={control}
+                    control={form.control}
                 />
             </div>
 
-            {/* Mijoz ma'lumotlari */}
             <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-4">
                     <FormCombobox
@@ -115,7 +78,7 @@ export const RegularOrders = ({ form }: Props) => {
                         required
                         options={clientsData?.results}
                         name="client"
-                        control={control}
+                        control={form.control}
                         className="w-full"
                     />
                     <div className="grid grid-cols-2 gap-4">
@@ -123,6 +86,8 @@ export const RegularOrders = ({ form }: Props) => {
                             methods={form}
                             name="note"
                             placeholder="Eslatma"
+                            required
+
                         />
                         <FormCombobox
                             placeholder="Ustuvor transport"
@@ -131,8 +96,9 @@ export const RegularOrders = ({ form }: Props) => {
                                 { name: "Van", id: 2 },
                             ]}
                             name="priority_vehicle"
-                            control={control}
+                            control={form.control}
                             className="w-full"
+                            required
                         />
                     </div>
                 </div>
@@ -143,41 +109,50 @@ export const RegularOrders = ({ form }: Props) => {
                         control={form.control}
                         name="cod"
                         placeholder="To'lov naqd summasi"
+                        required
+
+                    />
+                     <FormInput
+                        prefixIcon={
+                            <Clock className="h-4 w-4" />
+                        }
+                        methods={form}
+                        name={`time_to_drop`}
+                        type="time"
+                        className="w-full"
+                        required
                     />
                 </div>
             </div>
 
-            {/* Yuk ma'lumotlari */}
             <div className="grid grid-cols-3 gap-4">
                 <FormNumberInput
                     thousandSeparator=" "
                     control={form.control}
                     name="weight"
                     placeholder="Og'irligi (kg)"
+                    required
+
                 />
                 <FormNumberInput
                     thousandSeparator=" "
                     control={form.control}
                     name="product_count"
                     placeholder="Mahsulot soni"
-                    value={watch("product_count") || 0}
+                    required
+
                 />
                 <FormNumberInput
                     thousandSeparator=" "
                     control={form.control}
                     name="volume"
                     placeholder="Hajm (m³)"
+                    required
+
                 />
             </div>
 
-            {/* Products Section */}
-            <ProductsSection
-                form={form}
-                fields={fields}
-                append={append}
-                remove={remove}
-                update={update}
-            />
+            <ProductsSection form={form} />
         </div>
     )
 }

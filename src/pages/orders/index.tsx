@@ -10,7 +10,6 @@ import { useModal } from "@/hooks/useModal"
 import { useGlobalStore } from "@/store/global-store"
 import { useNavigate, useSearch } from "@tanstack/react-router"
 import { cols } from "./cols"
-import { orderTabs } from "./constants"
 import { AddOrder } from "./create"
 
 import ParamInput from "@/components/as-params/input"
@@ -21,9 +20,21 @@ const OrdersMain = () => {
     const { openModal: createOrder } = useModal("create")
     const { openModal: deleteOrder } = useModal("delete")
     const { setData, getData, clearKey } = useGlobalStore()
-    const { data, isLoading } = useGet<ListResponse<OrderRow>>(ORDERS,{
-        params:search
+    const { data, isLoading } = useGet<ListResponse<OrderRow>>(ORDERS, {
+        params: search
     })
+
+    const orderTabs = [
+        {
+            value: "1",
+            label: "Doimiy"
+        },
+        {
+            value: "2",
+            label: "Qo'shimcha"
+        }
+    ]
+
 
     const currentStaff = getData<OrderRow>(ORDERS)
 
@@ -79,11 +90,10 @@ const OrdersMain = () => {
                 columns={cols()}
                 data={data?.results}
                 onEdit={(row) => handleEdit(row.original)}
-                // loading={isLoading}
                 onDelete={(row) => handleDelete(row.original)}
                 head={
                     <div className="flex  items-center justify-between gap-3 mb-3">
-                        <ParamInput className="w-lg" />
+                        <ParamInput className="w-lg" name="company_name"/>
 
                         <div className="flex justify-between items-center gap-4 ">
                             <Button onClick={handleCreate}>
@@ -119,7 +129,7 @@ const OrdersMain = () => {
                                 />
                             </div>
 
-                            <ParamTabs options={orderTabs} />
+                            <ParamTabs options={orderTabs} paramName="type" />
                         </div>
                     </div>
                 }

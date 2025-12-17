@@ -3,19 +3,26 @@ import ParamDatePicker from "@/components/as-params/date-picker"
 import ParamInput from "@/components/as-params/input"
 import DownloadAsExcel from "@/components/download-as-excel"
 import { Button } from "@/components/ui/button"
-import { ORDERS } from "@/constants/api-endpoints"
 import { useModal } from "@/hooks/useModal"
 import { useGlobalStore } from "@/store/global-store"
 import { format } from "date-fns"
 import { CirclePlus, Route } from "lucide-react"
 
 const HeaderRoute = () => {
-    const { openModal: createOrder } = useModal(ORDERS)
+    const { openModal: createOrder } = useModal("create")
+    const { openModal: createRoute } = useModal("route")
     const { clearKey } = useGlobalStore()
+
     const handleCreate = () => {
-        clearKey(ORDERS)
+        clearKey("create")
         createOrder()
     }
+
+    const handleRoute = () => {
+        clearKey("route")
+        createRoute()
+    }
+
 
     return (
         <div className="space-y-2">
@@ -37,6 +44,7 @@ const HeaderRoute = () => {
                         Buyurtma qo'shish
                     </Button>
                     <Button
+                        onClick={handleRoute}
                         className="bg-green-500 hover:bg-green-600/90 text-white"
                         type="button"
                         icon={<Route size={18} />}
@@ -61,8 +69,8 @@ const HeaderRoute = () => {
                         label="Doimiy"
                         paramName="type"
                         options={[
-                            { id: "constant", name: "Doimiy" },
-                            { id: "addition", name: "Qo'shimcha" },
+                            { id: "1", name: "Doimiy" },
+                            { id: "2", name: "Qo'shimcha" },
                         ]}
                     />
                     <DownloadAsExcel

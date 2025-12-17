@@ -166,6 +166,10 @@ export const useItems = () =>
                     //     label: "Ekspeditorlar",
                     //     path: "/settings/freight-forwarders",
                     // },
+                     {
+                        label: "Yetkazib beruvchilar",
+                        path: "/settings/shippers",
+                    },
                     {
                         label: "Ombor",
                         path: "/settings/warehouse",

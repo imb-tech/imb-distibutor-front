@@ -1,8 +1,8 @@
 "use client"
 import { Input } from "@/components/ui/input"
+import { useGoogleMaps } from "@/pages/settings/map/useGoogleMaps"
 import { MapPin, Navigation, X } from "lucide-react"
 import { useCallback, useEffect, useRef, useState } from "react"
-import { useGoogleMaps } from "./useGoogleMaps"
 
 export const MapComponent: React.FC<MapComponentProps> = ({
     coordinates,

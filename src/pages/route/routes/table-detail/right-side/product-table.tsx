@@ -1,7 +1,7 @@
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table"
 
 interface ProductsTableProps {
-    products: CarsTypeInOrders["products"]
+    products:  OrderRow['loads']
 }
 
 export const ProductTable = ({ products }: ProductsTableProps) => {
@@ -10,9 +10,9 @@ export const ProductTable = ({ products }: ProductsTableProps) => {
             <TableBody>
                 {products?.map((product) => {
                     const cols = [
-                        product.name,
+                        product.product_name,
                         product.quantity,
-                        product.total_price,
+                        product.price,
                     ]
 
                     return (

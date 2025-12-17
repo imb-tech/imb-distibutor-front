@@ -76,15 +76,13 @@ export function DatePicker({
                         format(date, "dd/MM/yyyy")
                     :   <span>{placeholder || "Kunni tanlang"}</span>}
 
-                    <CalendarDays className="ml-2 h-4 w-4 text-primary" />
-
-                    {parsedDate && !disabled && (
+                    {parsedDate && !disabled ?
                         <X
                             onClick={reset}
                             size={16}
                             className="text-destructive  ml-2 cursor-pointer"
                         />
-                    )}
+                    :   <CalendarDays className="ml-2 h-4 w-4 text-primary" />}
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0">

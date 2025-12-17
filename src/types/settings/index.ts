@@ -17,15 +17,7 @@ type Profile = {
     password: string
 }
 
-type ProductsType = {
-    uuid: string
-    id: number
-    name: string
-    description: string
-    unit: number
-    price: string
-    currency: number
-}
+
 
 type DriversType = {
     id: number
@@ -51,22 +43,16 @@ type DriverFormType = {
     phone: string
     username: string
     password: string
-    uuid:number
-    driver_profile:{
+    uuid: number
+    driver_profile: {
         pinfl: string
-        id:number
+        id: number
         passport_number: string
         driver_license: string
         work_experience: number
         license_expiry: string
-
     }
 }
-
-
-
-
-
 
 type CarsType = {
     uuid: string
@@ -98,27 +84,14 @@ type WarehouseType = {
 }
 type LogisticiansType = {
     id: number
-    uuid:number
+    uuid: number
     full_name: string
     phone: string
-    username:string
-    password:string
-    depot:number
-  
+    username: string
+    password: string
+    depot: number
 }
-type CustomersType = {
-    id: number
-    uuid: string
-    name: string
-    company_name: string
-    address: string
-    loading_coordinates: number[]
-    coordinates: number[]
-    phone_number: string
-    email: string
-    note: string
-    schedules: SchedulesType[]
-}
+ 
 
 type SchedulesType = {
     id: number
@@ -134,15 +107,58 @@ type ScheduleFormType = {
     end_time: string
     enabled?: boolean
 }
-
-type CustomerFormType = {
+ 
+type CustomersType = {
+    id?: string
+    uuid?: string
     name: string
     company_name: string
     address: string
-    loading_coordinates: string[]
-    coordinates: string[]
+    loading_address?: string
+    coordinates: [number, number]
+    loading_coordinates?: [number, number]
+    phone_number: string
+    email: string
+    note: string
+    schedules?: Array<{
+        day_of_week: number
+        start_time: string
+        end_time: string
+    }>
+}
+
+ 
+interface CustomerFormType {
+    name: string
+    company_name: string
+    address: string
+    loading_address?: string
+    coordinates: [string, string]   
+    loading_coordinates: [string, string]   
     phone_number: string
     email: string
     note: string
     schedules: ScheduleFormType[]
+}
+type ShippersType = {
+    id: number
+    name: string
+}
+type MapComponentProps ={
+    coordinates: { lat: number; lng: number }
+    onCoordinatesChange: (coords: { lat: number; lng: number }) => void
+    onAddressFilled?: (address: AddressData) => void
+    showSearch?: boolean 
+    showMapControls?: boolean  
+    showCurrentLocationBtn?: boolean  
+    searchPlaceholder?: string  
+    className?: string  
+    mapHeight?: string  
+}
+
+type AddressData = {
+    street: string
+    city: string
+    region: string
+    fullAddress: string
 }

@@ -28,16 +28,12 @@ type PaymentMethod = {
 export const ExtraOrders = ({ form }: Props) => {
     const { control, watch, setValue } = form
 
-    const { data: clientsData } =
-        useGet<ListResponse<CustomersType>>(SETTINGS_CUSTOMERS)
+    const { data: clientsData } =useGet<ListResponse<CustomersType>>(SETTINGS_CUSTOMERS)
 
-    const { data: paymentsData } =
-        useGet<ListResponse<PaymentMethod>>(SETTINGS_PAYMENT_TYPES)
+    const { data: paymentsData } =  useGet<ListResponse<PaymentMethod>>(SETTINGS_PAYMENT_TYPES)
 
-    /** ---------------- MAP MODAL ---------------- */
     const { openModal: openMap, closeModal: closeMap } = useModal("map")
 
-    /** ---------------- FORM STATE ---------------- */
     const locationValue = watch("loading_coordinates")
     const currentAddress = watch("address")
 
@@ -46,7 +42,6 @@ export const ExtraOrders = ({ form }: Props) => {
         lng: locationValue?.[0] ?? 69.2401,
     }
 
-    /** ---------------- HANDLERS ---------------- */
     const handleMapOpen = () => {
         openMap()
     }
@@ -142,7 +137,6 @@ export const ExtraOrders = ({ form }: Props) => {
                 </div>
             </div>
 
-            {/* CARGO DETAILS */}
             <div className="space-y-3">
                 <h2 className="font-medium">Yuk tafsilotlari</h2>
 

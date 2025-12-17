@@ -126,7 +126,8 @@ export const ProductsTable = ({
                             methods={form}
                             name={`loads.${index}.quantity`}
                             placeholder="1"
-                            className="w-full"
+                            className="w-20"
+                            required
                         />
                     </div>
                 )

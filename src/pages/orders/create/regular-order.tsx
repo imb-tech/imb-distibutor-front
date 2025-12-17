@@ -8,6 +8,7 @@ import { useGet } from "@/hooks/useGet"
 import { useEffect } from "react"
 import { UseFormReturn } from "react-hook-form"
 import { ProductsSection } from "./add-products"
+import { Clock } from "lucide-react"
 
 type Props = {
     form: UseFormReturn<any>
@@ -27,35 +28,6 @@ type CustomersType = {
 export const RegularOrders = ({ form }: Props) => {
     const { data: clientsData } =
         useGet<ListResponse<CustomersType>>(SETTINGS_CUSTOMERS)
-
-    const prepareDataForSubmit = (data: any) => {
-        if (data.loads && Array.isArray(data.loads)) {
-            const cleanedLoads = data.loads.map((load: LoadRow) => {
-                return {
-                    quantity: load.quantity || 0,
-                    price: load.price || "0",
-                    product: load.product || 0,
-                    order: load.order || 1,
-                }
-            })
-            return { ...data, loads: cleanedLoads }
-        }
-        return data
-    }
-
-    useEffect(() => {
-        const originalSubmit = form.handleSubmit
-        form.handleSubmit = (onValid) => {
-            return originalSubmit((data) => {
-                const preparedData = prepareDataForSubmit(data)
-                console.log(
-                    "Backendga yuboriladigan loads:",
-                    preparedData.loads,
-                )
-                onValid(preparedData)
-            })
-        }
-    }, [form, prepareDataForSubmit])
 
     return (
         <div className="space-y-6">
@@ -139,6 +111,16 @@ export const RegularOrders = ({ form }: Props) => {
                         placeholder="To'lov naqd summasi"
                         required
 
+                    />
+                     <FormInput
+                        prefixIcon={
+                            <Clock className="h-4 w-4" />
+                        }
+                        methods={form}
+                        name={`time_to_drop`}
+                        type="time"
+                        className="w-full"
+                        required
                     />
                 </div>
             </div>

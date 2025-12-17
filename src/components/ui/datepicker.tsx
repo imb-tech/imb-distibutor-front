@@ -76,7 +76,7 @@ export function DatePicker({
                         format(date, "dd/MM/yyyy")
                     :   <span>{placeholder || "Kunni tanlang"}</span>}
 
-                    {parsedDate && !disabled ?
+                    {(parsedDate || date) && !disabled ?
                         <X
                             onClick={reset}
                             size={16}

@@ -1,9 +1,11 @@
 import { FormCombobox } from "@/components/form/combobox"
+import { FormDatePicker } from "@/components/form/date-picker"
 import FormInput from "@/components/form/input"
 import { Button } from "@/components/ui/button"
 import {
-    ORDERS,
     ROUTE_VEHICLES,
+    ROUTE_VEHICLES_DETAIL,
+    ROUTE_VEHICLES_UPDATE,
     SETTINGS_CARS,
     SETTINGS_DRIVERS,
 } from "@/constants/api-endpoints"
@@ -16,17 +18,15 @@ import { useQueryClient } from "@tanstack/react-query"
 import { useSearch } from "@tanstack/react-router"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-// import ModalOrderTable from "./modal-table"
-useGet
+import ModalOrderTable from "./modal-table"
 
 const AddVehiclesModal = () => {
     const queryClient = useQueryClient()
     const { closeModal } = useModal("create")
     const { getData, clearKey } = useGlobalStore()
     const currentVehicle = getData<RouteVehiclesAdd>(ROUTE_VEHICLES)
-    const { order_id } = useSearch({ from: "/_main/route/" })
-    const { data: orderData } = useGet(`${ORDERS}/${order_id}`, {
-        enabled: !!order_id,
+    const { data: routes } = useGet(`${ROUTE_VEHICLES_DETAIL}/${currentVehicle?.uuid}`, {
+        enabled: !!currentVehicle?.uuid,
     })
     const { data: drivers } = useGet(SETTINGS_DRIVERS)
     const { data: vehicles } = useGet(SETTINGS_CARS)
@@ -44,9 +44,10 @@ const AddVehiclesModal = () => {
         })) || []
 
     const form = useForm<RouteVehiclesAdd>({
-        defaultValues: { ...currentVehicle },
+        defaultValues: {
+            ...currentVehicle,
+        },
     })
-    console.log("driver", form.watch("driver"))
 
     const { handleSubmit, reset } = form
 
@@ -67,8 +68,9 @@ const AddVehiclesModal = () => {
     const isPending = creating || updating
 
     const onSubmit = (data: RouteVehiclesAdd) => {
+
         if (currentVehicle?.uuid) {
-            update(`${ROUTE_VEHICLES}/${currentVehicle.uuid}`, data)
+            update(`${ROUTE_VEHICLES_UPDATE}/${currentVehicle.uuid}`, data)
         } else {
             create(ROUTE_VEHICLES, data)
         }
@@ -107,27 +109,28 @@ const AddVehiclesModal = () => {
                     valueKey="value"
                 />
 
-                <FormInput
+                <FormDatePicker
                     required
-                    type="date"
                     name="start_date"
                     label="Boshlanish sanasi"
-                    methods={form}
-                    placeholder="Misol: 16/12/2025"
+                    control={form.control}
+                    className={"w-full"}
                 />
-
-                <div className="md:col-span-2 flex justify-end ">
-                    <Button
-                        loading={isPending}
-                        type="submit"
-                        className="min-w-40"
-                        variant={"default2"}
-                    >
-                        Saqlash
-                    </Button>
-                </div>
             </form>
-            {/* <ModalOrderTable order={orderData?.loads} /> */}
+            <div className="mt-6 ">
+                <ModalOrderTable routes={routes?.order_routes} />
+            </div>
+
+            <div className="md:col-span-2 flex justify-end ">
+                <Button
+                    loading={isPending}
+                    type="submit"
+                    className="min-w-40"
+                    variant={"default2"}
+                >
+                    Saqlash
+                </Button>
+            </div>
         </div>
     )
 }

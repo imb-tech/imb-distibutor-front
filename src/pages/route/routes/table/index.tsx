@@ -7,7 +7,10 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { ROUTE_VEHICLES } from "@/constants/api-endpoints"
+import {
+    ROUTE_VEHICLES,
+    ROUTE_VEHICLES_DETAIL,
+} from "@/constants/api-endpoints"
 import { useGet } from "@/hooks/useGet"
 import { useGlobalStore } from "@/store/global-store"
 import { CarTableRow } from "./car-row"
@@ -22,7 +25,7 @@ export const CarsTable = () => {
     const totalColumns = columns.length + 2
 
     return (
-        <div className="overflow-x-auto no-scrollbar-x">
+        <div className="overflow-x-auto  ">
             <Table>
                 <TableHeader>
                     <TableRow>
@@ -52,10 +55,10 @@ export const CarsTable = () => {
                 </TableBody>
             </Table>
 
-            <DeleteModal path={ROUTE_VEHICLES} id={selectedCar?.uuid} />
+            <DeleteModal path={ROUTE_VEHICLES_DETAIL} id={selectedCar?.uuid} />
 
             <Modal
-                size="max-w-2xl"
+                size="max-w-4xl"
                 title={
                     selectedCar?.uuid ?
                         "Marshurtlarni tahrirlash"

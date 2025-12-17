@@ -14,22 +14,25 @@ export const SETTINGS_VEHICLES = "setting/vehicles"
 /** ===== SETTINGS ===== */
 
 export const SETTINGS_PRODUCTS = "setting/products"
-
 export const SETTINGS_DRIVERS = "driver/list"
 export const SETTINGS_DRIVERS_CREATE = "driver/create"
 export const SETTINGS_DRIVERS_UPDATE = "driver/update"
-
 export const SETTINGS_CARS = "setting/vehicles"
 export const SETTINGS_FORWARDERS = "setting-forwarder"
 export const SETTINGS_WAREHOUSE = "setting/depots"
-
 export const SETTINGS_LOGISTICIANS_UPDATE = "logist/update"
-export const ROUTE_MAPS = "order/all/route"
-
 export const SETTINGS_SHIPPERS = "setting/shippers"
 export const SETTINGS_LOGISTICIANS = "logist/list"
 export const SETTINGS_CUSTOMERS= "clients"
 export const SETTINGS_PAYMENT_TYPES= "setting/payment-type"
+
+
+/** ===== MARSHURTLAR ===== */
+export const ROUTE_MAPS = "order/all/route"
+export const ROUTE_VEHICLES = "route"
+export const ROUTE_VEHICLES_UPDATE ="route/update"
+export const ROUTE_VEHICLES_CREATE="route/create"
+ 
 
 
 

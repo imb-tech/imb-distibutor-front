@@ -1,35 +1,71 @@
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table"
 
 interface InformationTableProps {
-    info: CarsTypeInOrders["info"]
+    info: OrderRow["client_data"]
+}
+
+const formatCoordinates = (coords: [number, number]) => {
+    if (!coords || coords.length < 2) return "Mavjud emas"
+    return `${coords[0].toFixed(6)}, ${coords[1].toFixed(6)}`
 }
 
 const InfoTable = ({ info }: InformationTableProps) => {
-    return (
-        <Table >
-            <TableBody>
-                {info?.map((item) => {
-                    const rows = [
-                        ["Buyurtma ID", item.order_id],
-                        ["Tashkilot", item.organization],
-                        ["Yetkazib berish manzili", item.location],
-                        ["Vazn", item.weight],
-                        ["Hajm", item.density],
-                        ["Ish vaqti (Boshlanishi)", item.working_start],
-                        ["Ish vaqti (Tugashi)", item.working_end],
-                        ["Narxi", `${item.price.toLocaleString("uz-UZ")} so'm`],
-                        ["Telefon raqami", item.phone_number],
-                    ]
+    if (!info) return <div>Mijoz ma'lumotlari mavjud emas</div>
 
-                    return rows.map(([label, value], rowIdx) => (
-                        <TableRow key={rowIdx} className="bg-background">
-                            <TableCell className="font-medium text-muted-foreground border-[1.5px] ">
-                                {label}
+    const dataMap = [
+        { key: "uuid", label: "Mijoz ID" },
+        { key: "name", label: "Mijoz nomi" },
+        { key: "company_name", label: "Tashkilot" },
+        { key: "address", label: "Manzil" },
+        { key: "address_zone", label: "Manzil zonasi" },
+        { key: "phone_number", label: "Telefon raqami" },
+        { key: "email", label: "Email" },
+        { key: "note", label: "Izoh" },
+        {
+            key: "is_active",
+            label: "Faol",
+            format: (val: boolean) => (val ? "Ha" : "Yo'q"),
+        },
+    ]
+
+    const coordinatesItem = {
+        label: "Koordinatalar",
+        value:
+            info.coordinates ?
+                formatCoordinates(info.coordinates)
+            :   "Mavjud emas",
+    }
+
+    return (
+        <Table>
+            <TableBody>
+                {dataMap.map((item, idx) => {
+                    const value = info[item.key as keyof typeof info]
+                    const displayValue =
+                        item.format ?
+                            item.format(value as never)
+                        :   value || "Mavjud emas"
+
+                    return (
+                        <TableRow key={idx} className="bg-background">
+                            <TableCell className="font-medium text-muted-foreground border-[1.5px]">
+                                {item.label}
                             </TableCell>
-                            <TableCell className="border-[1.5px] ">{value}</TableCell>
+                            <TableCell className="border-[1.5px]">
+                                {displayValue}
+                            </TableCell>
                         </TableRow>
-                    ))
+                    )
                 })}
+
+                <TableRow className="bg-background">
+                    <TableCell className="font-medium text-muted-foreground border-[1.5px]">
+                        {coordinatesItem.label}
+                    </TableCell>
+                    <TableCell className="border-[1.5px]">
+                        {coordinatesItem.value}
+                    </TableCell>
+                </TableRow>
             </TableBody>
         </Table>
     )

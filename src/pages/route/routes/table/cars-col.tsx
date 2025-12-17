@@ -11,35 +11,40 @@ export const useColumnsCarsOrderTable = () => {
             },
 
             {
-                accessorKey: "load_capacity",
-                header: "Yuk sig'imi",
+                accessorKey: "driver_name",
+                header: "Haydovchi F.I.O",
                 enableSorting: true,
             },
             {
-                accessorKey: "path",
-                header: "Harakatlanish",
+                accessorKey: "vehicle_name",
+                header: "Avtomobil rusumi",
                 enableSorting: true,
             },
             {
-                accessorKey: "driver",
-                header: "Haydovchi",
+                accessorKey: "vehicle_number",
+                header: "Avtomobil raqami",
                 enableSorting: true,
             },
             {
-                accessorKey: "forwarder",
+                accessorKey: "name",
                 header: "Ekspeditorlar",
                 enableSorting: true,
             },
             {
-                accessorKey: "car_model",
-                header: "Avtomobil rusimi",
+                accessorKey: "progress_order_count",
+                header: "Jarayondagi buyurtmalar",
                 enableSorting: true,
             },
             {
-                accessorKey: "car_number",
-                header: "Avtomobil raqami",
+                accessorKey: "finished_order_count",
+                header: "Yakunlangan buyurtmalar",
                 enableSorting: true,
             },
+            {
+                accessorKey: "order_weigth",
+                header: "Buyurtma og'irligi",
+                enableSorting: true,
+            } 
         ],
         [],
     )

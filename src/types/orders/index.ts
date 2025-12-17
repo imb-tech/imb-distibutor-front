@@ -14,11 +14,13 @@ type OrderRow = {
   };
 
   loads: Array<{
-    id: number;
+    id?: number;
+    product_name:string
     quantity: number;
     price: string;
     order: number;
-    product: number;
+    product?: number;
+    is_active:boolean
   }>;
   
   driver_name: string | null;
@@ -82,7 +84,7 @@ type Delivery = {
   client: number;
   payment_type: number; // Missing in your type
   order_type?:"extra"|"regular"; // Optional since not in JSON
-  loads?: DeliveryLoad[]; // Optional since not in JSON
+  loads?: DeliveryLoad[]; 
   phone_number:number|string
 };
 

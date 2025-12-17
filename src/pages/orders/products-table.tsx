@@ -4,7 +4,6 @@ import FormInput from "@/components/form/input"
 import { Button } from "@/components/ui/button"
 import { DataTable } from "@/components/ui/datatable"
 import { formatMoney } from "@/lib/format-money"
-import { cn } from "@/lib/utils"
 import { ColumnDef } from "@tanstack/react-table"
 import { Copy, X } from "lucide-react"
 import { UseFormReturn, useWatch } from "react-hook-form"
@@ -52,11 +51,16 @@ const getUnitById = (id: number) => {
 
 const getCurrencySymbol = (currencyId: number) => {
     switch (currencyId) {
-        case 1: return '$'
-        case 2: return '₸'
-        case 3: return '€'
-        case 4: return '£'
-        default: return '$'
+        case 1:
+            return "$"
+        case 2:
+            return "₸"
+        case 3:
+            return "€"
+        case 4:
+            return "£"
+        default:
+            return "$"
     }
 }
 
@@ -70,19 +74,7 @@ export const ProductsTable = ({
     const { control, watch } = form
     const loads = watch("loads") || []
 
-
     const columns: ColumnDef<LoadRow>[] = [
-        {
-            id: "order",
-            accessorKey: "order",
-            header: "#",
-            cell: ({ row }) => (
-                <div className="text-center font-medium text-sm">
-                    {row.index + 1}
-                </div>
-            ),
-            size: 50,
-        },
         {
             id: "product",
             accessorKey: "product",
@@ -91,27 +83,24 @@ export const ProductsTable = ({
                 const index = row.index
 
                 return (
-                    <div className="space-y-1 flex items-center justify-center">
+                    <div className="space-y-1 flex items-center justify-center min-w-40">
                         <FormCombobox
-                            placeholder="Tanlang"
                             required
+                            placeholder="Tanlang"
                             options={productOptions}
                             name={`loads.${index}.product`}
                             control={control}
                             valueKey="id"
                             labelKey="name"
-                            className="min-w-[120px]"
+                            className="w-full"
                             handleItem={(item) => {
                                 form.setValue(`loads.${index}`, item)
                                 form.setValue(`loads.${index}.product`, item.id)
-                            }
-                            }
+                            }}
                         />
-
                     </div>
                 )
             },
-            size: 160,
         },
         {
             id: "unit",
@@ -122,11 +111,8 @@ export const ProductsTable = ({
                 const currentUnit = loads[index]?.unit || 0
                 const unit = getUnitById(currentUnit)
 
-                return (
-                    <span>{unit.name}</span>
-                )
+                return <div className="min-w-24">{unit.name}</div>
             },
-            size: 80,
         },
         {
             id: "quantity",
@@ -135,7 +121,7 @@ export const ProductsTable = ({
             cell: ({ row }) => {
                 const index = row.index
                 return (
-                    <div className="space-y-1">
+                    <div className="space-y-1 min-w-20">
                         <FormInput
                             methods={form}
                             name={`loads.${index}.quantity`}
@@ -143,11 +129,9 @@ export const ProductsTable = ({
                             className="w-20"
                             required
                         />
-
                     </div>
                 )
             },
-            size: 90,
         },
         {
             id: "price",
@@ -156,21 +140,17 @@ export const ProductsTable = ({
             cell: ({ row }) => {
                 const index = row.index
                 return (
-                    <div className="space-y-1">
+                    <div className="space-y-1 min-w-20">
                         <FormInput
                             methods={form}
                             name={`loads.${index}.price`}
                             placeholder="0.00"
-                            className="w-28"
-
+                            className="w-full"
                         />
-
                     </div>
                 )
             },
-            size: 100,
         },
-
 
         {
             id: "total_amount",
@@ -181,19 +161,19 @@ export const ProductsTable = ({
                 const quantity = useWatch({
                     control,
                     name: `loads.${index}.quantity`,
-                    defaultValue: 0
+                    defaultValue: 0,
                 })
 
                 const price = useWatch({
                     control,
                     name: `loads.${index}.price`,
-                    defaultValue: 0
+                    defaultValue: 0,
                 })
 
                 const currentCurrency = useWatch({
                     control,
                     name: `loads.${index}.currency`,
-                    defaultValue: 1
+                    defaultValue: 1,
                 })
 
                 const quantityNum = parseFloat(quantity?.toString() || "0")
@@ -202,41 +182,34 @@ export const ProductsTable = ({
                 const currencySymbol = getCurrencySymbol(currentCurrency)
 
                 return (
-                    <div className="font-medium text-sm text-center pr-2">
+                    <div className="font-medium text-sm text-center pr-2 min-w-32">
                         {formatMoney(total)} {currencySymbol}
                     </div>
                 )
             },
-            size: 90,
         },
         {
             id: "actions",
             header: "",
             cell: ({ row }) => (
-                <div className="flex justify-between gap-2 items-center">
+                <div className="flex  gap-2 items-center">
                     <Button
                         type="button"
-                        variant="outline"
-                        size="icon"
+                        size={"sm"}
                         onClick={() => copyProduct(row.index)}
-                        className={cn("!h-9")}
-                        title="Nusxa olish"
                     >
                         <Copy className="h-4" />
                     </Button>
                     <Button
                         type="button"
-                        size="icon"
-                        variant="ghost"
+                        size={"sm"}
+                        variant="destructive"
                         onClick={() => remove(row.index)}
-                        className="h-9 w-9 text-red-500 hover:text-red-700 hover:bg-red-50 border-gray-200 border-[1px]"
-                        title="O'chirish"
                     >
                         <X className="h-4 w-4" />
                     </Button>
                 </div>
             ),
-            size: 50,
         },
     ]
 
@@ -245,12 +218,11 @@ export const ProductsTable = ({
             <DataTable
                 data={fields}
                 columns={columns}
-                selecteds_row={false}
-                numeration={false}
+                numeration
                 viewAll={true}
                 className="min-w-full"
+                height="h-[20vh]"
             />
         </div>
     )
 }
-

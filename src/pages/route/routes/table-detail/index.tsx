@@ -1,3 +1,7 @@
+import { ROUTE_VEHICLES } from "@/constants/api-endpoints"
+import { useGet } from "@/hooks/useGet"
+import { useNavigate, useSearch } from "@tanstack/react-router"
+import { useEffect } from "react"
 import { LeftSideCars } from "./left-side"
 import { RightSideCars } from "./right-side"
 interface CarDetailsRowProps {
@@ -5,6 +9,23 @@ interface CarDetailsRowProps {
 }
 
 export const CarDetailsRow = ({ car }: CarDetailsRowProps) => {
+    const navigate = useNavigate()
+    const search = useSearch({ from: "/_main/route/" })
+    const { data } = useGet<RouteTypes>(`${ROUTE_VEHICLES}/${car.uuid}`, {
+        enabled: !!car.uuid,
+    })
+
+    useEffect(() => {
+        if (data?.order_routes?.length) {
+            const orderUuid = (data as RouteTypes)?.order_routes?.[0]
+                ?.order_uuid
+            navigate({
+                to: "/route",
+                search: { ...search, order_id: orderUuid },
+            })
+        }
+    }, [data])
+
     return (
         <div className="py-3 px-2">
             <div>
@@ -13,8 +34,8 @@ export const CarDetailsRow = ({ car }: CarDetailsRowProps) => {
                 </h1>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4  ">
-                <LeftSideCars shop={car?.shop} />
-                <RightSideCars products={car?.products} info={car?.info} />
+                <LeftSideCars />
+                <RightSideCars />
             </div>
         </div>
     )

@@ -1,43 +1,153 @@
-import { formatMoney } from "@/lib/format-money"
-import { formatPhoneNumber } from "@/lib/format-phone-number"
+import { CopyButton } from "@/lib/copy-button"
+import { useSearch } from "@tanstack/react-router"
 import { ColumnDef } from "@tanstack/react-table"
-import { format } from "date-fns"
 import { useMemo } from "react"
 
-export const cols = () => {
-    return useMemo<ColumnDef<OrderRow>[]>(
+export const useConstantColumns = () => {
+    const search = useSearch({ from: "/_main/route/" })
+    const { type } = search
+
+    return useMemo<ColumnDef<RouteConstant>[]>(
         () => [
             {
-                header: "Sana",
-                accessorKey: "created_at",
+                header: "ID",
+                accessorKey: "orderId",
                 enableSorting: true,
-                cell: ({ getValue }) => {
-                    const date = getValue<string>()
-                    return (
-                        <div className="whitespace-nowrap">
-                            {format(date, "yyyy-MM-dd HH:mm")}
-                        </div>
-                    )
-                },
+                cell: ({ row }) => CopyButton(row.original.orderId),
             },
-
             {
-                header: "Mijoz",
-                accessorKey: "client_data.name",
-                enableSorting: false,
-                cell: ({ row }) => (
-                    <div className="min-w-[140px] ">
-                        {row.original.client_data.name}
+                header: "Sana",
+                accessorKey: "scheduled_delivery_date",
+                enableSorting: true,
+                cell: ({ row: { original } }) => (
+                    <span className="whitespace-nowrap">
+                        {original.scheduled_delivery_date
+                            ? new Date(original.scheduled_delivery_date).toLocaleDateString()
+                            : "-"
+                        }
+                    </span>
+                ),
+            },
+            {
+                header: "Ombor",
+                accessorKey: "depot_name",
+                enableSorting: true,
+                cell: ({ row: { original } }) => (
+                    <div className="min-w-32">{original.depot_name}</div>
+                ),
+            },
+            {
+                header: "Mijoz: Tashkilot nomi",
+                accessorKey: "client_data",
+                enableSorting: true,
+                cell: ({ row: { original } }) => (
+                    <div>
+                        {original.client_data?.name} ({original.client_data?.company_name})
+                    </div>
+                ),
+            },
+            {
+                header: "Telefon raqami",
+                accessorKey: "phone",
+                enableSorting: true,
+                cell: ({ row: { original } }) => (
+                    <div>
+                        {original.client_data?.phone_number}
                     </div>
                 ),
             },
             {
                 header: "Manzil",
-                accessorKey: "client_data.address",
-                enableSorting: false,
-                cell: ({ row }) => (
-                    <div className="min-w-[200px]  ">
-                        {row.original.client_data.address}
+                accessorKey: "address",
+                enableSorting: true,
+                cell: ({ row: { original } }) => (
+                    <div className="min-w-40 break-all">
+                        {original.client_data?.address}
+                    </div>
+                ),
+            },
+            {
+                header: "Kod",
+                accessorKey: "code",
+                enableSorting: true,
+            },
+            {
+                header: "Yetkazib berish vaqti",
+                accessorKey: "time_to_drop",
+                enableSorting: true,
+            },
+            {
+                header: "Ustuvorlik",
+                accessorKey: "priority",
+                enableSorting: true,
+            },
+            {
+                header: "To'lov turi",
+                accessorKey: "type",
+                enableSorting: true,
+                cell: ({ row: { original } }) => (
+                    <div>
+                        {original.type === 1 ? "COD" : "Other"}
+                    </div>
+                ),
+            },
+            {
+                header: "To'lov summasi",
+                accessorKey: "cod",
+                enableSorting: true,
+                cell: ({ row: { original } }) => (
+                    <div>
+                        {original.cod ? `${parseFloat(original.cod).toLocaleString()} UZS` : "-"}
+                    </div>
+                ),
+            },
+            {
+                header: "Og'irlik (kg)",
+                accessorKey: "weight",
+                enableSorting: true,
+            },
+            {
+                header: "Hajm (m3)",
+                accessorKey: "volume",
+                enableSorting: true,
+            },
+            {
+                header: "Mahsulot soni",
+                accessorKey: "product_count",
+                enableSorting: true,
+            },
+            {
+                header: "Haydovchi",
+                accessorKey: "driver_name",
+                enableSorting: true,
+                cell: ({ row: { original } }) => (
+                    <div>
+                        {original.driver_name || "-"}
+                    </div>
+                ),
+            },
+            {
+                header: "Mashina",
+                accessorKey: "vehicle_name",
+                enableSorting: true,
+                cell: ({ row: { original } }) => (
+                    <div>
+                        {original.vehicle_name || "-"}
+                    </div>
+                ),
+            },
+            {
+                header: "Ustuvor transport",
+                accessorKey: "priority_vehicle",
+                enableSorting: true,
+            },
+            {
+                header: "ETA",
+                accessorKey: "eta",
+                enableSorting: true,
+                cell: ({ row: { original } }) => (
+                    <div>
+                        {original.eta ? new Date(original.eta).toLocaleString() : "-"}
                     </div>
                 ),
             },
@@ -45,136 +155,11 @@ export const cols = () => {
                 header: "Eslatma",
                 accessorKey: "note",
                 enableSorting: true,
-                cell: ({ getValue }) => (
-                    <div className="min-w-[200px] ">
-                        {String(getValue() ?? "")}
-                    </div>
-                ),
-            },
-            {
-                header: "Status",
-                accessorKey: "status",
-                enableSorting: true,
-                cell: ({ getValue }) => {
-                    const status = getValue<number>()
-                    const statusMap: Record<number, string> = {
-                        0: "Kutilmoqda",
-                        1: "Jarayonda",
-                        2: "Yetkazildi",
-                        3: "Bekor qilindi",
-                    }
-                    return (
-                        <div className="whitespace-nowrap">
-                            {statusMap[status] || "Noma'lum"}
-                        </div>
-                    )
-                },
-            },
-            {
-                header: "Vaqt",
-                accessorKey: "eta",
-                enableSorting: true,
-                cell: ({ getValue }) => {
-                    const time = getValue<string>()
-                    return (
-                        <div className="whitespace-nowrap">
-                            {format(time, "yyyy-MM-dd HH:mm")}
-                        </div>
-                    )
-                },
-            },
-
-            {
-                header: "Rad etish sababi",
-                accessorKey: "rejection_reason",
-                enableSorting: true,
-            },
-            {
-                header: "Ogʼirlik kg",
-                accessorKey: "weight",
-                enableSorting: true,
-            },
-
-            {
-                header: "Yuk tushirish vaqti",
-                accessorKey: "scheduled_delivery_date",
-                enableSorting: true,
-                cell: ({ getValue }) => {
-                    const date = getValue<string>()
-                    return format(date, "yyyy-MM-dd HH:mm")
-                },
-            },
-
-            {
-                header: "Toʼlov naqd summasi",
-                accessorKey: "cod", // Using COD field
-                enableSorting: true,
-                cell: ({ row: { original } }) => formatMoney(original.cod),
-            },
-            {
-                header: "Hajm m3",
-                accessorKey: "volume",
-                enableSorting: true,
-            },
-            {
-                header: "Yetkazib beruvchi",
-                accessorKey: "client_data.company_name", // Using company name
-                enableSorting: true,
-                cell: ({ row }) => (
-                    <div className="min-w-[200px] ">
-                        {row.original.client_data.company_name}
-                    </div>
-                ),
-            },
-
-            {
-                header: "Ustuvorlik",
-                accessorKey: "priority",
-                enableSorting: true,
-                cell: ({ getValue }) => {
-                    const priority = getValue<number>()
-                    const priorityMap: Record<number, string> = {
-                        1: "Past",
-                        2: "Oʻrta",
-                        3: "Yuqori",
-                    }
-                    return priorityMap[priority] || "Noma'lum"
-                },
-            },
-            {
-                header: "Ombor manzili",
-                accessorKey: "depot_name", // Using depot name
-                enableSorting: true,
-                cell: ({ getValue }) => (
-                    <div className="min-w-[240px]">
-                        {String(getValue() ?? "-")}
-                    </div>
-                ),
-            },
-
-            {
-                header: "Telefon raqami",
-                accessorKey: "client_data.phone_number", // Using client phone
-                enableSorting: true,
-                cell: ({ row }) => (
-                    <div className="whitespace-nowrap">
-                        {formatPhoneNumber(
-                            row.original.client_data.phone_number,
-                        )}
-                    </div>
-                ),
-            },
-            {
-                header: "Elektron pochta",
-                accessorKey: "client_data.email", // Using client email
-                enableSorting: true,
-                cell: ({ row }) => (
-                    <div className="min-w-[200]">
-                        {row.original.client_data.email}
-                    </div>
+                cell: ({ row: { original } }) => (
+                    <div className="min-w-32 break-all">{original.note}</div>
                 ),
             },
         ],
-        [],
+        [type],
     )
 }

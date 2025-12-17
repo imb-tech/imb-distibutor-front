@@ -30,6 +30,7 @@ type OrderRow = {
   is_active: boolean;
   created_at: string;
   updated_at: string;
+  time_to_drop:string
   code: string | null;
   type: number;
   priority: number;

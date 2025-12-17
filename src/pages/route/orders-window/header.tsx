@@ -10,11 +10,19 @@ import { CirclePlus, Route } from "lucide-react"
 
 const HeaderRoute = () => {
     const { openModal: createOrder } = useModal("create")
+    const { openModal: createRoute } = useModal("route")
     const { clearKey } = useGlobalStore()
+
     const handleCreate = () => {
         clearKey("create")
         createOrder()
     }
+
+    const handleRoute = () => {
+        clearKey("route")
+        createRoute()
+    }
+
 
     return (
         <div className="space-y-2">
@@ -36,6 +44,7 @@ const HeaderRoute = () => {
                         Buyurtma qo'shish
                     </Button>
                     <Button
+                        onClick={handleRoute}
                         className="bg-green-500 hover:bg-green-600/90 text-white"
                         type="button"
                         icon={<Route size={18} />}

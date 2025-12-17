@@ -2,14 +2,15 @@ import DeleteModal from "@/components/custom/delete-modal"
 import Modal from "@/components/custom/modal"
 import { Card, CardContent } from "@/components/ui/card"
 import { DataTable } from "@/components/ui/datatable"
-import { ORDERS, ORDERS_WINDOW } from "@/constants/api-endpoints"
+import { ORDERS, ORDERS_WINDOW, SETTINGS_VEHICLES } from "@/constants/api-endpoints"
 import { useGet } from "@/hooks/useGet"
 import { useModal } from "@/hooks/useModal"
 import { AddOrder } from "@/pages/orders/create"
 import { useGlobalStore } from "@/store/global-store"
 import { useSearch } from "@tanstack/react-router"
 import HeaderRoute from "./header"
-import { cols } from "./constant-cols"
+import { useRouteColumns } from "@/hooks/use-router-column"
+import { AddRoute } from "../routes-window"
 
 
 
@@ -19,16 +20,24 @@ function RoutesMain() {
     const { openModal: deleteOrder } = useModal("delete")
     const { setData, getData } = useGlobalStore()
     const currentStaff = getData<OrderRow>(ORDERS_WINDOW)
-    const {data:ordersData, isLoading } = useGet<ListResponse<OrderRow>>(ORDERS_WINDOW, {
+    const currentRoute = getData<VehicleRow>(SETTINGS_VEHICLES)
+    const { data: ordersData, isLoading } = useGet<ListResponse<OrderRow>>(ORDERS_WINDOW, {
+        params: search,
+    })
+    const { data: routesData, isLoading:isRouting } = useGet<ListResponse<VehicleRow>>(SETTINGS_VEHICLES, {
         params: search,
     })
 
-    const handleDelete = (item:OrderRow) => {
+
+    
+    const columns = useRouteColumns()
+
+    const handleDelete = (item: OrderRow) => {
         setData<OrderRow>(ORDERS_WINDOW, item)
         deleteOrder()
     }
 
-    const handleEdit = (item:OrderRow) => {
+    const handleEdit = (item: OrderRow) => {
         setData(ORDERS_WINDOW, item)
         createOrder()
     }
@@ -39,7 +48,7 @@ function RoutesMain() {
                 <HeaderRoute />
                 <DataTable
                     numeration
-                    columns={cols()}
+                    columns={columns}
                     loading={isLoading}
                     data={ordersData?.results}
                     onEdit={(row) => handleEdit(row.original)}
@@ -55,6 +64,11 @@ function RoutesMain() {
                     <div className=" max-h-[80vh] overflow-y-auto no-scrollbar-x p-0.5">
                         <AddOrder />
                     </div>
+                </Modal>
+                <Modal modalKey="route"   
+                    size="max-w-5xl"
+                    title={currentRoute?.uuid ? "Tahrirlash" : "Yaratish"}>
+                    <AddRoute  />
                 </Modal>
                 <DeleteModal path={ORDERS_WINDOW} id={currentStaff?.uuid} />
             </CardContent>

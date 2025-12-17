@@ -1,4 +1,13 @@
 type RouteConstant = {
+    scheduled_delivery_date: any
+    depot_name: ReactNode
+    client_data: any
+    type: number
+    cod: any
+    loads: any
+    driver_name: string
+    vehicle_name: string
+    eta: any
     orderId: string
     date: string
     warehouse: string
@@ -18,6 +27,12 @@ type RouteConstant = {
 }
 
 type RouteAddition = {
+    uuid(uuid: any): any
+    client_data: any
+    type: number
+    cod: any
+    eta: any
+    loads: any
     orderId: string
     date: string
     warehouse: string

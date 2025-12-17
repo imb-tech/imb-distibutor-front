@@ -9,6 +9,7 @@ export const WORKING_SCHEDULE = "working-schedule"
 export const ORDERS = "order"
 export const ORDERS_WINDOW = "order"
 export const SHIPPERS = "setting/shippers"
+export const SETTINGS_VEHICLES = "setting/vehicles"
 
 /** ===== SETTINGS ===== */
 

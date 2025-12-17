@@ -44,7 +44,7 @@ export const useColumnsCarsOrderTable = () => {
                 accessorKey: "order_weigth",
                 header: "Buyurtma og'irligi",
                 enableSorting: true,
-            },
+            } 
         ],
         [],
     )

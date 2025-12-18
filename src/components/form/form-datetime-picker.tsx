@@ -111,7 +111,7 @@ export function FormDateTimePicker<TForm extends FieldValues>({
                                     />
 
                                     <div className="flex flex-col sm:flex-row sm:h-[300px] border-l divide-x ">
-                                        <ScrollArea className="w-64 sm:w-auto no-scrollbar-x">
+                                        <ScrollArea className="w-64 sm:w-auto  ">
                                             <div className="flex sm:flex-col p-2">
                                                 {hours.map((hour) => (
                                                     <Button

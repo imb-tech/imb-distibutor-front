@@ -23,16 +23,13 @@ export const SETTINGS_WAREHOUSE = "setting/depots"
 export const SETTINGS_LOGISTICIANS_UPDATE = "logist/update"
 export const SETTINGS_SHIPPERS = "setting/shippers"
 export const SETTINGS_LOGISTICIANS = "logist/list"
-export const SETTINGS_CUSTOMERS= "clients"
-export const SETTINGS_PAYMENT_TYPES= "setting/payment-type"
-
+export const SETTINGS_CUSTOMERS = "clients"
+export const SETTINGS_PAYMENT_TYPES = "setting/payment-type"
 
 /** ===== MARSHURTLAR ===== */
 export const ROUTE_MAPS = "route/all"
+// export const ROUTE_
 export const ROUTE_VEHICLES = "route"
-export const ROUTE_VEHICLES_UPDATE ="route/update"
-export const ROUTE_VEHICLES_CREATE="route/create"
- 
-
-
-
+export const ROUTE_VEHICLES_DETAIL = "route/detail"
+export const ROUTE_VEHICLES_UPDATE = "route/update"
+export const ROUTE_VEHICLES_CREATE = "route/create"

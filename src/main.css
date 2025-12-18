@@ -139,10 +139,10 @@
     @apply bg-primary text-primary-foreground;
 }
 
-.no-scrollbar-x::-webkit-scrollbar {
+*::-webkit-scrollbar {
     display: none;
 }
-.no-scrollbar-x {
+* {
     -ms-overflow-style: none; /* IE va Edge */
     scrollbar-width: none; /* Firefox */
 }

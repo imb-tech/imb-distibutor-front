@@ -82,12 +82,12 @@ export default function ScheduleTable({
         <Card className="w-full mt-3">
             <CardHeader className="pb-0">
                 <div className="flex items-center justify-between">
-                    <CardTitle >Ish Jadvali</CardTitle>
+                    <CardTitle>Ish Jadvali</CardTitle>
                     <div className="flex items-center gap-2"></div>
                 </div>
             </CardHeader>
             <CardContent>
-                <ScrollArea className="w-full whitespace-nowrap rounded-md border no-scrollbar-x">
+                <ScrollArea className="w-full whitespace-nowrap rounded-md border  ">
                     <div className="min-w-[800px]">
                         <Table>
                             <TableHeader>

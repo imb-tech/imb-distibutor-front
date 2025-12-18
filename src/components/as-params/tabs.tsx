@@ -66,7 +66,7 @@ const ParamTabs: React.FC<ParamTabsProps> = ({
             <div className="max-w-full overflow-x-auto flex flex-wrap items-center justify-between gap-4">
                 <TabsList
                     className={cn(
-                        " flex gap-3 overflow-x-auto justify-start no-scrollbar-x",
+                        " flex gap-3 overflow-x-auto justify-start  ",
                         className,
                     )}
                 >

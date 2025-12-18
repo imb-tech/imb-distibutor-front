@@ -1,7 +1,7 @@
 import { ColumnDef } from "@tanstack/react-table"
 import { useMemo } from "react"
-
-export const useColumnsCarsOrderTable = () => {
+import {format} from "date-fns"
+ export const useColumnsCarsOrderTable = () => {
     return useMemo<ColumnDef<CarsTypeInOrders>[]>(
         () => [
             {
@@ -27,7 +27,7 @@ export const useColumnsCarsOrderTable = () => {
             },
             {
                 accessorKey: "name",
-                header: "Ekspeditorlar",
+                header: "Yol",
                 enableSorting: true,
             },
             {
@@ -44,7 +44,20 @@ export const useColumnsCarsOrderTable = () => {
                 accessorKey: "order_weigth",
                 header: "Buyurtma og'irligi",
                 enableSorting: true,
-            } 
+            },
+            // {
+            //     accessorKey: "start_date",
+            //     header: "Boshlanish vaqti",
+            //     enableSorting: true,
+            //      cell: ({ getValue }) => {
+            //         const date = getValue<string>()
+            //         return (
+            //             <div className="whitespace-nowrap">
+            //                 {format(date, "yyyy-MM-dd HH:mm")}
+            //             </div>
+            //         )
+            //     },
+            // },
         ],
         [],
     )

@@ -25,6 +25,7 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import { DEFAULT_PAGE_SIZE, PAGE_KEY, PAGE_SIZE_KEY } from "@/constants/default"
+import { useHasAction } from "@/hooks/useUser"
 import { cn } from "@/lib/utils"
 import { useSearch } from "@tanstack/react-router"
 import { ChevronDown, ChevronsUpDown, ChevronUp } from "lucide-react"
@@ -78,20 +79,22 @@ interface DataTableProps<TData> {
     tableWrapperClassName?: string
     skeletonRowCount?: number
     onSelectedRowsChange?: (rows: TData[]) => void
-    clearSelectionTrigger?: any
+    actionPermissions?: string[]
     height?: string
+    clearSelectionTrigger?: any
     controlledRowSelection?: RowSelectionState
     onAllSelectedChange?: (allSelected: boolean) => void
 }
 
 export function DataTable<TData>({
-    data = [],
+    data,
     columns,
     loading,
-    className,
+    className = "min-w-[1100px]",
     deleteSelecteds,
     onRightClick,
     selecteds_count,
+    selecteds_row,
     onRowClick,
     disabled,
     rowColor,
@@ -100,7 +103,6 @@ export function DataTable<TData>({
     limitOffsetPagination,
     viewAll,
     head,
-    viewCount,
     numeration = false,
     wrapperClassName,
     actionMenuMode,
@@ -109,11 +111,11 @@ export function DataTable<TData>({
     onUndo,
     onView,
     tableWrapperClassName,
-    skeletonRowCount = 15,
     onSelectedRowsChange,
+    skeletonRowCount = 15,
     height,
+    actionPermissions,
     clearSelectionTrigger,
-    selecteds_row,
     controlledRowSelection,
     onAllSelectedChange,
 }: DataTableProps<TData>) {
@@ -127,16 +129,18 @@ export function DataTable<TData>({
         controlledRowSelection ?? {},
     )
 
+    const hasActions = actionPermissions && useHasAction(actionPermissions)
+
     const [columnFilters, setColumnFilters] =
         React.useState<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] =
         React.useState<VisibilityState>({})
     const search: any = useSearch({ from: "/_main" })
 
-    const hasActions = onDelete || onEdit || onUndo || onView
-
     const orderedColumns = React.useMemo(() => {
-        if (hasActions) {
+        if (hasActions) return columns
+
+        if (onDelete || onEdit || onUndo || onView) {
             return [
                 ...columns,
                 {
@@ -157,7 +161,16 @@ export function DataTable<TData>({
                 },
             ]
         } else return columns
-    }, [actionMenuMode, columns, onDelete, onEdit, onUndo, onView])
+    }, [actionMenuMode, columns, onDelete, onEdit, onUndo, onView, hasActions])
+
+    React.useEffect(() => {
+        if (
+            controlledRowSelection &&
+            !isRowSelectionEqual(rowSelection, controlledRowSelection)
+        ) {
+            setRowSelection(controlledRowSelection)
+        }
+    }, [controlledRowSelection])
 
     const table = useReactTable({
         data: data || [],
@@ -168,6 +181,7 @@ export function DataTable<TData>({
         getPaginationRowModel: getPaginationRowModel({
             initialSync: true,
         }),
+        getRowId: (row: any) => String(row.id),
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
         onColumnVisibilityChange: setColumnVisibility,
@@ -207,12 +221,30 @@ export function DataTable<TData>({
     }, [rowSelection])
 
     return (
-        <main className={cn("w-full bg-card rounded-md p-3", wrapperClassName)}>
+        <main
+            className={cn("w-full   p-4 bg-card rounded-md ", wrapperClassName)}
+        >
             {!!head && <div>{head}</div>}
+            {selecteds_count && (
+                <div className="flex flex-col gap-2 sm:flex-row items-end sm:items-center sm:justify-between pb-2">
+                    <p
+                        className={cn(
+                            "flex-1 text-sm text-muted-foreground",
+                            !deleteSelecteds && "text-end",
+                        )}
+                    >
+                        {table.getFilteredRowModel().rows?.length} {"dan"}{" "}
+                        {table.getFilteredSelectedRowModel().rows?.length}{" "}
+                        {"ta"}
+                        {"qator tanlandi"}.
+                    </p>
+                    <div></div>
+                </div>
+            )}
 
             <div
                 className={cn(
-                    "relative overflow-x-auto overflow-y-hidden    rounded-md",
+                    "relative overflow-x-auto overflow-y-hidden no-scollbar-x   rounded-md ",
                     tableWrapperClassName,
                 )}
             >
@@ -226,7 +258,7 @@ export function DataTable<TData>({
                                         .map((headerGroup, index) => (
                                             <TableRow
                                                 key={index}
-                                                className={`grid gap-1`}
+                                                className={`grid gap-1 `}
                                                 style={{
                                                     gridTemplateColumns: `repeat(${
                                                         headerGroup?.headers
@@ -258,20 +290,20 @@ export function DataTable<TData>({
                     </Table>
                 )}
 
-                {!loading && !!data?.length && (
+                {data?.length ?
                     <Table
-                        className={`${className} select-text bg-card rounded-md `}
+                        className={`${className} select-text  bg-card rounded-md`}
                     >
                         <TableHeader>
                             {table
                                 .getHeaderGroups()
                                 .map((headerGroup, index) => (
                                     <TableRow
-                                        key={index}
+                                        key={headerGroup.id}
                                         className="border-none "
                                     >
                                         {selecteds_row && (
-                                            <TableHead key={index} className="">
+                                            <TableHead>
                                                 <Checkbox
                                                     checked={
                                                         table.getIsAllPageRowsSelected() ||
@@ -287,10 +319,8 @@ export function DataTable<TData>({
                                                 />
                                             </TableHead>
                                         )}
-
                                         {numeration && (
                                             <TableHead
-                                                key={index}
                                                 className={cn(
                                                     " px-2  cursor-pointer",
                                                     index === 0 && "w-8",
@@ -304,9 +334,9 @@ export function DataTable<TData>({
                                             (header, index) => {
                                                 return (
                                                     <TableHead
-                                                        key={index}
+                                                        key={header.id}
                                                         className={cn(
-                                                            "px-2 cursor-pointer",
+                                                            " px-2 cursor-pointer",
                                                         )}
                                                         onClick={
                                                             (
@@ -369,56 +399,60 @@ export function DataTable<TData>({
                         </TableHeader>
 
                         <TableBody>
-                            {table.getRowModel().rows?.map((row, index) => (
-                                <TableRow
-                                    key={index}
-                                    data-state={
-                                        row.getIsSelected() && "selected"
-                                    }
-                                    onContextMenu={(e) => {
-                                        e.preventDefault()
-                                        onRightClick?.(row.original)
-                                    }}
-                                    className={cn(
-                                        "hover:bg-gray-200 dark:hover:bg-secondary border-none ",
-                                        rowColor?.(row.original),
-                                        index % 2 !== 0 && "bg-secondary/70",
-                                    )}
-                                >
-                                    {selecteds_row && (
-                                        <TableCell className="w-8 ">
-                                            <Checkbox
-                                                checked={row.getIsSelected()}
-                                                onCheckedChange={(value) =>
-                                                    row.toggleSelected(!!value)
-                                                }
-                                                aria-label="Select row"
-                                            />
-                                        </TableCell>
-                                    )}
+                            {table.getRowModel().rows?.length > 0 ?
+                                table.getRowModel().rows?.map((row, index) => (
+                                    <TableRow
+                                        key={row.id}
+                                        data-state={
+                                            row.getIsSelected() && "selected"
+                                        }
+                                        onContextMenu={(e) => {
+                                            e.preventDefault()
+                                            onRightClick?.(row.original)
+                                        }}
+                                        className={cn(
+                                            "hover:bg-zinc-200/90 dark:hover:bg-secondary border border-transparent ",
+                                            rowColor?.(row.original),
+                                            index % 2 !== 0 &&
+                                                "dark:bg-secondary/70 bg-zinc-200/70 rounded-xl ",
+                                        )}
+                                    >
+                                        {selecteds_row  && (
+                                            <TableCell className="w-8 ">
+                                                <Checkbox
+                                                    checked={row.getIsSelected()}
+                                                    onCheckedChange={(value) =>
+                                                        row.toggleSelected(
+                                                            !!value,
+                                                        )
+                                                    }
+                                                    aria-label="Select row"
+                                                />
+                                            </TableCell>
+                                        )}
+                                        {numeration && (
+                                            <TableCell className="w-8 ">
+                                                {((search[paramName] || 1) -
+                                                    1) *
+                                                    (search[
+                                                        pageSizeParamName
+                                                    ] || DEFAULT_PAGE_SIZE) +
+                                                    index +
+                                                    1}
+                                            </TableCell>
+                                        )}
 
-                                    {numeration && (
-                                        <TableCell className="w-8">
-                                            {((search[paramName] || 1) - 1) *
-                                                (search[pageSizeParamName] ||
-                                                    DEFAULT_PAGE_SIZE) +
-                                                index +
-                                                1}
-                                        </TableCell>
-                                    )}
-
-                                    {row
-                                        .getVisibleCells()
-                                        .map((cell, index) => (
+                                        {row.getVisibleCells().map((cell) => (
                                             <TableCell
-                                                key={index}
-                                                onClick={() =>
+                                                key={cell.id}
+                                                onClick={() => {
                                                     onRowClick?.(
                                                         cell.row.original,
                                                     )
-                                                }
+                                                }}
                                                 className={cn(
-                                                    `cursor-pointer border-r border-secondary last:border-none `,
+                                                    `cursor-pointer border-r   dark:border-secondary/50 border-secondary last:border-none 
+                                                         `,
                                                 )}
                                             >
                                                 {flexRender(
@@ -427,26 +461,27 @@ export function DataTable<TData>({
                                                 )}
                                             </TableCell>
                                         ))}
+                                    </TableRow>
+                                ))
+                            :   <TableRow>
+                                    <TableCell
+                                        colSpan={columns?.length}
+                                        className="h-24 text-center"
+                                    >
+                                        {"Mavjud emas"}
+                                    </TableCell>
                                 </TableRow>
-                            ))}
+                            }
                         </TableBody>
                         <TableFooter></TableFooter>
                     </Table>
-                )}
-                {data?.length === 0 && !loading && <EmptyBox height={height} />}
+                :   null}
+                {data?.length === 0 && !loading ?
+                    <EmptyBox height={height} />
+                :   null}
             </div>
-
             {!viewAll && data?.length ?
                 <div className="pt-4 mx-auto w-full relative flex justify-center">
-                    {!!viewCount && !!table.getRowModel().rows?.length && (
-                        <p className="absolute top-6 left-2">
-                            Soni:{" "}
-                            {typeof viewCount === "number" ?
-                                viewCount
-                            :   table.getRowModel().rows?.length}{" "}
-                            ta
-                        </p>
-                    )}
                     {totalPages ?
                         <ParamPagination
                             disabled={disabled || loading}
@@ -473,4 +508,14 @@ export function DataTable<TData>({
             :   ""}
         </main>
     )
+}
+
+function isRowSelectionEqual(
+    a: RowSelectionState = {},
+    b: RowSelectionState = {},
+) {
+    const aKeys = Object.keys(a)
+    const bKeys = Object.keys(b)
+    if (aKeys.length !== bKeys.length) return false
+    return aKeys.every((k) => a[k] === b[k])
 }

@@ -1,12 +1,5 @@
 import { useLocation } from "@tanstack/react-router"
-import {
-    CalendarDays,
-    ClipboardList,
-    Route,
-    Settings,
-    Split,
-    TrendingUp,
-} from "lucide-react"
+import { Route, Settings, Split } from "lucide-react"
 import { ReactNode, useMemo } from "react"
 import { useUser } from "./useUser"
 
@@ -107,44 +100,44 @@ export const useItems = () =>
                 icon: <Split width={18} />,
                 path: "/orders",
             },
-            {
-                label: "Ish jadvali",
-                icon: <CalendarDays width={18} />,
-                path: "/work-schedule",
-            },
-            {
-                label: "Moliya",
-                icon: <TrendingUp width={18} />,
-                path: "/finance",
-            },
+            // {
+            //     label: "Ish jadvali",
+            //     icon: <CalendarDays width={18} />,
+            //     path: "/work-schedule",
+            // },
+            // {
+            //     label: "Moliya",
+            //     icon: <TrendingUp width={18} />,
+            //     path: "/finance",
+            // },
 
-            {
-                label: "Hisobotlar",
-                icon: <ClipboardList width={18} />,
-                path: "/reports/cars",
-                items: [
-                    {
-                        label: "Avtomobillar",
-                        path: "/reports/cars",
-                    },
-                    {
-                        label: "Haydovchilar",
-                        path: "/reports/drivers",
-                    },
-                    {
-                        label: "Ekspeditorlar",
-                        path: "/reports/freight-forwarders",
-                    },
-                    {
-                        label: "Agentlar",
-                        path: "/reports/agents",
-                    },
-                    {
-                        label: "Logistlar",
-                        path: "/reports/logisticians",
-                    },
-                ],
-            },
+            // {
+            //     label: "Hisobotlar",
+            //     icon: <ClipboardList width={18} />,
+            //     path: "/reports/cars",
+            //     items: [
+            //         {
+            //             label: "Avtomobillar",
+            //             path: "/reports/cars",
+            //         },
+            //         {
+            //             label: "Haydovchilar",
+            //             path: "/reports/drivers",
+            //         },
+            //         {
+            //             label: "Ekspeditorlar",
+            //             path: "/reports/freight-forwarders",
+            //         },
+            //         {
+            //             label: "Agentlar",
+            //             path: "/reports/agents",
+            //         },
+            //         {
+            //             label: "Logistlar",
+            //             path: "/reports/logisticians",
+            //         },
+            //     ],
+            // },
             {
                 label: "Sozlamalar",
                 icon: <Settings width={18} />,
@@ -166,7 +159,7 @@ export const useItems = () =>
                     //     label: "Ekspeditorlar",
                     //     path: "/settings/freight-forwarders",
                     // },
-                     {
+                    {
                         label: "Yetkazib beruvchilar",
                         path: "/settings/shippers",
                     },

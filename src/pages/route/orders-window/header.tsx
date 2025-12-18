@@ -60,14 +60,7 @@ const HeaderRoute = () => {
                     </Button>
                 </div>
             </div>
-            <div className="flex items-center gap-3">
-                <p className="border border-primary  rounded-lg w-max px-3 py-0.5 text-primary">
-                    90 141 kg O'g'irlik
-                </p>
-                <p className="border border-primary  rounded-lg w-max px-3 py-0.5 text-primary">
-                    500 Buyurtmalar soni
-                </p>
-            </div>
+
 
             <div className="flex items-center gap-3">
                 <ParamInput fullWidth />
@@ -75,6 +68,7 @@ const HeaderRoute = () => {
                     <ParamCombobox
                         label="Doimiy"
                         paramName="type"
+                        valueKey="id"
                         options={[
                             { id: "1", name: "Doimiy" },
                             { id: "2", name: "Qo'shimcha" },

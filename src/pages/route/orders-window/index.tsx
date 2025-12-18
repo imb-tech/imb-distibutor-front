@@ -19,7 +19,8 @@ function RoutesMain() {
     const params = {
         ...search,
         status: 0,
-        page_tabs: null
+        page_tabs: null,
+        type:"1"
 
     }
 

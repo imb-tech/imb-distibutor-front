@@ -19,7 +19,7 @@ const ModalOrderTable = ({
 }: ModalOrderTableType) => {
     const { openModal: openOrderListModal } = useModal("order-list")
     const columns = useColumnsOrderTable()
-    const { setData, getData } = useGlobalStore()
+    const { setData } = useGlobalStore()
     const [rowSelection, setRowSelection] = useState<Record<string, boolean>>(
         {},
     )
@@ -34,7 +34,6 @@ const ModalOrderTable = ({
     }, [preselectedRowSelection])
 
     const handleModalOpen = () => {
-        // Store only the order IDs, not the entire route objects
         const orderIds = routes.map(route => route.order)
         setData(ROUTE_ASSIGNE_ORDERS, orderIds)
         openOrderListModal()
@@ -45,6 +44,7 @@ const ModalOrderTable = ({
             <div className="flex items-end justify-end">
                 <Button type="button" onClick={handleModalOpen}>
                     <Plus size={16} />
+                    Yaratish
                 </Button>
             </div>
             <DataTable

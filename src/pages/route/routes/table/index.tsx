@@ -74,7 +74,7 @@ export const CarsTable = () => {
                 title={"Buyurtmalar tanlang"}
                 modalKey="order-list"
             >
-                <AddOrderList />
+                <AddOrderList uuid={selectedCar?.uuid || ""} />
             </Modal>
         </div>
     )

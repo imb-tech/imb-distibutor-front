@@ -30,7 +30,7 @@ interface RoutePayload {
 }
 
 export const AddRoute = () => {
-    const { closeModal, openModal: routeModal } = useModal("route_create")
+    const { closeModal } = useModal("route")
     const { openModal: vehicleModal } = useModal("vehicle_edit")
     const { clearKey, getData, setData } = useGlobalStore()
     const { data: vehiclesData, isLoading } =
@@ -62,10 +62,6 @@ export const AddRoute = () => {
 
     const { mutate: postMutate, isPending: isPendingCreate } = usePost({
         onSuccess,
-        onError: (error) => {
-            toast.error("Marshrut yaratishda xatolik yuz berdi")
-            console.error("Route creation error:", error)
-        },
     })
 
     const handleVehicleEdit = (item: VehicleRow) => {

@@ -29,10 +29,11 @@ export const SETTINGS_PAYMENT_TYPES = "setting/payment-type"
 
 /** ===== MARSHURTLAR ===== */
 export const ROUTE_MAPS = "route/all"
-// export const ROUTE_
+export const ROUTE_ORDER_LSIT = "order/short-list"
 export const ROUTE_VEHICLES = "route"
 export const ROUTE_VEHICLES_DETAIL = "route/detail"
 export const ROUTE_VEHICLES_UPDATE = "route/update"
 export const ROUTE_VEHICLES_CREATE = "route/create"
 export const SELECTED_VEHICLE_IDS = "vehicle_ids"
 export const SELECTED_ORDER_IDS = "order_ids"
+export const ROUTE_ASSIGNE_ORDERS ="route/assignee-orders"

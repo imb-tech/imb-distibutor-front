@@ -16,6 +16,7 @@ import { useGlobalStore } from "@/store/global-store"
 import { CarTableRow } from "./car-row"
 import { useColumnsCarsOrderTable } from "./cars-col"
 import AddVehiclesModal from "./modal/add-car"
+import AddOrderList from "./modal/add-order"
 
 export const CarsTable = () => {
     const { data } = useGet<ListResponse<CarsTypeInOrders>>(ROUTE_VEHICLES)
@@ -67,6 +68,13 @@ export const CarsTable = () => {
                 modalKey={"create"}
             >
                 <AddVehiclesModal />
+            </Modal>
+            <Modal
+                size="max-w-2xl"
+                title={"Buyurtmalar tanlang"}
+                modalKey="order-list"
+            >
+                <AddOrderList />
             </Modal>
         </div>
     )

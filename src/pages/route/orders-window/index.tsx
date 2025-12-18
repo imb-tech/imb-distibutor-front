@@ -98,7 +98,7 @@ function RoutesMain() {
                 >
                     <EditModal />
                 </Modal>
-
+ 
                 <DeleteModal path={ORDERS_WINDOW} id={currentStaff?.uuid} />
             </CardContent>
         </Card>

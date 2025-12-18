@@ -1,4 +1,3 @@
-import Modal from "@/components/custom/modal"
 import { FormDatePicker } from "@/components/form/date-picker"
 import FormInput from "@/components/form/input"
 import { Button } from "@/components/ui/button"
@@ -19,7 +18,6 @@ import { Clock, Search } from "lucide-react"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-import EditModal from "../vehicles-window"
 import { vehicleCols } from "./cols"
 
 interface RoutePayload {
@@ -195,15 +193,6 @@ export const AddRoute = () => {
                     Marshrutlash
                 </Button>
             </div>
-
-            <Modal
-                modalKey="vehicle_edit"
-                size="max-w-5xl"
-                classNameTitle="font-medium text-xl"
-                title={"Avtomobil tahrirlash"}
-            >
-                <EditModal />
-            </Modal>
         </form>
     )
 }

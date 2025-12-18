@@ -95,7 +95,10 @@ const AddVehiclesModal = () => {
     }
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 w-full overflow-hidden p-1">
+        <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="space-y-4 w-full overflow-hidden p-1"
+        >
             <div className="grid md:grid-cols-2 gap-5">
                 <FormInput
                     required
@@ -137,7 +140,7 @@ const AddVehiclesModal = () => {
                 onSelectedRowsChange={handleSelectionChange}
             />
 
-            <div className="flex justify-end">
+            <div className="flex justify-end ">
                 <Button
                     loading={isPending}
                     type="submit"

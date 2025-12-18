@@ -2,7 +2,6 @@ import { useAdditionColumns } from "@/pages/route/orders-window/addition-cols"
 import { useConstantColumns } from "@/pages/route/orders-window/constant-cols"
 import { useSearch } from "@tanstack/react-router"
 import { ColumnDef } from "@tanstack/react-table"
-import { CloudCog } from "lucide-react"
 import { useMemo } from "react"
 
 

@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { DataTable } from "@/components/ui/datatable"
 import { Label } from "@/components/ui/label"
-import { ROUTE_VEHICLES, ROUTE_VEHICLES_CREATE, SETTINGS_VEHICLES } from "@/constants/api-endpoints"
+import { ROUTE_VEHICLES, ROUTE_VEHICLES_CREATE, SELECTED_ORDER_IDS, SELECTED_VEHICLE_IDS, SETTINGS_VEHICLES } from "@/constants/api-endpoints"
 import { useGet } from "@/hooks/useGet"
 import { useModal } from "@/hooks/useModal"
 import { useGlobalStore } from "@/store/global-store"
@@ -12,8 +12,6 @@ import { Clock, Search } from "lucide-react"
 import { usePost } from "@/hooks/usePost"
 import { FormDatePicker } from "@/components/form/date-picker"
 import FormInput from "@/components/form/input"
-import Modal from "@/components/custom/modal"
-import EditModal from "../vehicles-window"
 import { useState } from "react"
 
 interface RoutePayload {
@@ -25,9 +23,6 @@ interface RoutePayload {
   order_ids?: string[]
 }
 
-// Store key constants
-const SELECTED_VEHICLE_IDS = "vehicle_ids"
-const SELECTED_ORDER_IDS = "order_ids"
 
 export const AddRoute = () => {
   const { closeModal, openModal: routeModal } = useModal("route_create")
@@ -74,30 +69,12 @@ export const AddRoute = () => {
     vehicleModal()
   }
 
-  // const filteredVehicles = vehiclesData?.results?.filter(vehicle =>
-  //   !searchQuery ||
-  //   vehicle.uuid?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-  //   vehicle.vehicle_number?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-  //   vehicle.driver_name?.toLowerCase().includes(searchQuery.toLowerCase())
-  // ) || []
-
   const onSubmit = (data: Omit<RoutePayload, 'vehicle_ids' | 'order_ids'>) => {
-    // Validation
-    if (!data.date || !data.start_time) {
-      toast.error("Iltimos, sana va boshlanish vaqtini kiriting")
-      return
-    }
 
     if (selectedVehicleIds.length === 0) {
       toast.error("Iltimos, kamida bitta avtomobil tanlang")
       return
     }
-
-    if (selectedOrderIds.length === 0) {
-      toast.error("Iltimos, kamida bitta buyurtma tanlang")
-      return
-    }
-
     const payload: RoutePayload = {
       ...data,
       vehicle_ids: selectedVehicleIds,
@@ -108,6 +85,7 @@ export const AddRoute = () => {
     console.log("Sending route payload:", payload)
     postMutate(ROUTE_VEHICLES_CREATE, payload)
   }
+  const columns = vehicleCols()
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col h-full">
@@ -124,7 +102,7 @@ export const AddRoute = () => {
             placeholder="Sana"
             name="date"
             className="w-full"
-         
+
           />
         </div>
         <div>
@@ -137,7 +115,6 @@ export const AddRoute = () => {
             type="time"
             placeholder="Marshrutlarning boshlanish vaqti"
             className="w-full"
-           
           />
         </div>
       </div>
@@ -158,26 +135,20 @@ export const AddRoute = () => {
       </div>
 
       {/* Data table with filtered results */}
-      <div className="mb-6 flex-1 min-h-0">
-        <div className="border rounded-md overflow-hidden bg-white h-full">
-          <div className="h-[300px] overflow-auto">
-            <DataTable
-              onEdit={(row) => handleVehicleEdit(row.original)}
-              columns={vehicleCols()}
-              data={vehiclesData?.results}
-              loading={isLoading}
-              form={form}
-              enableRowSelection
-              selectionMode="multiple"
-              selecteds_row
-              noResultsMessage="Avtomobillar topilmadi"
-              // onSelectedRowsChange={(rows: VehicleRow[]) => {
-              //   const ids = rows.map(row => row.id)
-              //   setData(SELECTED_VEHICLE_IDS, ids)
-              // }}
-            />
-          </div>
-        </div>
+      <div className="border rounded-md overflow-y-auto  max-h-[50vh] bg-white h-full w-full min-w-[1024px] overflow-x-auto">
+
+        <DataTable
+          onEdit={(row) => handleVehicleEdit(row.original)}
+          columns={columns}
+          data={vehiclesData?.results}
+          loading={isLoading}
+          selecteds_row
+          onSelectedRowsChange={(rows: VehicleRow[]) => {
+            const ids = rows.map(row => row.id)
+            setData(SELECTED_VEHICLE_IDS, ids)
+          }}
+          className="min-w-[900px]"
+        />
       </div>
 
       <div className="flex items-center justify-end gap-3 pt-6 border-t">
@@ -199,20 +170,12 @@ export const AddRoute = () => {
           className="bg-green-600 hover:bg-green-700 text-white px-6"
           type="submit"
           loading={isPendingCreate}
-          disabled={isPendingCreate || selectedVehicleIds.length === 0 || selectedOrderIds.length === 0}
+          disabled={selectedVehicleIds.length ? false : true}
         >
           Marshrutlash
         </Button>
       </div>
 
-      <Modal
-        modalKey="vehicle_edit"
-        size="max-w-5xl"
-        classNameTitle="font-medium text-xl"
-        title={currentVehicle?.uuid ? "Avtomobil tahrirlash" : ""}
-      >
-        <EditModal />
-      </Modal>
     </form>
   )
 }

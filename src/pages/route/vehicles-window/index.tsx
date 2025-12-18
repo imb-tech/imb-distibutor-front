@@ -32,10 +32,8 @@ const EditModal = () => {
     const { closeModal } = useModal("vehicle_edit")
     const { getData, clearKey } = useGlobalStore()
 
-    // Fetch warehouses for dropdown
     const { data: warehousesData } = useGet<ListResponse<WarehouseType>>(SETTINGS_WAREHOUSES)
 
-    // Get current data if editing
     const currentRoute = getData<FormData>("current_route")
 
     const form = useForm<FormData>({

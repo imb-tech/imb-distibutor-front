@@ -1,4 +1,5 @@
 type VehicleRow = {
+    vehicle_number: any
     id: number|string
     uuid: string
     driver: number

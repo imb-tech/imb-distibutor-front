@@ -1,4 +1,9 @@
 type OrderRow = {
+  end_time: ReactNode;
+  shipper: ReactNode;
+  vehicle_number: ReactNode;
+  orderId: any;
+  id: any;
   // Required fields from API
   client_data: {
     coordinates: [number, number];

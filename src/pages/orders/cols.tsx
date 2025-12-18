@@ -7,27 +7,59 @@ import { useMemo } from "react"
 export const cols = () => {
     return useMemo<ColumnDef<OrderRow>[]>(
         () => [
-            // {
-            //     header: "Sana",
-            //     accessorKey: "created_at",
-            //     enableSorting: true,
-            //     cell: ({ getValue }) => {
-            //         const date = getValue<string>()
-            //         return (
-            //             <div className="whitespace-nowrap">
-            //                 {format(date, "yyyy-MM-dd HH:mm")}
-            //             </div>
-            //         )
-            //     },
-            // },
+
 
             {
-                header: "Mijoz",
-                accessorKey: "client_data.name",
+                header: "ID buyurtma",
+                accessorKey: "id",
                 enableSorting: false,
                 cell: ({ row }) => (
                     <div className="min-w-[140px] ">
-                        {row.original.client_data.name}
+                        {row.original.id}
+                    </div>
+                ),
+            },
+            {
+                header: "Sana",
+                accessorKey: "scheduled_delivery_date",
+                enableSorting: true,
+                cell: ({ getValue }) => {
+                    const date = getValue<string>()
+                    return (
+                        <div className="whitespace-nowrap">
+                            {format(date, "yyyy-MM-dd HH:mm")}
+                        </div>
+                    )
+                },
+            },
+            {
+                header: "Haydovchi",
+                accessorKey: "driver_name",
+                enableSorting: false,
+                cell: ({ row }) => (
+                    <div className="min-w-[140px] ">
+                        {row.original.driver_name}
+                    </div>
+                ),
+            },
+            {
+                header: "Avtomobil raqami",
+                accessorKey: "vehicle_number",
+                enableSorting: false,
+                cell: ({ row }) => (
+                    <div className="min-w-[140px] ">
+                        {row.original.vehicle_number}
+                    </div>
+                ),
+            },
+
+            {
+                header: "Mijoz",
+                accessorKey: "client_data.company_name",
+                enableSorting: false,
+                cell: ({ row }) => (
+                    <div className="min-w-[200px]  ">
+                        {row.original.client_data.company_name}
                     </div>
                 ),
             },
@@ -58,10 +90,12 @@ export const cols = () => {
                 cell: ({ getValue }) => {
                     const status = getValue<number>()
                     const statusMap: Record<number, string> = {
-                        0: "Kutilmoqda",
-                        1: "Jarayonda",
-                        2: "Yetkazildi",
-                        3: "Bekor qilindi",
+                        0: "Unscheduled",
+                        1: "Scheduled",
+                        2: "In Progress",
+                        3: "Partly Delivered",
+                        4: "Delivered",
+                        5: "Not Delivered"
                     }
                     return (
                         <div className="whitespace-nowrap">
@@ -70,23 +104,33 @@ export const cols = () => {
                     )
                 },
             },
-            // {
-            //     header: "Vaqt",
-            //     accessorKey: "eta",
-            //     enableSorting: true,
-            //     cell: ({ getValue }) => {
-            //         const time = getValue<string>()
-            //         return (
-            //             <div className="whitespace-nowrap">
-            //                 {format(time, "yyyy-MM-dd HH:mm")}
-            //             </div>
-            //         )
-            //     },
-            // },
+            {
+                header: "ETA vaqti",
+                accessorKey: "eta",
+                enableSorting: true,
+                cell: ({ getValue }) => {
+                    const time = getValue<string>()
+                    return (
+                        <div className="whitespace-nowrap">
+                            {format(time, "yyyy-MM-dd HH:mm")}
+                        </div>
+                    )
+                },
+            },
+            {
+                header: "Kontakt nomi",
+                accessorKey: "name",
+                enableSorting: true,
+                cell: ({ row }) => (
+                    <div className="min-w-[200px]  ">
+                        {row.original.client_data.name}
+                    </div>
+                ),
+            },
 
             {
                 header: "Rad etish sababi",
-                accessorKey: "rejection_reason",
+                accessorKey: "reject_reason",
                 enableSorting: true,
             },
             {
@@ -95,19 +139,76 @@ export const cols = () => {
                 enableSorting: true,
             },
 
+          
             {
                 header: "Yuk tushirish vaqti",
-                accessorKey: "scheduled_delivery_date",
+                accessorKey: "time_to_drop",
+                enableSorting: true,
+            },
+            {
+                header: "Yuk jo'natuvchi",
+                accessorKey: "shipper",
+                enableSorting: false,
+                cell: ({ row }) => (
+                    <div className="min-w-[140px] flex items-center justify-center">
+                        {row.original.shipper ? row.original.shipper : "-"}
+                    </div>
+                ),
+            },
+            {
+                header: "Sana marshrut",
+                accessorKey: "route_start_date",
                 enableSorting: true,
                 cell: ({ getValue }) => {
                     const date = getValue<string>()
-                    return format(date, "yyyy-MM-dd HH:mm")
+                    return format(date, "yyyy-MM-dd  HH:mm")
                 },
             },
 
             {
+                header: "Uzunlik (Longitude)",
+                accessorKey: "client_data.coordinates", // asl manba
+                enableSorting: true,
+                sortingFn: (rowA, rowB) => {
+                    const coordA = rowA.original.client_data.coordinates?.[0] ?? 0;
+                    const coordB = rowB.original.client_data.coordinates?.[0] ?? 0;
+                    return coordA - coordB;
+                },
+                cell: ({ row }) => {
+                    const longitude = row.original.client_data.coordinates?.[0];
+                    return (
+                        <div className="whitespace-nowrap font-medium">
+                            {longitude ? longitude.toFixed(6) : "-"}
+                        </div>
+                    );
+                },
+            },
+            {
+                header: "Kenglik (Latitude)",
+                accessorKey: "client_data.coordinates",
+                enableSorting: true,
+                sortingFn: (rowA, rowB) => {
+                    const coordA = rowA.original.client_data.coordinates?.[1] ?? 0;
+                    const coordB = rowB.original.client_data.coordinates?.[1] ?? 0;
+                    return coordA - coordB;
+                },
+                cell: ({ row }) => {
+                    const latitude = row.original.client_data.coordinates?.[1];
+                    return (
+                        <div className="whitespace-nowrap font-medium">
+                            {latitude ? latitude.toFixed(6) : "-"}
+                        </div>
+                    );
+                },
+            },
+               {
+                header: "Reys hududi",
+                accessorKey: "client_data.address_zone",
+                enableSorting: true,
+            },
+            {
                 header: "Toʼlov naqd summasi",
-                accessorKey: "cod", // Using COD field
+                accessorKey: "cod",
                 enableSorting: true,
                 cell: ({ row: { original } }) => formatMoney(original.cod),
             },
@@ -118,7 +219,7 @@ export const cols = () => {
             },
             {
                 header: "Yetkazib beruvchi",
-                accessorKey: "client_data.company_name", // Using company name
+                accessorKey: "client_data.company_name",
                 enableSorting: true,
                 cell: ({ row }) => (
                     <div className="min-w-[200px] ">
@@ -126,7 +227,16 @@ export const cols = () => {
                     </div>
                 ),
             },
-
+   {
+                header: "Yetib keldi",
+                accessorKey: "end_time",
+                enableSorting: true,
+                cell: ({ row }) => (
+                    <div className="min-w-[200px] ">
+                        {row.original.end_time}
+                    </div>
+                ),
+            },
             {
                 header: "Ustuvorlik",
                 accessorKey: "priority",
@@ -143,7 +253,7 @@ export const cols = () => {
             },
             {
                 header: "Ombor manzili",
-                accessorKey: "depot_name", // Using depot name
+                accessorKey: "depot_name",
                 enableSorting: true,
                 cell: ({ getValue }) => (
                     <div className="min-w-[240px]">
@@ -154,7 +264,7 @@ export const cols = () => {
 
             {
                 header: "Telefon raqami",
-                accessorKey: "client_data.phone_number", // Using client phone
+                accessorKey: "client_data.phone_number",
                 enableSorting: true,
                 cell: ({ row }) => (
                     <div className="whitespace-nowrap">
@@ -171,6 +281,16 @@ export const cols = () => {
                 cell: ({ row }) => (
                     <div className="min-w-[200]">
                         {row.original.client_data.email}
+                    </div>
+                ),
+            },
+            {
+                header: "Haydovchi uchun eslatma",
+                accessorKey: "client_data.note",
+                enableSorting: true,
+                cell: ({ row }) => (
+                    <div className="min-w-[200]">
+                        {row.original.client_data.note}
                     </div>
                 ),
             },

@@ -1,6 +1,6 @@
 type RouteConstant = {
     scheduled_delivery_date: any
-    depot_name: ReactNode
+    depot_name:string
     client_data: any
     type: number
     cod: any

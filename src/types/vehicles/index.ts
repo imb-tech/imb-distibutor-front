@@ -1,5 +1,5 @@
 type VehicleRow = {
-    id: number
+    id: number|string
     uuid: string
     driver: number
     type: number

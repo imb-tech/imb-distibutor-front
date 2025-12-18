@@ -86,7 +86,6 @@ export const RegularOrders = ({ form }: Props) => {
                             methods={form}
                             name="note"
                             placeholder="Eslatma"
-                            required
 
                         />
                         <FormCombobox

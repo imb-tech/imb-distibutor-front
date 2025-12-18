@@ -19,7 +19,7 @@ const ModalOrderTable = ({
 
     const preselectedRowSelection = useMemo<RowSelectionState>(() => {
         if (!routes?.length) return {}
-        return Object.fromEntries(routes.map((r) => [String(r.order), true]))
+        return Object.fromEntries(routes.map((r) => [String(r.id), true]))
     }, [routes])
 
     useEffect(() => {

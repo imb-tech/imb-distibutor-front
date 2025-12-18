@@ -2,7 +2,7 @@ import DeleteModal from "@/components/custom/delete-modal"
 import Modal from "@/components/custom/modal"
 import { Card, CardContent } from "@/components/ui/card"
 import { DataTable } from "@/components/ui/datatable"
-import { ORDERS_WINDOW, SETTINGS_VEHICLES } from "@/constants/api-endpoints"
+import { ORDERS_WINDOW } from "@/constants/api-endpoints"
 import { useRouteColumns } from "@/hooks/use-router-column"
 import { useGet } from "@/hooks/useGet"
 import { useModal } from "@/hooks/useModal"
@@ -29,11 +29,13 @@ function RoutesMain() {
     const { setData, getData } = useGlobalStore()
 
     const currentStaff = getData<OrderRow>(ORDERS_WINDOW)
-    const currentRoute = getData<VehicleRow>(SETTINGS_VEHICLES)
 
-    const { data: ordersData, isLoading } = useGet<ListResponse<OrderRow>>(ORDERS_WINDOW, {
-        params
-    })
+    const { data: ordersData, isLoading } = useGet<ListResponse<OrderRow>>(
+        ORDERS_WINDOW,
+        {
+            params,
+        },
+    )
 
     const columns = useRouteColumns() as ColumnDef<OrderRow>[];
 
@@ -67,7 +69,6 @@ function RoutesMain() {
                     wrapperClassName="px-0"
                     selecteds_row={true}
                     onSelectedRowsChange={handleRowSelectionChange}
-
                 />
 
                 <Modal

@@ -15,10 +15,10 @@ const RouteMain = () => {
             />
             <div className="grid lg:grid-cols-1 gap-3">
                 {/* <FleetDashboard /> */}
-                {/* {page_tabs === "routes" ?
+                {page_tabs === "routes" ?
                     <RouteOrderMain />
-                :   <RoutesMain />} */}
-                <RouteOrderMain/>
+                :   <RoutesMain />}
+                <FleetDashboard/>
             </div>
         </div>
     )

@@ -1,8 +1,7 @@
 import { usePaths } from "@/hooks/usePaths"
 import { cn } from "@/lib/utils"
 import { useLocation, useNavigate } from "@tanstack/react-router"
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
-import { DropdownMenu, DropdownMenuTrigger } from "../ui/dropdown-menu"
+import { NavUser } from "../sidebar/nav-user"
 import { SidebarTrigger, useSidebar } from "../ui/sidebar"
 import { Tabs, TabsList, TabsTrigger } from "../ui/tabs"
 import { ThemeColorToggle } from "./color-toggle"
@@ -12,6 +11,7 @@ const Header = () => {
     const { pathname } = useLocation()
     const navigate = useNavigate()
     const { childPaths } = usePaths()
+    const { isMobile } = useSidebar()
 
     return (
         <header className="p-2 gap-4 flex items-center justify-between bg-card border-b border-border max-w-full box-border">
@@ -48,20 +48,7 @@ const Header = () => {
                 <div className="flex sm:gap-2">
                     <ThemeColorToggle />
                 </div>
-                <DropdownMenu>
-                    <div className="relative h-10">
-                        <DropdownMenuTrigger className="!outline-none">
-                            <Avatar className="relative overflow-hidden">
-                                <AvatarImage
-                                    src={undefined}
-                                    alt="user img"
-                                    className="object-cover"
-                                />
-                                <AvatarFallback>SA</AvatarFallback>
-                            </Avatar>
-                        </DropdownMenuTrigger>
-                    </div>
-                </DropdownMenu>
+                {isMobile && <NavUser />}
             </hgroup>
         </header>
     )

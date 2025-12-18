@@ -1,6 +1,6 @@
 type RouteConstant = {
     scheduled_delivery_date: any
-    depot_name: ReactNode
+    depot_name: any
     client_data: any
     type: number
     cod: any
@@ -142,7 +142,6 @@ type RouteMaps = {
     name: string
     depot_name: string
     order_routes: OrderRoute[]
-    coordinates: [number, number]
 }
 type RouteVehiclesAdd = {
     uuid:number

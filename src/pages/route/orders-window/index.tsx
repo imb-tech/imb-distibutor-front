@@ -9,16 +9,14 @@ import { useModal } from "@/hooks/useModal"
 import { AddOrder } from "@/pages/orders/create"
 import { useGlobalStore } from "@/store/global-store"
 import { useSearch } from "@tanstack/react-router"
+import { ColumnDef } from "@tanstack/react-table"
 import { AddRoute } from "../routes-window"
+import EditModal from "../vehicles-window"
 import HeaderRoute from "./header"
 
 function RoutesMain() {
     const search = useSearch({ from: "/_main/route/" })
-    const params = {
-        ...search,
-        status: 0,
-        page_tabs: null,
-    }
+    const { page_tabs, ...params } = search
 
     const { openModal: createOrder } = useModal("create")
     const { openModal: deleteOrder } = useModal("delete")
@@ -29,11 +27,11 @@ function RoutesMain() {
     const { data: ordersData, isLoading } = useGet<ListResponse<OrderRow>>(
         ORDERS_WINDOW,
         {
-            params,
+            params: { ...params, type: "1", status: 0 },
         },
     )
 
-    const columns = useRouteColumns()
+    const columns = useRouteColumns() as ColumnDef<OrderRow>[]
 
     const handleDelete = (item: OrderRow) => {
         setData<OrderRow>(ORDERS_WINDOW, item)
@@ -81,10 +79,20 @@ function RoutesMain() {
 
                 <Modal
                     modalKey="route"
-                    size="max-w-5xl"
-                    title="Marshrutlash"
+                    size="max-w-6xl"
+                    title="Marshrut yaratish"
                 >
-                    <AddRoute />
+                    <div className="min-w-[1024px] overflow-x-auto w-full">
+                        <AddRoute />
+                    </div>
+                </Modal>
+
+                <Modal
+                    modalKey="vehicle_edit"
+                    classNameTitle="font-medium text-xl"
+                    title={"Avtomobil tahrirlash"}
+                >
+                    <EditModal />
                 </Modal>
 
                 <DeleteModal path={ORDERS_WINDOW} id={currentStaff?.uuid} />

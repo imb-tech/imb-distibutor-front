@@ -13,6 +13,7 @@ export const SETTINGS_VEHICLES = "setting/vehicles"
 
 /** ===== SETTINGS ===== */
 
+
 export const SETTINGS_PRODUCTS = "setting/products"
 export const SETTINGS_DRIVERS = "driver/list"
 export const SETTINGS_DRIVERS_CREATE = "driver/create"
@@ -33,4 +34,6 @@ export const ROUTE_VEHICLES = "route"
 export const ROUTE_VEHICLES_DETAIL = "route/detail"
 export const ROUTE_VEHICLES_UPDATE = "route/update"
 export const ROUTE_VEHICLES_CREATE = "route/create"
+export const SELECTED_VEHICLE_IDS = "vehicle_ids"
+export const SELECTED_ORDER_IDS = "order_ids"
 export const ROUTE_ASSIGNE_ORDERS ="route/assignee-orders"

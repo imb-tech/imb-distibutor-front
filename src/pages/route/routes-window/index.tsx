@@ -1,4 +1,3 @@
-import Modal from "@/components/custom/modal"
 import { FormDatePicker } from "@/components/form/date-picker"
 import FormInput from "@/components/form/input"
 import { Button } from "@/components/ui/button"
@@ -7,17 +6,19 @@ import { Label } from "@/components/ui/label"
 import {
     ROUTE_VEHICLES,
     ROUTE_VEHICLES_CREATE,
+    SELECTED_ORDER_IDS,
+    SELECTED_VEHICLE_IDS,
     SETTINGS_VEHICLES,
 } from "@/constants/api-endpoints"
 import { useGet } from "@/hooks/useGet"
 import { useModal } from "@/hooks/useModal"
 import { usePost } from "@/hooks/usePost"
 import { useGlobalStore } from "@/store/global-store"
+import { useSearch } from "@tanstack/react-router"
 import { Clock, Search } from "lucide-react"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-import EditModal from "../vehicles-window"
 import { vehicleCols } from "./cols"
 
 interface RoutePayload {
@@ -29,12 +30,9 @@ interface RoutePayload {
     order_ids?: string[]
 }
 
-// Store key constants
-const SELECTED_VEHICLE_IDS = "vehicle_ids"
-const SELECTED_ORDER_IDS = "order_ids"
-
 export const AddRoute = () => {
-    const { closeModal, openModal: routeModal } = useModal("route_create")
+    const { date } = useSearch({ from: "/_main/route/" })
+    const { closeModal } = useModal("route")
     const { openModal: vehicleModal } = useModal("vehicle_edit")
     const { clearKey, getData, setData } = useGlobalStore()
     const { data: vehiclesData, isLoading } =
@@ -48,13 +46,11 @@ export const AddRoute = () => {
 
     const form = useForm<Omit<RoutePayload, "vehicle_ids" | "order_ids">>({
         defaultValues: {
-            date: "",
+            date: date,
             start_time: "",
             status: "active",
         },
     })
-
-    const currentVehicle = getData<VehicleRow>(SETTINGS_VEHICLES)
 
     const onSuccess = () => {
         toast.success("Marshrut muvaffaqiyatli yaratildi!")
@@ -68,10 +64,6 @@ export const AddRoute = () => {
 
     const { mutate: postMutate, isPending: isPendingCreate } = usePost({
         onSuccess,
-        onError: (error) => {
-            toast.error("Marshrut yaratishda xatolik yuz berdi")
-            console.error("Route creation error:", error)
-        },
     })
 
     const handleVehicleEdit = (item: VehicleRow) => {
@@ -82,22 +74,6 @@ export const AddRoute = () => {
     const onSubmit = (
         data: Omit<RoutePayload, "vehicle_ids" | "order_ids">,
     ) => {
-        // Validation
-        if (!data.date || !data.start_time) {
-            toast.error("Iltimos, sana va boshlanish vaqtini kiriting")
-            return
-        }
-
-        if (selectedVehicleIds.length === 0) {
-            toast.error("Iltimos, kamida bitta avtomobil tanlang")
-            return
-        }
-
-        if (selectedOrderIds.length === 0) {
-            toast.error("Iltimos, kamida bitta buyurtma tanlang")
-            return
-        }
-
         const payload: RoutePayload = {
             ...data,
             vehicle_ids: selectedVehicleIds,
@@ -199,15 +175,6 @@ export const AddRoute = () => {
                     Marshrutlash
                 </Button>
             </div>
-
-            <Modal
-                modalKey="vehicle_edit"
-                size="max-w-5xl"
-                classNameTitle="font-medium text-xl"
-                title={currentVehicle?.uuid ? "Avtomobil tahrirlash" : ""}
-            >
-                <EditModal />
-            </Modal>
         </form>
     )
 }

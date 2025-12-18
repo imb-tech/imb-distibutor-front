@@ -1,14 +1,14 @@
+import { FormCombobox } from "@/components/form/combobox"
+import FormInput from "@/components/form/input"
 import { Button } from "@/components/ui/button"
+import { useGet } from "@/hooks/useGet"
 import { useModal } from "@/hooks/useModal"
+import { usePatch } from "@/hooks/usePatch"
+import { usePost } from "@/hooks/usePost"
 import { useGlobalStore } from "@/store/global-store"
 import { useQueryClient } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
-import FormInput from "@/components/form/input"
-import { FormCombobox } from "@/components/form/combobox"
-import { useGet } from "@/hooks/useGet"
 import { toast } from "sonner"
-import { usePatch } from "@/hooks/usePatch"
-import { usePost } from "@/hooks/usePost"
 
 interface WarehouseType {
     id: string
@@ -32,10 +32,9 @@ const EditModal = () => {
     const { closeModal } = useModal("vehicle_edit")
     const { getData, clearKey } = useGlobalStore()
 
-    // Fetch warehouses for dropdown
-    const { data: warehousesData } = useGet<ListResponse<WarehouseType>>(SETTINGS_WAREHOUSES)
+    const { data: warehousesData } =
+        useGet<ListResponse<WarehouseType>>(SETTINGS_WAREHOUSES)
 
-    // Get current data if editing
     const currentRoute = getData<FormData>("current_route")
 
     const form = useForm<FormData>({
@@ -43,7 +42,7 @@ const EditModal = () => {
             driver: "",
             vehicleNumber: "",
             expeditor: "",
-            warehouse: ""
+            warehouse: "",
         },
     })
 
@@ -51,7 +50,7 @@ const EditModal = () => {
 
     const onSuccess = () => {
         toast.success(
-            `Ma'lumotlar muvaffaqiyatli ${currentRoute ? "tahrirlandi!" : "saqlandi!"}`
+            `Ma'lumotlar muvaffaqiyatli ${currentRoute ? "tahrirlandi!" : "saqlandi!"}`,
         )
         reset()
         clearKey("current_route")
@@ -73,7 +72,7 @@ const EditModal = () => {
         if (currentRoute?.uuid) {
             updateMutate(
                 `${SETTINGS_ROUTES_UPDATE}/${currentRoute.uuid}`,
-                values
+                values,
             )
         } else {
             postMutate(SETTINGS_ROUTES, values)
@@ -88,11 +87,7 @@ const EditModal = () => {
     }
 
     return (
-        <div className="w-full max-w-md mx-auto p-4">
-            <div className="mb-6">
-                <h2 className="text-lg font-semibold mb-2">Tahrirlash</h2>
-            </div>
-
+        <div className="w-full ">
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 {/* Driver Input */}
                 <FormInput
@@ -134,16 +129,7 @@ const EditModal = () => {
                 />
 
                 {/* Buttons */}
-                <div className="flex items-center justify-end gap-3 pt-6 border-t mt-6">
-                    <Button
-                        variant="outline"
-                        className="border-gray-300 text-gray-700 hover:bg-gray-50 px-6"
-                        onClick={handleCancel}
-                        type="button"
-                        disabled={isPending}
-                    >
-                        Bekor qilish
-                    </Button>
+                <div className="flex items-center justify-end ">
                     <Button
                         className="bg-green-600 hover:bg-green-700 text-white px-6"
                         type="submit"

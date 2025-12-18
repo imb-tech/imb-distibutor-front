@@ -12,6 +12,20 @@ type LoadRow = {
     total_amount?: number
 }
 
+type ProductsTableProps = {
+    form: any
+    fields: LoadRow[]
+    productOptions: Array<{
+        id: number
+        name: string
+        unit: number
+        price: string
+        currency: number
+    }>
+    remove: (index: number) => void
+    copyProduct: (index: number) => void
+}
+
 type ProductsType = {
     id: number
     uuid: string
@@ -106,26 +120,26 @@ type ListResponse<T> = {
 }
 
 
- 
-type Employee= {
-  id: string
-  employeeId: string
-  fullName: string
-  role: string
-  schedule: Record<string, boolean>  
+
+type Employee = {
+    id: string
+    employeeId: string
+    fullName: string
+    role: string
+    schedule: Record<string, boolean>
 }
 
-type ScheduleTableProps= {
-  employees: Employee[]
-  month: Date
-  onScheduleChange?: (employeeId: string, date: string, isWorking: boolean) => void
-  readonly?: boolean
+type ScheduleTableProps = {
+    employees: Employee[]
+    month: Date
+    onScheduleChange?: (employeeId: string, date: string, isWorking: boolean) => void
+    readonly?: boolean
 }
 
 type DayInfo = {
-  date: Date
-  dayNumber: number
-  dayName: string
-  isWeekend: boolean
-  dateString: string
+    date: Date
+    dayNumber: number
+    dayName: string
+    isWeekend: boolean
+    dateString: string
 }

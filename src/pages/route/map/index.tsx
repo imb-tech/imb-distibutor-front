@@ -2,7 +2,7 @@ import YandexMapView from "./MapView"
 
 export const FleetDashboard = () => {
     return (
-        <div>
+        <div className="w-full">
             <YandexMapView />
         </div>
     )

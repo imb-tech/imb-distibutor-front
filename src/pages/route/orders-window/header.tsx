@@ -3,6 +3,7 @@ import ParamDatePicker from "@/components/as-params/date-picker"
 import ParamInput from "@/components/as-params/input"
 import DownloadAsExcel from "@/components/download-as-excel"
 import { Button } from "@/components/ui/button"
+import { SELECTED_ORDER_IDS } from "@/constants/api-endpoints"
 import { useModal } from "@/hooks/useModal"
 import { useGlobalStore } from "@/store/global-store"
 import { format } from "date-fns"
@@ -11,7 +12,7 @@ import { CirclePlus, Route } from "lucide-react"
 const HeaderRoute = () => {
     const { openModal: createOrder } = useModal("create")
     const { openModal: createRoute } = useModal("route")
-    const { clearKey } = useGlobalStore()
+    const { clearKey, getData } = useGlobalStore()
 
     const handleCreate = () => {
         clearKey("create")
@@ -23,6 +24,9 @@ const HeaderRoute = () => {
         createRoute()
     }
 
+    const selectedOrderIds = getData<string[]>(SELECTED_ORDER_IDS) || []
+
+ 
 
     return (
         <div className="space-y-2">
@@ -48,19 +52,13 @@ const HeaderRoute = () => {
                         className="bg-green-500 hover:bg-green-600/90 text-white"
                         type="button"
                         icon={<Route size={18} />}
+                        disabled={selectedOrderIds.length ? false : true}
                     >
                         Marshrutlash
                     </Button>
                 </div>
             </div>
-            <div className="flex items-center gap-3">
-                <p className="border border-primary  rounded-lg w-max px-3 py-0.5 text-primary">
-                    90 141 kg O'g'irlik
-                </p>
-                <p className="border border-primary  rounded-lg w-max px-3 py-0.5 text-primary">
-                    500 Buyurtmalar soni
-                </p>
-            </div>
+
 
             <div className="flex items-center gap-3">
                 <ParamInput fullWidth />
@@ -68,6 +66,7 @@ const HeaderRoute = () => {
                     <ParamCombobox
                         label="Doimiy"
                         paramName="type"
+                        valueKey="id"
                         options={[
                             { id: "1", name: "Doimiy" },
                             { id: "2", name: "Qo'shimcha" },

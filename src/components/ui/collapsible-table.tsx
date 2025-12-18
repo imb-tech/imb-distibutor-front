@@ -142,21 +142,7 @@ export function CollapsibleDataTable<TData>({
             )}
         >
             {!!head && <div className="px-4 py-4">{head}</div>}
-            {selecteds_count && (
-                <div className="flex flex-col gap-2 sm:flex-row items-end sm:items-center sm:justify-between pb-2">
-                    <div
-                        className={cn(
-                            "flex-1 text-sm text-muted-foreground",
-                            !deleteSelecteds && "text-end",
-                        )}
-                    >
-                        {table.getFilteredRowModel().rows.length} dan{" "}
-                        {table.getFilteredSelectedRowModel().rows.length} ta
-                        qator tanlandi.
-                    </div>
-                    <div></div>
-                </div>
-            )}
+
             <div
                 className={cn(
                     "relative overflow-x-auto",

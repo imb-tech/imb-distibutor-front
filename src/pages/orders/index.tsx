@@ -51,6 +51,10 @@ const OrdersMain = () => {
         createOrder()
     }
 
+
+
+
+    
     function setToday(navigate: any, search: any) {
         navigate({
             to: "/orders",
@@ -90,7 +94,7 @@ const OrdersMain = () => {
                 onDelete={(row) => handleDelete(row.original)}
                 head={
                     <div className="flex  items-center justify-between gap-3 mb-3">
-                        <ParamInput className="w-lg" name="company_name" />
+                        <ParamInput fullWidth name="company_name"/>
 
                         <div className="flex justify-between items-center gap-4 ">
                             <Button onClick={handleCreate}>

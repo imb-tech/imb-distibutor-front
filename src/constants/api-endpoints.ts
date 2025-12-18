@@ -1,7 +1,7 @@
 /** ===== HR ===== */
 export const USERS_ADMIN_PROFILE = "hr/"
 export const LOGIN = "auth/login"
-export const PROFILE = "hr/"
+export const PROFILE = "profile"
 
 /** ===== WORKING-SCHEDULE ===== */
 export const WORKING_SCHEDULE = "working-schedule"
@@ -27,7 +27,7 @@ export const SETTINGS_CUSTOMERS = "clients"
 export const SETTINGS_PAYMENT_TYPES = "setting/payment-type"
 
 /** ===== MARSHURTLAR ===== */
-export const ROUTE_MAPS = "order/all/route"
+export const ROUTE_MAPS = "route/all"
 // export const ROUTE_
 export const ROUTE_VEHICLES = "route"
 export const ROUTE_VEHICLES_DETAIL = "route/detail"

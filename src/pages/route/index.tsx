@@ -18,7 +18,7 @@ const RouteMain = () => {
                 {page_tabs === "routes" ?
                     <RouteOrderMain />
                 :   <RoutesMain />}
-                <FleetDashboard/>
+                
             </div>
         </div>
     )

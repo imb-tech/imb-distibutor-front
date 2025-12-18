@@ -1,3 +1,4 @@
+import Modal from "@/components/custom/modal"
 import { FormCheckbox } from "@/components/form/checkbox"
 import { FormFormatNumberInput } from "@/components/form/format-number-input"
 import FormInput from "@/components/form/input"
@@ -15,7 +16,6 @@ import { useCallback, useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { MapComponent } from "../map"
-import Modal from "@/components/custom/modal"
 
 const AddCustomersModal = () => {
     const queryClient = useQueryClient()
@@ -28,20 +28,24 @@ const AddCustomersModal = () => {
     const getDefaultValues = (): CustomerFormType => {
         if (currentCustomer) {
             // Convert coordinates to [string, string] tuple
-            const coordinates: [string, string] = currentCustomer.coordinates ?
-                [
-                    currentCustomer.coordinates[0]?.toString() || "",
-                    currentCustomer.coordinates[1]?.toString() || ""
-                ]
-            :   ["", ""]
+            const coordinates: [string, string] =
+                currentCustomer.coordinates ?
+                    [
+                        currentCustomer.coordinates[0]?.toString() || "",
+                        currentCustomer.coordinates[1]?.toString() || "",
+                    ]
+                :   ["", ""]
 
             // Convert loading_coordinates to [string, string] tuple
-            const loadingCoordinates: [string, string] = currentCustomer.loading_coordinates ?
-                [
-                    currentCustomer.loading_coordinates[0]?.toString() || "",
-                    currentCustomer.loading_coordinates[1]?.toString() || ""
-                ]
-            :   ["", ""]
+            const loadingCoordinates: [string, string] =
+                currentCustomer.loading_coordinates ?
+                    [
+                        currentCustomer.loading_coordinates[0]?.toString() ||
+                            "",
+                        currentCustomer.loading_coordinates[1]?.toString() ||
+                            "",
+                    ]
+                :   ["", ""]
 
             const schedules: ScheduleFormType[] = []
 
@@ -170,23 +174,33 @@ const AddCustomersModal = () => {
 
     const handleMainCoordinatesChange = useCallback(
         (coords: { lat: number; lng: number }) => {
-            setValue("coordinates.0", coords.lng.toString(), { shouldDirty: true })
-            setValue("coordinates.1", coords.lat.toString(), { shouldDirty: true })
+            setValue("coordinates.0", coords.lng.toString(), {
+                shouldDirty: true,
+            })
+            setValue("coordinates.1", coords.lat.toString(), {
+                shouldDirty: true,
+            })
         },
         [setValue],
     )
 
     const handleLoadingCoordinatesChange = useCallback(
         (coords: { lat: number; lng: number }) => {
-            setValue("loading_coordinates.0", coords.lng.toString(), { shouldDirty: true })
-            setValue("loading_coordinates.1", coords.lat.toString(), { shouldDirty: true })
+            setValue("loading_coordinates.0", coords.lng.toString(), {
+                shouldDirty: true,
+            })
+            setValue("loading_coordinates.1", coords.lat.toString(), {
+                shouldDirty: true,
+            })
         },
         [setValue],
     )
 
-    const [currentMapType, setCurrentMapType] = useState<'main' | 'loading'>('main')
+    const [currentMapType, setCurrentMapType] = useState<"main" | "loading">(
+        "main",
+    )
 
-    const handleMapOpen = (type: 'main' | 'loading') => {
+    const handleMapOpen = (type: "main" | "loading") => {
         setCurrentMapType(type)
         openMap()
     }
@@ -245,7 +259,7 @@ const AddCustomersModal = () => {
 
     return (
         <>
-            <div className="max-h-[80vh] overflow-y-auto no-scrollbar-x p-1">
+            <div className="max-h-[80vh] overflow-y-auto   p-1">
                 <form
                     onSubmit={handleSubmit(onSubmit)}
                     className="grid grid-cols-1 lg:grid-cols-2 gap-4"
@@ -265,7 +279,7 @@ const AddCustomersModal = () => {
                             placeholder="Misol: 'UzAuto Motors' MChJ"
                             methods={form}
                         />
-                        
+
                         {/* Main Address Map Selection */}
                         <div className="space-y-3">
                             <div className="flex items-center justify-between">
@@ -289,20 +303,28 @@ const AddCustomersModal = () => {
                                                         <div className="flex gap-4 text-xs text-muted-foreground">
                                                             <span>
                                                                 Kenglik:{" "}
-                                                                {Number(coordinates.lat).toFixed(6)}
+                                                                {Number(
+                                                                    coordinates.lat,
+                                                                ).toFixed(6)}
                                                             </span>
                                                             <span>
                                                                 Uzunlik:{" "}
-                                                                {Number(coordinates.lng).toFixed(6)}
+                                                                {Number(
+                                                                    coordinates.lng,
+                                                                ).toFixed(6)}
                                                             </span>
                                                         </div>
                                                     </>
                                                 :   <div className="space-y-1">
                                                         <p className="text-sm font-medium text-foreground">
-                                                            Joylashuv tanlanmagan
+                                                            Joylashuv
+                                                            tanlanmagan
                                                         </p>
                                                         <p className="text-xs text-muted-foreground">
-                                                            Xaritadan joylashuvni tanlang yoki manzilni qidiring
+                                                            Xaritadan
+                                                            joylashuvni tanlang
+                                                            yoki manzilni
+                                                            qidiring
                                                         </p>
                                                     </div>
                                                 }
@@ -310,8 +332,14 @@ const AddCustomersModal = () => {
                                         </div>
                                         <Button
                                             type="button"
-                                            variant={currentAddress ? "outline" : "default"}
-                                            onClick={() => handleMapOpen('main')}
+                                            variant={
+                                                currentAddress ? "outline" : (
+                                                    "default"
+                                                )
+                                            }
+                                            onClick={() =>
+                                                handleMapOpen("main")
+                                            }
                                             className="shrink-0"
                                         >
                                             <Map className="w-4 h-4 mr-2" />
@@ -338,7 +366,7 @@ const AddCustomersModal = () => {
                             placeholder="azamatsamandarov@gmail.com"
                             methods={form}
                         />
-                        
+
                         {/* Loading Address Map Selection */}
                         <div className="space-y-3">
                             <div className="flex items-center justify-between">
@@ -357,25 +385,33 @@ const AddCustomersModal = () => {
                                                 {currentLoadingAddress ?
                                                     <>
                                                         <p className="text-sm font-medium text-foreground">
-                                                            {currentLoadingAddress}
+                                                            {
+                                                                currentLoadingAddress
+                                                            }
                                                         </p>
                                                         <div className="flex gap-4 text-xs text-muted-foreground">
                                                             <span>
                                                                 Kenglik:{" "}
-                                                                {Number(loadingCoordinates.lat).toFixed(6)}
+                                                                {Number(
+                                                                    loadingCoordinates.lat,
+                                                                ).toFixed(6)}
                                                             </span>
                                                             <span>
                                                                 Uzunlik:{" "}
-                                                                {Number(loadingCoordinates.lng).toFixed(6)}
+                                                                {Number(
+                                                                    loadingCoordinates.lng,
+                                                                ).toFixed(6)}
                                                             </span>
                                                         </div>
                                                     </>
                                                 :   <div className="space-y-1">
                                                         <p className="text-sm font-medium text-foreground">
-                                                            Yuk olish manzili tanlanmagan
+                                                            Yuk olish manzili
+                                                            tanlanmagan
                                                         </p>
                                                         <p className="text-xs text-muted-foreground">
-                                                            Yuk olish manzilini xaritadan tanlang
+                                                            Yuk olish manzilini
+                                                            xaritadan tanlang
                                                         </p>
                                                     </div>
                                                 }
@@ -383,8 +419,14 @@ const AddCustomersModal = () => {
                                         </div>
                                         <Button
                                             type="button"
-                                            variant={currentLoadingAddress ? "outline" : "default"}
-                                            onClick={() => handleMapOpen('loading')}
+                                            variant={
+                                                currentLoadingAddress ?
+                                                    "outline"
+                                                :   "default"
+                                            }
+                                            onClick={() =>
+                                                handleMapOpen("loading")
+                                            }
                                             className="shrink-0"
                                         >
                                             <Map className="w-4 h-4 mr-2" />
@@ -480,15 +522,31 @@ const AddCustomersModal = () => {
             {/* Map Modal */}
             <Modal
                 size="max-w-4xl"
-                title={currentMapType === 'main' ? "Asosiy manzilni tanlash" : "Yuk olish manzilini tanlash"}
+                title={
+                    currentMapType === "main" ?
+                        "Asosiy manzilni tanlash"
+                    :   "Yuk olish manzilini tanlash"
+                }
                 className=""
                 modalKey="map"
             >
                 <div className="space-y-4">
                     <MapComponent
-                        coordinates={currentMapType === 'main' ? coordinates : loadingCoordinates}
-                        onCoordinatesChange={currentMapType === 'main' ? handleMainCoordinatesChange : handleLoadingCoordinatesChange}
-                        onAddressFilled={currentMapType === 'main' ? handleMainAddressFilled : handleLoadingAddressFilled}
+                        coordinates={
+                            currentMapType === "main" ? coordinates : (
+                                loadingCoordinates
+                            )
+                        }
+                        onCoordinatesChange={
+                            currentMapType === "main" ?
+                                handleMainCoordinatesChange
+                            :   handleLoadingCoordinatesChange
+                        }
+                        onAddressFilled={
+                            currentMapType === "main" ?
+                                handleMainAddressFilled
+                            :   handleLoadingAddressFilled
+                        }
                         showSearch={true}
                         showMapControls={true}
                         showCurrentLocationBtn={true}
@@ -502,20 +560,23 @@ const AddCustomersModal = () => {
                                 Tanlangan manzil:
                             </div>
                             <div className="text-muted-foreground mt-1">
-                                {currentMapType === 'main' ?
+                                {currentMapType === "main" ?
                                     currentAddress || "Tanlanmagan"
-                                : currentLoadingAddress || "Tanlanmagan"}
+                                :   currentLoadingAddress || "Tanlanmagan"}
                             </div>
                         </div>
-                            <Button
-                                type="button"
-                                variant="default2"
-                                onClick={handleMapSelection}
-                                disabled={currentMapType === 'main' ? !currentAddress : !currentLoadingAddress}
-                            >
-                                Tanlashni tasdiqlash
-                            </Button>
-                       
+                        <Button
+                            type="button"
+                            variant="default2"
+                            onClick={handleMapSelection}
+                            disabled={
+                                currentMapType === "main" ? !currentAddress : (
+                                    !currentLoadingAddress
+                                )
+                            }
+                        >
+                            Tanlashni tasdiqlash
+                        </Button>
                     </div>
                 </div>
             </Modal>
@@ -534,4 +595,3 @@ const weekDays = [
     { id: 5, label: "Juma" },
     { id: 6, label: "Shanba" },
 ]
-

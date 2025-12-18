@@ -10,7 +10,13 @@ const formatCoordinates = (coords: [number, number]) => {
 }
 
 const InfoTable = ({ info }: InformationTableProps) => {
-    if (!info) return <div>Mijoz ma'lumotlari mavjud emas</div>
+    if (!info) {
+        return (
+            <h1 className="text-center text-primary">
+                Mijoz ma'lumotlari mavjud emas
+            </h1>
+        )
+    }
 
     const dataMap = [
         { key: "uuid", label: "Mijoz ID" },

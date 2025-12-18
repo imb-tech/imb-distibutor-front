@@ -3,14 +3,14 @@ import Modal from "@/components/custom/modal"
 import { Card, CardContent } from "@/components/ui/card"
 import { DataTable } from "@/components/ui/datatable"
 import { ORDERS_WINDOW, SETTINGS_VEHICLES } from "@/constants/api-endpoints"
+import { useRouteColumns } from "@/hooks/use-router-column"
 import { useGet } from "@/hooks/useGet"
 import { useModal } from "@/hooks/useModal"
 import { AddOrder } from "@/pages/orders/create"
 import { useGlobalStore } from "@/store/global-store"
 import { useSearch } from "@tanstack/react-router"
-import HeaderRoute from "./header"
-import { useRouteColumns } from "@/hooks/use-router-column"
 import { AddRoute } from "../routes-window"
+import HeaderRoute from "./header"
 
 function RoutesMain() {
     const search = useSearch({ from: "/_main/route/" })
@@ -29,7 +29,7 @@ function RoutesMain() {
     const currentRoute = getData<VehicleRow>(SETTINGS_VEHICLES)
 
     const { data: ordersData, isLoading } = useGet<ListResponse<OrderRow>>(ORDERS_WINDOW, {
-        params: params
+        params
     })
 
     const columns = useRouteColumns()
@@ -44,10 +44,10 @@ function RoutesMain() {
         createOrder()
     }
 
-    // const handleRowSelectionChange = (rows:OrderRow[]) => {
-    //     const ids = rows.map(row => row.orderId || row.id || "").filter(Boolean)
-    //     setData("order_ids", ids)
-    // }
+    const handleRowSelectionChange = (rows:OrderRow[]) => {
+        const ids = rows.map(row => row.orderId || row.id || "").filter(Boolean)
+        setData("order_ids", ids)
+    }
 
     return (
         <Card>
@@ -63,7 +63,7 @@ function RoutesMain() {
                     onDelete={(row) => handleDelete(row.original)}
                     wrapperClassName="px-0"
                     selecteds_row={true}
-                    // onSelectedRowsChange={handleRowSelectionChange}
+                    onSelectedRowsChange={handleRowSelectionChange}
 
                 />
 

@@ -212,7 +212,7 @@ export function DataTable<TData>({
 
             <div
                 className={cn(
-                    "relative overflow-x-auto overflow-y-hidden no-scrollbar-x  rounded-md",
+                    "relative overflow-x-auto overflow-y-hidden    rounded-md",
                     tableWrapperClassName,
                 )}
             >

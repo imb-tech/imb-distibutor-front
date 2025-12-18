@@ -10,9 +10,11 @@ import { ROUTE_VEHICLES } from "@/constants/api-endpoints"
 import { useModal } from "@/hooks/useModal"
 import { useGlobalStore } from "@/store/global-store"
 import { useNavigate, useSearch } from "@tanstack/react-router"
+import { format } from "date-fns"
 import {
     ChevronDown,
     CircleUser,
+    Clock,
     MoreVertical,
     Package,
     Pencil,
@@ -25,7 +27,6 @@ interface CarTableRowProps {
     car: CarsTypeInOrders
     index: number
     colSpan?: number
-     
 }
 
 export const CarTableRow = ({ car, index, colSpan }: CarTableRowProps) => {
@@ -33,9 +34,10 @@ export const CarTableRow = ({ car, index, colSpan }: CarTableRowProps) => {
     const { setData } = useGlobalStore()
     const { openModal: openCreateModal } = useModal("create")
     const { openModal: openDeleteModal } = useModal("delete")
-    const { route_id } = search
+    const { route_id, ...otherSearchParams } = search
     const navigate = useNavigate()
 
+  
     const cols = [
         {
             icon: <CircleUser size={16} className="text-primary" />,
@@ -65,23 +67,25 @@ export const CarTableRow = ({ car, index, colSpan }: CarTableRowProps) => {
             icon: <Package className="text-primary" size={16} />,
             value: car.order_weight,
         },
+        // {
+        //     icon: <Clock className="text-primary" size={16} />,
+        //     value: car.start_date ? formatDate(car.start_date) : "Mavjud emas",
+        // },
     ]
 
-const handleRowClick = () => {
-    navigate({
-        to: "/route",
-        search: route_id === String(car.uuid) 
-            ? {}  
-            : { ...search, route_id: String(car.uuid) },  
-    })
-}
+    const handleRowClick = () => {
+        const hasId = route_id === String(car.uuid)
 
-const handleCloseDetails = () => {
-    navigate({
-        to: "/route",
-        search: {}  
-    })
-}
+        navigate({
+            to: "/route",
+            search: {
+                ...otherSearchParams,
+                route_id: hasId ? undefined : String(car.uuid),
+                order_id: undefined,
+                tabs: undefined,
+            },
+        })
+    }
 
     const handleEdit = (e: React.MouseEvent) => {
         e.stopPropagation()
@@ -161,16 +165,13 @@ const handleCloseDetails = () => {
                 </TableCell>
             </TableRow>
 
-        {route_id == String(car.uuid) && (
-            <TableRow>
-                <TableCell colSpan={totalColSpan} className="p-0">
-                    <CarDetailsRow 
-                        car={car} 
-                         
-                    />
-                </TableCell>
-            </TableRow>
-        )}
+            {route_id == String(car.uuid) && (
+                <TableRow>
+                    <TableCell colSpan={totalColSpan} className="p-0">
+                        <CarDetailsRow car={car} />
+                    </TableCell>
+                </TableRow>
+            )}
         </>
     )
 }

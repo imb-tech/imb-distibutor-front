@@ -21,23 +21,21 @@ const OrdersMain = () => {
     const { openModal: deleteOrder } = useModal("delete")
     const { setData, getData, clearKey } = useGlobalStore()
     const { data, isLoading } = useGet<ListResponse<OrderRow>>(ORDERS, {
-        params: search
+        params: search,
     })
 
     const orderTabs = [
         {
             value: "1",
-            label: "Doimiy"
+            label: "Doimiy",
         },
         {
             value: "2",
-            label: "Qo'shimcha"
-        }
+            label: "Qo'shimcha",
+        },
     ]
 
-
     const currentStaff = getData<OrderRow>(ORDERS)
-
 
     const handleDelete = (item: OrderRow) => {
         setData<OrderRow>(ORDERS, item)
@@ -66,13 +64,13 @@ const OrdersMain = () => {
                 from: undefined,
                 to: undefined,
             },
-        });
+        })
     }
 
     function setLastMonth(navigate: any, search: any) {
-        const now = new Date();
-        const first = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-        const last = new Date(now.getFullYear(), now.getMonth(), 0);
+        const now = new Date()
+        const first = new Date(now.getFullYear(), now.getMonth() - 1, 1)
+        const last = new Date(now.getFullYear(), now.getMonth(), 0)
 
         navigate({
             to: "/orders",
@@ -82,9 +80,8 @@ const OrdersMain = () => {
                 from: first.toISOString().split("T")[0],
                 to: last.toISOString().split("T")[0],
             },
-        });
+        })
     }
-
 
     return (
         <div>
@@ -110,22 +107,24 @@ const OrdersMain = () => {
                                     variant={
                                         !!search?.today ? "default" : "outline"
                                     }
-                                    onClick={() => setToday(navigate, search)
-
-                                    }
+                                    onClick={() => setToday(navigate, search)}
                                     size={"sm"}
                                     type="button"
                                 >
                                     Bugungi
                                 </Button>
-                                <Button variant={
-                                    search?.from && search?.to
-                                        ? "default"
-                                        : "outline"
-                                }
-
-                                    onClick={() => setLastMonth(navigate, search)}
-                                    size={"sm"} type="button">
+                                <Button
+                                    variant={
+                                        search?.from && search?.to ?
+                                            "default"
+                                        :   "outline"
+                                    }
+                                    onClick={() =>
+                                        setLastMonth(navigate, search)
+                                    }
+                                    size={"sm"}
+                                    type="button"
+                                >
                                     Oxirgi oy
                                 </Button>
                                 <ParamDateRange
@@ -146,10 +145,10 @@ const OrdersMain = () => {
                 title={
                     currentStaff?.uuid ?
                         "Buyurtma tahrirlash"
-                        : "Buyurtma qo'shish"
+                    :   "Buyurtma qo'shish"
                 }
             >
-                <div className=" max-h-[80vh] overflow-y-auto no-scrollbar-x p-0.5">
+                <div className=" max-h-[80vh] overflow-y-auto   p-0.5">
                     <AddOrder />
                 </div>
             </Modal>

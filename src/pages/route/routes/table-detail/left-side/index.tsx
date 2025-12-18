@@ -1,5 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card"
-import { ROUTE_VEHICLES } from "@/constants/api-endpoints"
+import { ROUTE_VEHICLES_DETAIL } from "@/constants/api-endpoints"
 import { useGet } from "@/hooks/useGet"
 import { cn } from "@/lib/utils"
 import { useNavigate, useSearch } from "@tanstack/react-router"
@@ -12,7 +12,7 @@ export const LeftSideCars = () => {
     const { route_id, order_id } = search
     const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set())
     const { data: routeData, isLoading } = useGet<any>(
-        `${ROUTE_VEHICLES}/${route_id}`,
+        `${ROUTE_VEHICLES_DETAIL}/${route_id}`,
         {
             enabled: !!route_id,
         },

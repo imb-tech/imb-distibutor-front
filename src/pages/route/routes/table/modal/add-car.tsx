@@ -1,9 +1,11 @@
 import { FormCombobox } from "@/components/form/combobox"
+import { FormDatePicker } from "@/components/form/date-picker"
 import FormInput from "@/components/form/input"
 import { Button } from "@/components/ui/button"
 import {
-    ORDERS,
     ROUTE_VEHICLES,
+    ROUTE_VEHICLES_DETAIL,
+    ROUTE_VEHICLES_UPDATE,
     SETTINGS_CARS,
     SETTINGS_DRIVERS,
 } from "@/constants/api-endpoints"
@@ -13,23 +15,28 @@ import { usePatch } from "@/hooks/usePatch"
 import { usePost } from "@/hooks/usePost"
 import { useGlobalStore } from "@/store/global-store"
 import { useQueryClient } from "@tanstack/react-query"
-import { useSearch } from "@tanstack/react-router"
+import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-// import ModalOrderTable from "./modal-table"
-useGet
+import ModalOrderTable from "./modal-table"
 
 const AddVehiclesModal = () => {
     const queryClient = useQueryClient()
     const { closeModal } = useModal("create")
     const { getData, clearKey } = useGlobalStore()
     const currentVehicle = getData<RouteVehiclesAdd>(ROUTE_VEHICLES)
-    const { order_id } = useSearch({ from: "/_main/route/" })
-    const { data: orderData } = useGet(`${ORDERS}/${order_id}`, {
-        enabled: !!order_id,
-    })
+    const [selectedOrderIds, setSelectedOrderIds] = useState<number[]>([])
+
+    const { data: routes, refetch: refetchRoutes } = useGet(
+        `${ROUTE_VEHICLES_DETAIL}/${currentVehicle?.uuid}`,
+        {
+            enabled: !!currentVehicle?.uuid,
+        },
+    )
+
     const { data: drivers } = useGet(SETTINGS_DRIVERS)
     const { data: vehicles } = useGet(SETTINGS_CARS)
+
 
     const driverOptions =
         drivers?.results?.map((driver: { id: number; full_name: string }) => ({
@@ -44,9 +51,8 @@ const AddVehiclesModal = () => {
         })) || []
 
     const form = useForm<RouteVehiclesAdd>({
-        defaultValues: { ...currentVehicle },
+        defaultValues:currentVehicle,
     })
-    console.log("driver", form.watch("driver"))
 
     const { handleSubmit, reset } = form
 
@@ -57,9 +63,13 @@ const AddVehiclesModal = () => {
             :   "Avtomobil qo'shildi!",
         )
         reset()
+        setSelectedOrderIds([])
         clearKey(ROUTE_VEHICLES)
         closeModal()
         queryClient.refetchQueries({ queryKey: [ROUTE_VEHICLES] })
+        if (currentVehicle?.uuid) {
+            refetchRoutes()
+        }
     }
 
     const { mutate: create, isPending: creating } = usePost({ onSuccess })
@@ -67,67 +77,94 @@ const AddVehiclesModal = () => {
     const isPending = creating || updating
 
     const onSubmit = (data: RouteVehiclesAdd) => {
-        if (currentVehicle?.uuid) {
-            update(`${ROUTE_VEHICLES}/${currentVehicle.uuid}`, data)
-        } else {
-            create(ROUTE_VEHICLES, data)
+        const payload = {
+            ...data,
+            orders: selectedOrderIds,
         }
+
+        if (currentVehicle?.uuid) {
+            update(`${ROUTE_VEHICLES_UPDATE}/${currentVehicle.uuid}`, payload)
+        } else {
+            create(ROUTE_VEHICLES, payload)
+        }
+    }
+
+    const handleSelectionChange = (selectedRows: OrderRoutesType[]) => {
+        const newSelectedIds = selectedRows.map((row) => row.order)
+
+        setSelectedOrderIds(newSelectedIds)
+        
     }
 
     return (
         <div className="w-full max-w-4xl mx-auto">
-            <form
-                onSubmit={handleSubmit(onSubmit)}
-                className="grid md:grid-cols-2 gap-5"
-            >
-                <FormInput
-                    required
-                    name="name"
-                    label="Yo'l"
-                    methods={form}
-                    maxLength={20}
-                    placeholder="Misol: 01 A 123 AA"
-                />
-                <FormCombobox
-                    required
-                    name="driver"
-                    control={form.control}
-                    label="Haydovchi"
-                    options={driverOptions}
-                    labelKey="label"
-                    valueKey="value"
-                />
-                <FormCombobox
-                    required
-                    name="vehicle"
-                    control={form.control}
-                    label="Avtomobil"
-                    options={vehiclesOptions}
-                    labelKey="label"
-                    valueKey="value"
-                />
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                <div className="grid md:grid-cols-2 gap-5">
+                    <FormInput
+                        required
+                        name="name"
+                        label="Yo'l"
+                        methods={form}
+                        maxLength={20}
+                        placeholder="Misol: 01 A 123 AA"
+                    />
+                    <FormCombobox
+                        required
+                        name="driver"
+                        control={form.control}
+                        label="Haydovchi"
+                        options={driverOptions}
+                        labelKey="label"
+                        valueKey="value"
+                    />
+                    <FormCombobox
+                        required
+                        name="vehicle"
+                        control={form.control}
+                        label="Avtomobil"
+                        options={vehiclesOptions}
+                        labelKey="label"
+                        valueKey="value"
+                    />
+                    <FormDatePicker
+                        required
+                        name="start_date"
+                        label="Boshlanish sanasi"
+                        control={form.control}
+                        className={"w-full"}
+                    />
+                </div>
 
-                <FormInput
-                    required
-                    type="date"
-                    name="start_date"
-                    label="Boshlanish sanasi"
-                    methods={form}
-                    placeholder="Misol: 16/12/2025"
-                />
+                <div className="border rounded-lg p-4">
+                    <div className="mb-3">
+                        <div className="text-sm text-gray-600">
+                            {currentVehicle?.uuid ?
+                                "Tahrirlash rejimida"
+                            :   "Yangi qo'shish"}{" "}
+                            - {selectedOrderIds.length}/
+                            {routes?.order_routes?.length || 0} ta buyurtma
+                            tanlandi
+                        </div>
+                    </div>
 
-                <div className="md:col-span-2 flex justify-end ">
+                    <ModalOrderTable
+                        routes={routes?.order_routes || []}
+                        onSelectedRowsChange={handleSelectionChange}
+            
+                    />
+                </div>
+
+                <div className="flex justify-end">
                     <Button
                         loading={isPending}
                         type="submit"
                         className="min-w-40"
-                        variant={"default2"}
+                        variant="default2"
                     >
                         Saqlash
                     </Button>
                 </div>
             </form>
-            {/* <ModalOrderTable order={orderData?.loads} /> */}
         </div>
     )
 }

@@ -16,7 +16,7 @@ import HeaderRoute from "./header"
 
 function RoutesMain() {
     const search = useSearch({ from: "/_main/route/" })
-    const {page_tabs, ...params}=search
+    const { page_tabs, ...params } = search
 
     const { openModal: createOrder } = useModal("create")
     const { openModal: deleteOrder } = useModal("delete")
@@ -27,7 +27,7 @@ function RoutesMain() {
     const { data: ordersData, isLoading } = useGet<ListResponse<OrderRow>>(
         ORDERS_WINDOW,
         {
-            params,
+            params: { ...params, type: "1", status: 0 },
         },
     )
 

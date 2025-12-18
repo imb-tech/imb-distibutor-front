@@ -17,28 +17,25 @@ const ModalOrderTable = ({
         {},
     )
 
-
     const preselectedRowSelection = useMemo<RowSelectionState>(() => {
         if (!routes?.length) return {}
-        return Object.fromEntries(routes.map((r) => [String(r.id), true]))
+        return Object.fromEntries(routes.map((r) => [String(r.order), true]))
     }, [routes])
 
     useEffect(() => {
         setRowSelection(preselectedRowSelection)
     }, [preselectedRowSelection])
 
-console.log(routes);
-
-     
     return (
         <DataTable
             columns={columns}
             data={routes || []}
             viewAll={true}
-            selecteds_row={true}
-            height="h-[30vh]"
+            selecteds_row
+            height="h-[10vh]"
             onSelectedRowsChange={onSelectedRowsChange}
             controlledRowSelection={rowSelection}
+            className="min-w-[700px]"
         />
     )
 }

@@ -9,20 +9,14 @@ import { useModal } from "@/hooks/useModal"
 import { AddOrder } from "@/pages/orders/create"
 import { useGlobalStore } from "@/store/global-store"
 import { useSearch } from "@tanstack/react-router"
-import { AddRoute } from "../routes-window"
-import HeaderRoute from "./header"
-import EditModal from "../vehicles-window"
 import { ColumnDef } from "@tanstack/react-table"
+import { AddRoute } from "../routes-window"
+import EditModal from "../vehicles-window"
+import HeaderRoute from "./header"
 
 function RoutesMain() {
     const search = useSearch({ from: "/_main/route/" })
-    const params = {
-        ...search,
-        status: 0,
-        page_tabs: null,
-        type:"1"
-
-    }
+    const {page_tabs, ...params}=search
 
     const { openModal: createOrder } = useModal("create")
     const { openModal: deleteOrder } = useModal("delete")
@@ -37,7 +31,7 @@ function RoutesMain() {
         },
     )
 
-    const columns = useRouteColumns() as ColumnDef<OrderRow>[];
+    const columns = useRouteColumns() as ColumnDef<OrderRow>[]
 
     const handleDelete = (item: OrderRow) => {
         setData<OrderRow>(ORDERS_WINDOW, item)
@@ -50,7 +44,9 @@ function RoutesMain() {
     }
 
     const handleRowSelectionChange = (rows: OrderRow[]) => {
-        const ids = rows.map(row => row.orderId || row.id || "").filter(Boolean)
+        const ids = rows
+            .map((row) => row.orderId || row.id || "")
+            .filter(Boolean)
         setData("order_ids", ids)
     }
 
@@ -98,7 +94,7 @@ function RoutesMain() {
                 >
                     <EditModal />
                 </Modal>
- 
+
                 <DeleteModal path={ORDERS_WINDOW} id={currentStaff?.uuid} />
             </CardContent>
         </Card>

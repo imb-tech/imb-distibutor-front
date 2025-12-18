@@ -14,6 +14,7 @@ import { useGet } from "@/hooks/useGet"
 import { useModal } from "@/hooks/useModal"
 import { usePost } from "@/hooks/usePost"
 import { useGlobalStore } from "@/store/global-store"
+import { useSearch } from "@tanstack/react-router"
 import { Clock, Search } from "lucide-react"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
@@ -30,6 +31,7 @@ interface RoutePayload {
 }
 
 export const AddRoute = () => {
+    const { date } = useSearch({ from: "/_main/route/" })
     const { closeModal } = useModal("route")
     const { openModal: vehicleModal } = useModal("vehicle_edit")
     const { clearKey, getData, setData } = useGlobalStore()
@@ -44,7 +46,7 @@ export const AddRoute = () => {
 
     const form = useForm<Omit<RoutePayload, "vehicle_ids" | "order_ids">>({
         defaultValues: {
-            date: "",
+            date: date,
             start_time: "",
             status: "active",
         },
@@ -72,22 +74,6 @@ export const AddRoute = () => {
     const onSubmit = (
         data: Omit<RoutePayload, "vehicle_ids" | "order_ids">,
     ) => {
-        // Validation
-        if (!data.date || !data.start_time) {
-            toast.error("Iltimos, sana va boshlanish vaqtini kiriting")
-            return
-        }
-
-        if (selectedVehicleIds.length === 0) {
-            toast.error("Iltimos, kamida bitta avtomobil tanlang")
-            return
-        }
-
-        if (selectedOrderIds.length === 0) {
-            toast.error("Iltimos, kamida bitta buyurtma tanlang")
-            return
-        }
-
         const payload: RoutePayload = {
             ...data,
             vehicle_ids: selectedVehicleIds,

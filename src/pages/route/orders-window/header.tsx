@@ -26,9 +26,7 @@ const HeaderRoute = () => {
 
     const selectedOrderIds = getData<string[]>(SELECTED_ORDER_IDS) || []
 
-    console.log(selectedOrderIds?.length, "selected orders");
-
-
+ 
 
     return (
         <div className="space-y-2">

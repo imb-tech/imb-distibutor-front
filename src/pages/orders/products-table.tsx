@@ -71,7 +71,7 @@ export const ProductsTable = ({
     remove,
     copyProduct,
 }: ProductsTableProps) => {
-    const { control, watch } = form
+    const { control, watch, setValue } = form
     const loads = watch("loads") || []
 
     const columns: ColumnDef<LoadRow>[] = [
@@ -94,8 +94,13 @@ export const ProductsTable = ({
                             labelKey="name"
                             className="w-full"
                             handleItem={(item) => {
-                                form.setValue(`loads.${index}`, item)
-                                form.setValue(`loads.${index}.product`, item.id)
+                                setValue(`loads.${index}.product`, item.id)
+                                setValue(`loads.${index}.unit`, item.unit)
+                                setValue(`loads.${index}.price`, item.price)
+                                setValue(
+                                    `loads.${index}.currency`,
+                                    item.currency,
+                                )
                             }}
                         />
                     </div>

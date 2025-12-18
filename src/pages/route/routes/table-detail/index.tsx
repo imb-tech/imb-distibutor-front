@@ -1,4 +1,4 @@
-import { ROUTE_VEHICLES } from "@/constants/api-endpoints"
+import { ROUTE_VEHICLES, ROUTE_VEHICLES_DETAIL } from "@/constants/api-endpoints"
 import { useGet } from "@/hooks/useGet"
 import { useNavigate, useSearch } from "@tanstack/react-router"
 import { useEffect } from "react"
@@ -11,7 +11,7 @@ interface CarDetailsRowProps {
 export const CarDetailsRow = ({ car }: CarDetailsRowProps) => {
     const navigate = useNavigate()
     const search = useSearch({ from: "/_main/route/" })
-    const { data } = useGet<RouteTypes>(`${ROUTE_VEHICLES}/${car.uuid}`, {
+    const { data } = useGet<RouteTypes>(`${ROUTE_VEHICLES_DETAIL}/${car.uuid}`, {
         enabled: !!car.uuid,
     })
 

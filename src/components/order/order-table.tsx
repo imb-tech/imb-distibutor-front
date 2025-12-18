@@ -331,7 +331,6 @@ export function ProductDataTable({
                 data={products}
                 columns={columns}
                 selecteds_row={true}
-                selecteds_count={true}
                 onSelectedRowsChange={setSelectedRows}
                 numeration={false} // Biz allaqachon № column qo'shdik
                 className="border rounded-md"

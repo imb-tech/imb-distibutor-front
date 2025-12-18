@@ -209,25 +209,10 @@ export function DataTable<TData>({
     return (
         <main className={cn("w-full bg-card rounded-md p-3", wrapperClassName)}>
             {!!head && <div>{head}</div>}
-            {selecteds_count && (
-                <div className="flex flex-col gap-2 sm:flex-row items-end sm:items-center sm:justify-between pb-2">
-                    <p
-                        className={cn(
-                            "flex-1 text-sm text-muted-foreground",
-                            !deleteSelecteds && "text-end",
-                        )}
-                    >
-                        {table.getFilteredRowModel().rows?.length} dan{" "}
-                        {table.getFilteredSelectedRowModel().rows?.length} ta
-                        qator tanlandi.
-                    </p>
-                    <div></div>
-                </div>
-            )}
 
             <div
                 className={cn(
-                    "relative overflow-x-auto overflow-y-hidden no-scrollbar-x  rounded-md",
+                    "relative overflow-x-auto overflow-y-hidden    rounded-md",
                     tableWrapperClassName,
                 )}
             >

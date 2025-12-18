@@ -1,120 +1,218 @@
 import { Button } from "@/components/ui/button"
 import { DataTable } from "@/components/ui/datatable"
-import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { SETTINGS_VEHICLES } from "@/constants/api-endpoints"
+import { ROUTE_VEHICLES, ROUTE_VEHICLES_CREATE, SETTINGS_VEHICLES } from "@/constants/api-endpoints"
 import { useGet } from "@/hooks/useGet"
 import { useModal } from "@/hooks/useModal"
 import { useGlobalStore } from "@/store/global-store"
 import { toast } from "sonner"
 import { vehicleCols } from "./cols"
-import { useMemo, useState } from "react"
 import { useForm } from "react-hook-form"
-import { Search } from "lucide-react"
+import { Clock, Search } from "lucide-react"
+import { usePost } from "@/hooks/usePost"
+import { FormDatePicker } from "@/components/form/date-picker"
+import FormInput from "@/components/form/input"
+import Modal from "@/components/custom/modal"
+import EditModal from "../vehicles-window"
+import { useState } from "react"
+
+interface RoutePayload {
+  date: string
+  start_time: string
+  vehicle_ids: string[]
+  status?: string
+  name?: string
+  order_ids?: string[]
+}
+
+// Store key constants
+const SELECTED_VEHICLE_IDS = "vehicle_ids"
+const SELECTED_ORDER_IDS = "order_ids"
 
 export const AddRoute = () => {
-  const { closeModal } = useModal("create")
-  const { clearKey } = useGlobalStore()
+  const { closeModal, openModal: routeModal } = useModal("route_create")
+  const { openModal: vehicleModal } = useModal("vehicle_edit")
+  const { clearKey, getData, setData } = useGlobalStore()
   const { data: vehiclesData, isLoading } = useGet<ListResponse<VehicleRow>>(SETTINGS_VEHICLES)
 
-  const [searchTerm, setSearchTerm] = useState("")
-  const [startDate, setStartDate] = useState("")
-  const [startTime, setStartTime] = useState("")
-  const form = useForm()
-  const columns = vehicleCols()
+  const [searchQuery, setSearchQuery] = useState<string>("")
 
-  const filteredData = useMemo(() => {
-    if (!vehiclesData?.results) return []
-    if (!searchTerm) return vehiclesData.results
+  const selectedVehicleIds = getData<string[]>(SELECTED_VEHICLE_IDS) || []
 
-    const lowerSearch = searchTerm.toLowerCase()
-    return vehiclesData.results.filter((vehicle: VehicleRow) =>
-      vehicle.number.toLowerCase().includes(lowerSearch) ||
-      vehicle.license.toLowerCase().includes(lowerSearch) ||
-      vehicle.serial_number.toLowerCase().includes(lowerSearch) ||
-      String(vehicle.driver).includes(lowerSearch) ||
-      String(vehicle.depot).includes(lowerSearch)
-    )
-  }, [vehiclesData?.results, searchTerm])
+  const selectedOrderIds = getData<string[]>(SELECTED_ORDER_IDS) || []
 
-  const onSubmit = () => {
+  const form = useForm<Omit<RoutePayload, 'vehicle_ids' | 'order_ids'>>({
+    defaultValues: {
+      date: "",
+      start_time: "",
+      status: "active",
+    }
+  })
+
+  const currentVehicle = getData<VehicleRow>(SETTINGS_VEHICLES)
+
+  const onSuccess = () => {
     toast.success("Marshrut muvaffaqiyatli yaratildi!")
-    clearKey("ORDERS")
+    clearKey(ROUTE_VEHICLES)
+    clearKey(SELECTED_VEHICLE_IDS)
+    clearKey(SELECTED_ORDER_IDS)
     closeModal()
+    form.reset()
+    setSearchQuery("")
+  }
+
+  const { mutate: postMutate, isPending: isPendingCreate } = usePost({
+    onSuccess,
+    onError: (error) => {
+      toast.error("Marshrut yaratishda xatolik yuz berdi")
+      console.error("Route creation error:", error)
+    }
+  })
+
+  const handleVehicleEdit = (item: VehicleRow) => {
+    setData(SETTINGS_VEHICLES, item)
+    vehicleModal()
+  }
+
+  // const filteredVehicles = vehiclesData?.results?.filter(vehicle =>
+  //   !searchQuery ||
+  //   vehicle.uuid?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  //   vehicle.vehicle_number?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  //   vehicle.driver_name?.toLowerCase().includes(searchQuery.toLowerCase())
+  // ) || []
+
+  const onSubmit = (data: Omit<RoutePayload, 'vehicle_ids' | 'order_ids'>) => {
+    // Validation
+    if (!data.date || !data.start_time) {
+      toast.error("Iltimos, sana va boshlanish vaqtini kiriting")
+      return
+    }
+
+    if (selectedVehicleIds.length === 0) {
+      toast.error("Iltimos, kamida bitta avtomobil tanlang")
+      return
+    }
+
+    if (selectedOrderIds.length === 0) {
+      toast.error("Iltimos, kamida bitta buyurtma tanlang")
+      return
+    }
+
+    const payload: RoutePayload = {
+      ...data,
+      vehicle_ids: selectedVehicleIds,
+      order_ids: selectedOrderIds,
+      name: `Route ${data.date} ${data.start_time}`
+    }
+
+    console.log("Sending route payload:", payload)
+    postMutate(ROUTE_VEHICLES_CREATE, payload)
   }
 
   return (
-    <div className="flex flex-col h-full">
+    <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col h-full">
       <div className="mb-6">
         <h2 className="text-lg font-semibold mb-4">Marshrutlash</h2>
         <p className="text-sm mb-4">Asosiy ma'lumotlar</p>
       </div>
 
+      {/* Form inputs for backend submission */}
       <div className="grid grid-cols-2 gap-4 mb-6">
         <div>
-          <Input
-            type="date"
+          <FormDatePicker
+            control={form.control}
             placeholder="Sana"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
+            name="date"
             className="w-full"
+         
           />
         </div>
         <div>
-          <Input
+          <FormInput
+            prefixIcon={
+              <Clock className="h-4 w-4" />
+            }
+            methods={form}
+            name="start_time"
             type="time"
             placeholder="Marshrutlarning boshlanish vaqti"
-            value={startTime}
-            onChange={(e) => setStartTime(e.target.value)}
             className="w-full"
+           
           />
         </div>
       </div>
 
+      {/* Search section - not part of form submission */}
       <div className="mb-4">
         <Label className="text-base font-medium mb-3 block">Avtomobillar</Label>
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Qidiruv"
-            className="pl-10"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+          <input
+            type="text"
+            placeholder="Qidirish"
+            className="flex h-10 w-full rounded-md border border-input bg-background px-10 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
       </div>
 
-      <div className="mb-6">
-        <div className="border rounded-md overflow-hidden bg-white">
-          <div className="max-h-[400px] overflow-auto">
+      {/* Data table with filtered results */}
+      <div className="mb-6 flex-1 min-h-0">
+        <div className="border rounded-md overflow-hidden bg-white h-full">
+          <div className="h-[300px] overflow-auto">
             <DataTable
-              columns={columns}
-              data={filteredData}
+              onEdit={(row) => handleVehicleEdit(row.original)}
+              columns={vehicleCols()}
+              data={vehiclesData?.results}
               loading={isLoading}
               form={form}
               enableRowSelection
+              selectionMode="multiple"
+              selecteds_row
               noResultsMessage="Avtomobillar topilmadi"
+              // onSelectedRowsChange={(rows: VehicleRow[]) => {
+              //   const ids = rows.map(row => row.id)
+              //   setData(SELECTED_VEHICLE_IDS, ids)
+              // }}
             />
           </div>
         </div>
       </div>
 
-      <div className="flex items-center justify-end gap-3 pt-6">
+      <div className="flex items-center justify-end gap-3 pt-6 border-t">
         <Button
           variant="outline"
           className="border-orange-500 text-orange-600 hover:bg-orange-50 px-6"
-          onClick={closeModal}
+          onClick={() => {
+            closeModal()
+            form.reset()
+            clearKey(SELECTED_VEHICLE_IDS)
+            setSearchQuery("")
+          }}
           type="button"
+          disabled={isPendingCreate}
         >
           Bekor qilish
         </Button>
         <Button
           className="bg-green-600 hover:bg-green-700 text-white px-6"
-          onClick={onSubmit}
+          type="submit"
+          loading={isPendingCreate}
+          disabled={isPendingCreate || selectedVehicleIds.length === 0 || selectedOrderIds.length === 0}
         >
           Marshrutlash
         </Button>
       </div>
-    </div>
+
+      <Modal
+        modalKey="vehicle_edit"
+        size="max-w-5xl"
+        classNameTitle="font-medium text-xl"
+        title={currentVehicle?.uuid ? "Avtomobil tahrirlash" : ""}
+      >
+        <EditModal />
+      </Modal>
+    </form>
   )
 }

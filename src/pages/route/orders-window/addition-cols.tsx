@@ -1,24 +1,34 @@
 import { CopyButton } from "@/lib/copy-button"
 import { useSearch } from "@tanstack/react-router"
 import { ColumnDef } from "@tanstack/react-table"
-import { JSXElementConstructor, Key, ReactElement, ReactNode, ReactPortal, useMemo } from "react"
+import { format } from "date-fns"
+import { useMemo } from "react"
 
 export const useAdditionColumns = () => {
     const search = useSearch({ from: "/_main/route/" })
     const { type } = search
 
-   return useMemo<ColumnDef<RouteAddition>[]>(() => [
-              {
+    return useMemo<ColumnDef<RouteAddition>[]>(() => [
+        {
             header: "ID",
             accessorKey: "orderId",
             enableSorting: true,
             cell: ({ row }) => CopyButton(row.original.orderId),
         },
         {
-            header: "Haydovchi ismi",
-            accessorKey: "driver_name",
-            enableSorting: true,
-        },
+                header: "Sana",
+                accessorKey: "scheduled_delivery_date",
+                enableSorting: true,
+                cell: ({ getValue }) => {
+                    const date = getValue<string>()
+                    return (
+                        <div className="whitespace-nowrap">
+                            {format(date, "yyyy-MM-dd HH:mm")}
+                        </div>
+                    )
+                },
+            },
+     
         {
             header: "Mijoz (Tashkilot)",
             accessorKey: "company_name",
@@ -28,6 +38,11 @@ export const useAdditionColumns = () => {
                     {row.original.client_data?.name} ({row.original.client_data?.company_name})
                 </div>
             ),
+        },
+           {
+            header: "Haydovchi ismi",
+            accessorKey: "driver_name",
+            enableSorting: true,
         },
         {
             header: "Manzil",

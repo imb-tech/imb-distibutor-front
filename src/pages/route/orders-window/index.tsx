@@ -93,7 +93,6 @@ function RoutesMain() {
 
                 <Modal
                     modalKey="vehicle_edit"
-                    size="max-w-5xl"
                     classNameTitle="font-medium text-xl"
                     title={"Avtomobil tahrirlash"}
                 >

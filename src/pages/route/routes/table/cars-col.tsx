@@ -27,7 +27,7 @@ import {format} from "date-fns"
             },
             {
                 accessorKey: "name",
-                header: "Ekspeditorlar",
+                header: "Yol",
                 enableSorting: true,
             },
             {

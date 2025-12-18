@@ -28,6 +28,7 @@ export const SETTINGS_PAYMENT_TYPES = "setting/payment-type"
 
 /** ===== MARSHURTLAR ===== */
 export const ROUTE_MAPS = "order/all/route"
+// export const ROUTE_
 export const ROUTE_VEHICLES = "route"
 export const ROUTE_VEHICLES_DETAIL = "route/detail"
 export const ROUTE_VEHICLES_UPDATE = "route/update"

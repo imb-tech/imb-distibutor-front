@@ -16,6 +16,7 @@ const getUniqueColor = (index: number) => {
 }
 
 const apikey = import.meta.env.VITE_YANDEX_MAP_API_KEY
+const apuKeyRoute = import.meta.env.VITE_YANDEX_MAP_API_ROUTE_KEY
 
 export const getDrivingRoute = async (
     points: number[][],
@@ -26,7 +27,7 @@ export const getDrivingRoute = async (
         "https://api.routing.yandex.net/v2/route",
         {
             params: {
-                apikey,
+                apikey: apuKeyRoute,
                 waypoints,
                 mode: "driving",
                 lang: "ru_RU",

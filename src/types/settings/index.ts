@@ -17,8 +17,6 @@ type Profile = {
     password: string
 }
 
-
-
 type DriversType = {
     id: number
     uuid: string
@@ -65,6 +63,8 @@ type CarsType = {
     fuel_type: number
     size: number
     depot: number
+    open_side: boolean
+    open_back_side: boolean
 }
 type ForwardersType = {
     id: number
@@ -91,7 +91,6 @@ type LogisticiansType = {
     password: string
     depot: number
 }
- 
 
 type SchedulesType = {
     id: number
@@ -107,7 +106,7 @@ type ScheduleFormType = {
     end_time: string
     enabled?: boolean
 }
- 
+
 type CustomersType = {
     id?: string
     uuid?: string
@@ -127,14 +126,13 @@ type CustomersType = {
     }>
 }
 
- 
 interface CustomerFormType {
     name: string
     company_name: string
     address: string
     loading_address?: string
-    coordinates: [string, string]   
-    loading_coordinates: [string, string]   
+    coordinates: [string, string]
+    loading_coordinates: [string, string]
     phone_number: string
     email: string
     note: string
@@ -144,16 +142,16 @@ type ShippersType = {
     id: number
     name: string
 }
-type MapComponentProps ={
+type MapComponentProps = {
     coordinates: { lat: number; lng: number }
     onCoordinatesChange: (coords: { lat: number; lng: number }) => void
     onAddressFilled?: (address: AddressData) => void
-    showSearch?: boolean 
-    showMapControls?: boolean  
-    showCurrentLocationBtn?: boolean  
-    searchPlaceholder?: string  
-    className?: string  
-    mapHeight?: string  
+    showSearch?: boolean
+    showMapControls?: boolean
+    showCurrentLocationBtn?: boolean
+    searchPlaceholder?: string
+    className?: string
+    mapHeight?: string
 }
 
 type AddressData = {

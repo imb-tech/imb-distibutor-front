@@ -3,8 +3,26 @@ import { formatPhoneNumber } from "@/lib/format-phone-number"
 import { ColumnDef } from "@tanstack/react-table"
 import { format } from "date-fns"
 import { useMemo } from "react"
+import { useGet } from "@/hooks/useGet"
+import { SETTINGS_SHIPPERS } from "@/constants/api-endpoints"
+import { Skeleton } from "@/components/ui/skeleton"
 
 export const cols = () => {
+
+        const { data: shippersData, isLoading: isLoadingShippers } =
+            useGet<ListResponse<ShippersType>>(SETTINGS_SHIPPERS)
+    
+        const shippers = useMemo(() => {
+            if (!shippersData?.results) return {}
+    
+            return shippersData.results.reduce(
+                (acc: Record<string, string>, shipper: ShippersType) => {
+                    acc[shipper.id] = shipper.name
+                    return acc
+                },
+                {},
+            )
+        }, [shippersData])
     return useMemo<ColumnDef<OrderRow>[]>(
         () => [
 
@@ -149,11 +167,18 @@ export const cols = () => {
                 header: "Yuk jo'natuvchi",
                 accessorKey: "shipper",
                 enableSorting: false,
-                cell: ({ row }) => (
-                    <div className="min-w-[140px] flex items-center justify-center">
-                        {row.original.shipper ? row.original.shipper : "-"}
-                    </div>
-                ),
+                          cell: ({ row }) => {
+                    const shipperId = row.getValue("shipper")
+
+                    if (isLoadingShippers) {
+                        return <Skeleton className="h-4 w-20" />
+                    }
+
+                    if (!shipperId && shipperId !== 0) return "-"
+
+                    const  shipperName = shippers[shipperId.toString()]
+                    return  shipperName || shipperId
+                },
             },
             {
                 header: "Sana marshrut",

@@ -1,7 +1,13 @@
+import { FormCheckbox } from "@/components/form/checkbox" // Add this import
 import { FormCombobox } from "@/components/form/combobox"
 import FormInput from "@/components/form/input"
 import { Button } from "@/components/ui/button"
-import { SETTINGS_CARS } from "@/constants/api-endpoints"
+import {
+    SETTINGS_CARS,
+    SETTINGS_DRIVERS,
+    SETTINGS_WAREHOUSE,
+} from "@/constants/api-endpoints"
+import { useGet } from "@/hooks/useGet"
 import { useModal } from "@/hooks/useModal"
 import { usePatch } from "@/hooks/usePatch"
 import { usePost } from "@/hooks/usePost"
@@ -33,9 +39,17 @@ const AddCarsModal = () => {
     const { closeModal } = useModal("create")
     const { getData, clearKey } = useGlobalStore()
     const currentCar = getData<CarsType>(SETTINGS_CARS)
-
+    const { data: drivers } =
+        useGet<ListResponse<DriversType>>(SETTINGS_DRIVERS)
+    const { data: depots } =
+        useGet<ListResponse<WarehouseType>>(SETTINGS_WAREHOUSE)
     const form = useForm<CarsType>({
-        defaultValues: { ...currentCar, type: currentCar?.type || 1 },
+        defaultValues: {
+            ...currentCar,
+            type: currentCar?.type || 1,
+            open_side: currentCar?.open_side || false, // Add default value
+            open_back_side: currentCar?.open_back_side || false, // Add default value
+        },
     })
 
     const { handleSubmit, reset } = form
@@ -136,24 +150,51 @@ const AddCarsModal = () => {
                     placeholder="Misol: 1000"
                 />
 
-                <FormInput
+                <div className="space-y-2">
+                    <label className="text-sm font-medium block">
+                        Bagaj konfiguratsiyasi
+                    </label>
+                    <div className="grid grid-cols-2 gap-4 pt-1">
+                        <div className="flex items-center">
+                            <FormCheckbox
+                                name="open_side"
+                                label="Yon bagaj ochiq"
+                                control={form.control}
+                                wrapperClass="flex-row items-center gap-2"
+                            />
+                        </div>
+                        <div className="flex items-center">
+                            <FormCheckbox
+                                name="open_back_side"
+                                label="Orqa bagaj ochiq"
+                                control={form.control}
+                                wrapperClass="flex-row items-center gap-2"
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <FormCombobox
                     name="depot"
-                    label="Ombor ID (ixtiyoriy)"
-                    type="number"
-                    methods={form}
-                    placeholder="Misol: 15"
+                    label="Ombor (ixtiyoriy)"
+                    options={depots?.results}
+                    labelKey="name"
+                    valueKey="id"
+                    control={form.control}
                 />
 
-                <FormInput
+                <FormCombobox
                     required
                     name="driver"
-                    label="Haydovchi ID"
-                    type="number"
-                    methods={form}
-                    placeholder="Misol: 42"
+                    label="Haydovchi"
+                    options={drivers?.results}
+                    labelKey="full_name"
+                    valueKey="id"
+                    control={form.control}
+                    placeholder="Misol: Farrux"
                 />
 
-                <div className="md:col-span-2 flex justify-end ">
+                <div className="md:col-span-2 flex justify-end">
                     <Button
                         loading={isPending}
                         type="submit"

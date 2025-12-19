@@ -1,8 +1,11 @@
+import { Skeleton } from "@/components/ui/skeleton"
+import { SETTINGS_DRIVERS, SETTINGS_WAREHOUSE } from "@/constants/api-endpoints"
+import { useGet } from "@/hooks/useGet"
 import { ColumnDef } from "@tanstack/react-table"
 import { format } from "date-fns"
+import { Check, X } from "lucide-react"
 import { useMemo } from "react"
 
- 
 const FUEL_TYPES: Record<number, string> = {
     1: "Benzin",
     2: "Dizel",
@@ -21,6 +24,37 @@ const VEHICLE_TYPES: Record<number, string> = {
 }
 
 export const useColumnsCarsTable = () => {
+    const { data: warehousesData, isLoading: isLoadingWarehouses } = useGet<{
+        results: WarehouseType[]
+    }>(SETTINGS_WAREHOUSE)
+
+    const { data: driversData, isLoading: isLoadingDrivers } =
+        useGet<ListResponse<DriversType>>(SETTINGS_DRIVERS)
+
+    const warehouseMap = useMemo(() => {
+        if (!warehousesData?.results) return {}
+
+        return warehousesData.results.reduce(
+            (acc: Record<string, string>, warehouse: WarehouseType) => {
+                acc[warehouse.id] = warehouse.name
+                return acc
+            },
+            {},
+        )
+    }, [warehousesData])
+
+    const driverMap = useMemo(() => {
+        if (!driversData?.results) return {}
+
+        return driversData?.results.reduce(
+            (acc: Record<string, string>, driver: DriversType) => {
+                acc[driver.id] = driver.full_name
+                return acc
+            },
+            {},
+        )
+    }, [driversData])
+
     return useMemo<ColumnDef<CarsType>[]>(
         () => [
             {
@@ -37,16 +71,25 @@ export const useColumnsCarsTable = () => {
                 enableSorting: true,
                 cell: ({ row }) => {
                     const typeId = row.original.type
-                    return (
-                        <span>{VEHICLE_TYPES[typeId] || `Turi ${typeId}`}</span>
-                    )
+                    return <span>{VEHICLE_TYPES[typeId] || `${typeId}`}</span>
                 },
             },
             {
+                header: "Haydovchi",
                 accessorKey: "driver",
-                header: "Haydovchi ID",
                 enableSorting: true,
-                cell: ({ row }) => `ID: ${row.original.driver}`,
+                cell: ({ row }) => {
+                    const driverId = row.getValue("driver")
+
+                    if (isLoadingWarehouses) {
+                        return <Skeleton className="h-4 w-20" />
+                    }
+
+                    if (!driverId && driverId !== 0) return "-"
+
+                    const driverName = driverMap[driverId.toString()]
+                    return driverName || driverId
+                },
             },
             {
                 accessorKey: "license",
@@ -90,12 +133,45 @@ export const useColumnsCarsTable = () => {
                 },
             },
             {
-                accessorKey: "depot",
-                header: "Ombor / Depo",
+                accessorKey: "open_side",
+                header: "Yon bagaj",
                 enableSorting: true,
-                cell: ({ row }) => `Depo #${row.original.depot}`,
+                cell: ({ row }) => {
+                    const isOpen = row.original.open_side
+                    return isOpen ?
+                            <Check className="h-4 w-4 text-green-600" />
+                        :   <X className="h-4 w-4 text-red-600" />
+                },
+            },
+            {
+                accessorKey: "open_back_side",
+                header: "Orqa bagaj",
+                enableSorting: true,
+                cell: ({ row }) => {
+                    const isOpen = row.original.open_back_side
+                    return isOpen ?
+                            <Check className="h-4 w-4 text-green-600" />
+                        :   <X className="h-4 w-4 text-red-600" />
+                },
+            },
+            {
+                accessorKey: "depot",
+                header: "Ombor",
+                enableSorting: true,
+                cell: ({ row }) => {
+                    const depotId = row.getValue("depot")
+
+                    if (isLoadingWarehouses) {
+                        return <Skeleton className="h-4 w-20" />
+                    }
+
+                    if (!depotId && depotId !== 0) return "-"
+
+                    const driverName = warehouseMap[depotId.toString()]
+                    return driverName || depotId
+                },
             },
         ],
-        [],
+        [warehouseMap, isLoadingWarehouses, driverMap, isLoadingDrivers],
     )
 }

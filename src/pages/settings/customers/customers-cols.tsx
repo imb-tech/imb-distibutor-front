@@ -34,16 +34,16 @@ export const useColumnsCustomersTable = () => {
                     </div>
                 ),
             },
-            {
-                accessorKey: "loading_coordinates",
-                header: "Yuk olish koordinatalari",
-                enableSorting: false,
-                cell: ({ row }) => {
-                    const coords = row.original.loading_coordinates as number[]
-                    if (!coords || coords.length !== 2) return "-"
-                    return `${coords[0]?.toFixed(6)},${coords[1]?.toFixed(6)}`
-                },
-            },
+            // {
+            //     accessorKey: "loading_coordinates",
+            //     header: "Yuk olish koordinatalari",
+            //     enableSorting: false,
+            //     cell: ({ row }) => {
+            //         const coords = row.original.loading_coordinates as number[]
+            //         if (!coords || coords.length !== 2) return "-"
+            //         return `${coords[0]?.toFixed(6)},${coords[1]?.toFixed(6)}`
+            //     },
+            // },
             {
                 accessorKey: "coordinates",
                 header: "Koordinatalar",

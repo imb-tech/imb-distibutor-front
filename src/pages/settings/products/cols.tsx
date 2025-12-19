@@ -28,6 +28,24 @@ export const useoColumns = () => {
                 accessorKey: "unit",
                 header: "O'lchov turi",
                 enableSorting: true,
+                cell: ({ getValue }) => {
+                    const val = getValue<number>()
+
+                    const UNIT_OPTIONS = [
+                        { value: 0, label: "Pieces" },
+                        { value: 1, label: "Kg" },
+                        { value: 2, label: "Pound" },
+                        { value: 3, label: "Square meter" },
+                        { value: 4, label: "Liter" },
+                        { value: 5, label: "Cubic meter" },
+                        { value: 6, label: "Gallon" },
+                    ]
+
+                    const unit = UNIT_OPTIONS.find((opt) => opt.value === val)
+                    if (!unit) return "-"
+
+                    return <span>{unit.label}</span>
+                },
             },
             {
                 accessorKey: "currency",

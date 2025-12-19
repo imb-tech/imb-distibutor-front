@@ -8,47 +8,73 @@ import {
     YMaps,
 } from "@pbe/react-yandex-maps"
 import axios from "axios"
+import { useEffect, useState } from "react"
 
-const colors = [
-    "#FF0000",
-    "#00AAFF",
-    "#00FF00",
-    "#FFA500",
-    "#800080",
-    "#FF1493",
-    "#00CED1",
-    "#FFD700",
-    "#FF69B4",
-    "#32CD32",
-    "#FF4500",
-    "#4169E1",
-    "#DC143C",
-    "#00FA9A",
-    "#FF8C00",
-]
+const getUniqueColor = (index: number) => {
+    const hue = (index * 137.508) % 360
+    return `hsl(${hue}, 75%, 50%)`
+}
 
 const apikey = import.meta.env.VITE_YANDEX_MAP_API_KEY
 
+export const getDrivingRoute = async (
+    points: number[][],
+): Promise<number[][]> => {
+    const waypoints = points.map((p) => `${p[0]},${p[1]}`).join("|")
+
+    const { data } = await axios.get(
+        "https://api.routing.yandex.net/v2/route",
+        {
+            params: {
+                apikey,
+                waypoints,
+                mode: "driving",
+                lang: "ru_RU",
+                results: 1,
+            },
+        },
+    )
+
+    // Marshrut koordinatalari
+    return data.routes[0].geometry.coordinates.map(([lng, lat]: number[]) => [
+        lat,
+        lng,
+    ])
+}
+
 export default function YandexMapView() {
     const { isSuccess, data } = useGet<RouteMaps[]>(ROUTE_MAPS)
+
+    const [routesGeometry, setRoutesGeometry] = useState<
+        Record<number, number[][]>
+    >({})
 
     const defaultState = {
         center: [41.2995, 69.2401],
         zoom: 12,
     }
 
-    const getRequest = async () => {
-        try {
-            const res = await axios.get(
-                `https://api.routing.yandex.net/v2/distancematrix?origins=41.2995,69.2401&destinations=41.3000,69.2500|41.3100,69.2600&apikey=${apikey}`,
-            )
-            console.log(res.data)
-        } catch (error) {
-            console.error("Xatolik yuz berdi:", error)
-        }
-    }
+    useEffect(() => {
+        if (!isSuccess) return
 
-    getRequest()
+        data.forEach(async (route) => {
+            const startPoint = [41.2995, 69.2401]
+
+            const shopPoints = route.order_routes.map((o) => [
+                o.client_coordinates[1],
+                o.client_coordinates[0],
+            ])
+
+            const fullPoints = [startPoint, ...shopPoints]
+
+            const geometry = await getDrivingRoute(fullPoints)
+
+            setRoutesGeometry((prev) => ({
+                ...prev,
+                [route.id]: geometry,
+            }))
+        })
+    }, [isSuccess])
 
     return (
         <YMaps
@@ -63,50 +89,46 @@ export default function YandexMapView() {
                     <RouteButton options={{ float: "right" }} />
 
                     {isSuccess &&
-                        data.map((route, routeIndex) => {
-                            const routeColor =
-                                colors[routeIndex % colors.length]
-                            return (
-                                <div key={route.id}>
-                                    {route.order_routes.map((order, i) => (
-                                        <Placemark
-                                            key={order.id}
-                                            geometry={[
-                                                order.client_coordinates[1],
-                                                order.client_coordinates[0],
-                                            ]}
-                                            options={{
-                                                iconContent: `<strong>${order.number}</strong>`,
-                                                iconColor: routeColor,
-                                            }}
-                                            properties={{
-                                                iconContent:
-                                                    order.number.toString(),
-                                                balloonContent: `
-                                                    <strong>${route.name}</strong><br/>
-                                                    Buyurtma: #${order.number}<br/>
-                                                    Manzil: ${order.client_address}<br/>
-                                                    Tartib: ${i + 1}
-                                                `,
-                                            }}
-                                        />
-                                    ))}
-
-                                    {/* Yo‘l chizish */}
-                                    <Polyline
-                                        geometry={route}
+                        data.map((route, index) => (
+                            <div key={route.id}>
+                                {/* Do‘konlar */}
+                                {route.order_routes.map((order, i) => (
+                                    <Placemark
+                                        key={order.id}
+                                        geometry={[
+                                            order.client_coordinates[1],
+                                            order.client_coordinates[0],
+                                        ]}
+                                        properties={{
+                                            iconContent:
+                                                order.number.toString(),
+                                            balloonContent: `
+                                                <strong>${route.name}</strong><br/>
+                                                Buyurtma: #${order.number}<br/>
+                                                Manzil: ${order.client_address}<br/>
+                                                Tartib: ${order.number}
+                                            `,
+                                        }}
                                         options={{
-                                            strokeColor:
-                                                colors[
-                                                    routeIndex % colors.length
-                                                ],
-                                            strokeWidth: 4,
-                                            strokeOpacity: 0.8,
+                                            preset: "islands#blueCircleIcon",
+                                            iconColor: getUniqueColor(i),
                                         }}
                                     />
-                                </div>
-                            )
-                        })}
+                                ))}
+
+                                {/* DRIVER YO‘LI */}
+                                {routesGeometry[route.id] && (
+                                    <Polyline
+                                        geometry={routesGeometry[route.id]}
+                                        options={{
+                                            strokeColor: getUniqueColor(index),
+                                            strokeWidth: 5,
+                                            strokeOpacity: 0.85,
+                                        }}
+                                    />
+                                )}
+                            </div>
+                        ))}
                 </Map>
             </div>
         </YMaps>

@@ -70,7 +70,7 @@ export const CarsTable = () => {
                 <AddVehiclesModal />
             </Modal>
             <Modal
-                size="max-w-2xl"
+                size="max-w-4xl"
                 title={"Buyurtmalar tanlang"}
                 modalKey="order-list"
             >

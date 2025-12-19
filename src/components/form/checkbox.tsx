@@ -39,6 +39,7 @@ export function FormCheckbox<TForm extends FieldValues>({
                             htmlFor={name}
                             required={!!required}
                             isError={!!control._formState.errors?.[name]}
+                            className="pb-0"
                         >
                             {label}
                         </FieldLabel>

@@ -10,7 +10,6 @@ import { useModal } from "@/hooks/useModal"
 import { usePost } from "@/hooks/usePost"
 import { useGlobalStore } from "@/store/global-store"
 import { useQueryClient } from "@tanstack/react-query"
-import { useSearch } from "@tanstack/react-router"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 
@@ -26,11 +25,10 @@ const AddOrderList = ({ uuid }: AddOrderListType) => {
         defaultValues: {},
     })
 
-    const { handleSubmit, reset, control, watch } = form
+    const { handleSubmit, reset, control } = form
 
     const { data } = useGet(ROUTE_ORDER_LSIT)
     const { closeModal } = useModal("order-list")
-    const search = useSearch({ from: "/_main/route/" })
 
     const onSuccess = () => {
         toast.success("Yangi order qo'shildi")
@@ -46,8 +44,6 @@ const AddOrderList = ({ uuid }: AddOrderListType) => {
     const { mutate: create, isPending: creating } = usePost({ onSuccess })
 
     const orderList: Order[] = data?.results || []
-
-    const formValues = watch()
 
     const onSubmit = (formData: FormData) => {
         const selectedOrderIds: number[] = []
@@ -67,12 +63,8 @@ const AddOrderList = ({ uuid }: AddOrderListType) => {
 
     return (
         <div className="w-full max-w-4xl mx-auto p-1">
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
                 <div className="space-y-3">
-                    <label className="text-sm font-medium leading-none">
-                        Buyurtmalar
-                    </label>
-
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[400px] overflow-y-auto p-2">
                         {orderList.map((order) => (
                             <div
@@ -84,7 +76,6 @@ const AddOrderList = ({ uuid }: AddOrderListType) => {
                                     label={order.client_address}
                                     control={control}
                                     wrapperClass="flex-1"
-                                    className="mt-0"
                                     hideError
                                 />
                             </div>

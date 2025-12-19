@@ -112,6 +112,7 @@ export const AddOrder = () => {
                 <div className="sm:col-span-2">
                     <FormCombobox
                         required
+                        label="Yetkazib beruvchini tanlang"
                         name="shipper"
                         placeholder="Yetqazuvchi"
                         control={form.control as Control<any>}

@@ -226,6 +226,7 @@ type RouteDetailType = {
 type Order = {
     id: number
     client_address: string
+    code:number
 }
 
 interface AddOrderListType {

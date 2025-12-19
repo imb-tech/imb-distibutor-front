@@ -61,6 +61,8 @@ const AddOrderList = ({ uuid }: AddOrderListType) => {
         create(`${ROUTE_ASSIGNE_ORDERS}/${uuid}`, payload)
     }
 
+    
+
     return (
         <div className="w-full max-w-4xl mx-auto p-1">
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
@@ -73,7 +75,7 @@ const AddOrderList = ({ uuid }: AddOrderListType) => {
                             >
                                 <FormCheckbox
                                     name={`order-${order.id}`}
-                                    label={order.client_address}
+                                    label={`${order?.code ? `# ${order.code}` : ""} ${order.client_address}`}
                                     control={control}
                                     wrapperClass="flex-1"
                                     hideError

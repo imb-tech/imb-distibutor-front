@@ -76,7 +76,7 @@ type ForwardersType = {
 }
 
 type WarehouseType = {
-    id?: string
+    id: string
     uuid: string
     name: string
     address: string

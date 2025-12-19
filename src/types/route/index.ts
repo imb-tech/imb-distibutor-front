@@ -220,3 +220,14 @@ type RouteDetailType = {
     start_depot_name: "Reserve Center"
     end_depot_name: "Reserve Center"
 }
+
+
+
+type Order = {
+    id: number
+    client_address: string
+}
+
+interface AddOrderListType {
+    uuid: string
+}

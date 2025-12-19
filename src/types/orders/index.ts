@@ -1,7 +1,7 @@
 type OrderRow = {
-  end_time: ReactNode;
-  shipper: ReactNode;
-  vehicle_number: ReactNode;
+  end_time: string;
+  shipper: string;
+  vehicle_number: string;
   orderId: any;
   id: any;
   // Required fields from API

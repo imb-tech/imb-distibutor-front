@@ -18,9 +18,7 @@ const getUniqueColor = (index: number) => {
 const apikey = import.meta.env.VITE_YANDEX_MAP_API_KEY
 const apuKeyRoute = import.meta.env.VITE_YANDEX_MAP_API_ROUTE_KEY
 
-export const getDrivingRoute = async (
-    points: number[][],
-): Promise<number[][]> => {
+const getDrivingRoute = async (points: number[][]): Promise<number[][]> => {
     const waypoints = points.map((p) => `${p[0]},${p[1]}`).join("|")
 
     const { data } = await axios.get(
@@ -31,16 +29,23 @@ export const getDrivingRoute = async (
                 waypoints,
                 mode: "driving",
                 lang: "ru_RU",
-                results: 1,
             },
         },
     )
 
-    // Marshrut koordinatalari
-    return data.routes[0].geometry.coordinates.map(([lng, lat]: number[]) => [
-        lat,
-        lng,
-    ])
+    const result: number[][] = []
+
+    data.route.legs.forEach((leg: any) => {
+        leg.steps.forEach((step: any) => {
+            if (step.polyline?.points) {
+                step.polyline.points.forEach(([lat, lng]: number[]) => {
+                    result.push([lat, lng])
+                })
+            }
+        })
+    })
+
+    return result
 }
 
 export default function YandexMapView() {
@@ -56,26 +61,32 @@ export default function YandexMapView() {
     }
 
     useEffect(() => {
-        if (!isSuccess) return
+        if (!isSuccess || !data) return
 
-        data.forEach(async (route) => {
-            const startPoint = [41.2995, 69.2401]
+        const loadRoutes = async () => {
+            for (const route of data) {
+                const startPoint = [41.2995, 69.2401]
 
-            const shopPoints = route.order_routes.map((o) => [
-                o.client_coordinates[1],
-                o.client_coordinates[0],
-            ])
+                const shopPoints = route.order_routes.map((o) => [
+                    o.client_coordinates[1],
+                    o.client_coordinates[0],
+                ])
 
-            const fullPoints = [startPoint, ...shopPoints]
+                const fullPoints = [startPoint, ...shopPoints]
 
-            const geometry = await getDrivingRoute(fullPoints)
+                const geometry = await getDrivingRoute(fullPoints)
 
-            setRoutesGeometry((prev) => ({
-                ...prev,
-                [route.id]: geometry,
-            }))
-        })
-    }, [isSuccess])
+                setRoutesGeometry((prev) => ({
+                    ...prev,
+                    [route.id]: geometry,
+                }))
+            }
+        }
+
+        loadRoutes()
+    }, [isSuccess, data])
+
+    console.log(routesGeometry)
 
     return (
         <YMaps
@@ -122,7 +133,6 @@ export default function YandexMapView() {
                                     <Polyline
                                         geometry={routesGeometry[route.id]}
                                         options={{
-                                            strokeColor: getUniqueColor(index),
                                             strokeWidth: 5,
                                             strokeOpacity: 0.85,
                                         }}

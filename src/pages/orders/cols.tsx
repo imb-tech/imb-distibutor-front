@@ -320,6 +320,6 @@ export const cols = () => {
                 ),
             },
         ],
-        [],
+        [shippers,isLoadingShippers],
     )
 }

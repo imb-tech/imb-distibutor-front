@@ -59,8 +59,10 @@ const getCurrencySymbol = (currencyId: number) => {
             return "€"
         case 4:
             return "£"
-        default:
+        case 4:
             return "$"
+        default:
+            return "-"
     }
 }
 

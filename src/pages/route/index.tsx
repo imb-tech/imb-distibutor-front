@@ -13,7 +13,7 @@ const RouteMain = () => {
                 options={paramOptions}
                 className={"mb-2 bg-background"}
             />
-            <div className="grid lg:grid-cols-1 gap-3">
+            <div className="grid lg:grid-cols-2 gap-3">
                 <FleetDashboard />
                 {page_tabs === "routes" ?
                     <RouteOrderMain />

@@ -1,3 +1,4 @@
+import ParamPagination from "@/components/as-params/pagination"
 import DeleteModal from "@/components/custom/delete-modal"
 import Modal from "@/components/custom/modal"
 import {
@@ -13,13 +14,18 @@ import {
 } from "@/constants/api-endpoints"
 import { useGet } from "@/hooks/useGet"
 import { useGlobalStore } from "@/store/global-store"
+import { useSearch } from "@tanstack/react-router"
 import { CarTableRow } from "./car-row"
 import { useColumnsCarsOrderTable } from "./cars-col"
 import AddVehiclesModal from "./modal/add-car"
 import AddOrderList from "./modal/add-order"
 
 export const CarsTable = () => {
-    const { data } = useGet<ListResponse<CarsTypeInOrders>>(ROUTE_VEHICLES)
+    const search = useSearch({ from: "/_main/route/" })
+    const { page_tabs, order_id, tabs, route_id, ...params } = search
+    const { data } = useGet<ListResponse<CarsTypeInOrders>>(ROUTE_VEHICLES, {
+        params,
+    })
     const { getData } = useGlobalStore()
     const selectedCar = getData(ROUTE_VEHICLES) as CarsTypeInOrders | null
     const columns = useColumnsCarsOrderTable()
@@ -55,6 +61,10 @@ export const CarsTable = () => {
                     ))}
                 </TableBody>
             </Table>
+
+            <div className="flex my-3 justify-center">
+                <ParamPagination totalPages={data?.total_pages} />
+            </div>
 
             <DeleteModal path={ROUTE_VEHICLES_DETAIL} id={selectedCar?.uuid} />
 

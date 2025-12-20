@@ -37,7 +37,6 @@ export const CarTableRow = ({ car, index, colSpan }: CarTableRowProps) => {
     const { route_id, ...otherSearchParams } = search
     const navigate = useNavigate()
 
-  
     const cols = [
         {
             icon: <CircleUser size={16} className="text-primary" />,
@@ -67,10 +66,13 @@ export const CarTableRow = ({ car, index, colSpan }: CarTableRowProps) => {
             icon: <Package className="text-primary" size={16} />,
             value: car.order_weight,
         },
-        // {
-        //     icon: <Clock className="text-primary" size={16} />,
-        //     value: car.start_date ? formatDate(car.start_date) : "Mavjud emas",
-        // },
+        {
+            icon: <Clock className="text-primary" size={16} />,
+            value:
+                car.start_date ?
+                    format(car.start_date, "yyyy-MM-dd HH:mm")
+                :   "-",
+        },
     ]
 
     const handleRowClick = () => {

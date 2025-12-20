@@ -2,6 +2,7 @@ import { ParamCombobox } from "@/components/as-params/combobox"
 import ParamInput from "@/components/as-params/input"
 import { Card, CardContent } from "@/components/ui/card"
 import { CarsTable } from "./table"
+import DownloadAsExcel from "@/components/download-as-excel"
 
 const RouteOrderMain = () => {
     return (
@@ -12,18 +13,18 @@ const RouteOrderMain = () => {
                         <h1 className="text-xl">Marshrutlar</h1>
                         <ParamInput fullWidth />
                     </div>
-                    {/* <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2">
                         <ParamCombobox
-                            paramName="doimiy"
-                            label="doimiy"
-                            options={[]}
+                            label="Doimiy"
+                            paramName="type"
+                            valueKey="id"
+                            options={[
+                                { id: "1", name: "Doimiy" },
+                                { id: "2", name: "Qo'shimcha" },
+                            ]}
                         />
-                        <ParamCombobox
-                            paramName="excel"
-                            label="excel"
-                            options={[]}
-                        />
-                    </div> */}
+                    </div>
+                    <DownloadAsExcel url="/" name="routes"/>
                 </div>
 
                 <div className="rounded-md border overflow-hidden">

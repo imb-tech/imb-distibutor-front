@@ -30,12 +30,12 @@ const HeaderRoute = () => {
 
     return (
         <div className="space-y-2">
-            <div className="flex justify-between items-center gap-3">
+            <div className="flex  flex-col justify-between  gap-3">
                 <h1 className="md:text-xl ">Rejalashtirilmagan buyurtmalar </h1>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center  gap-3">
                     <ParamDatePicker
                         placeholder="Bugun"
-                        className={"min-w-0 w-max"}
+                        className={"min-w-0 w-full"}
                         defaultValue={format(String(new Date()), "yyyy-MM-dd")}
                         addButtonProps={{ className: "flex gap-0" }}
                     />
@@ -43,13 +43,13 @@ const HeaderRoute = () => {
                         onClick={handleCreate}
                         type="button"
                         icon={<CirclePlus size={18} />}
-                        className="bg-primary hover:bg-primary/90 text-white"
+                        className="bg-primary hover:bg-primary/90 w-full text-white"
                     >
                         Buyurtma qo'shish
                     </Button>
                     <Button
                         onClick={handleRoute}
-                        className="bg-green-500 hover:bg-green-600/90 text-white"
+                        className="bg-green-500 hover:bg-green-600/90 w-full text-white"
                         type="button"
                         icon={<Route size={18} />}
                         disabled={selectedOrderIds.length ? false : true}

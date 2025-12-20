@@ -10,9 +10,12 @@ import {
 import axios from "axios"
 import { useEffect, useState } from "react"
 
-const getUniqueColor = (index: number) => {
-    const hue = (index * 137.508) % 360
-    return `hsl(${hue}, 75%, 50%)`
+const getUniqueColor = (index: number): string => {
+    const r = (index * 123) % 256
+    const g = (index * 231) % 256
+    const b = (index * 312) % 256
+
+    return "#" + [r, g, b].map((x) => x.toString(16).padStart(2, "0")).join("")
 }
 
 const apikey = import.meta.env.VITE_YANDEX_MAP_API_KEY
@@ -86,7 +89,7 @@ export default function YandexMapView() {
         loadRoutes()
     }, [isSuccess, data])
 
-    console.log(routesGeometry)
+
 
     return (
         <YMaps
@@ -96,7 +99,7 @@ export default function YandexMapView() {
                 load: "package.full",
             }}
         >
-            <div style={{ height: "600px", width: "100%" }}>
+            <div style={{ height: "700px", width: "100%" }}>
                 <Map defaultState={defaultState} width="100%" height="100%">
                     <RouteButton options={{ float: "right" }} />
 
@@ -123,7 +126,7 @@ export default function YandexMapView() {
                                         }}
                                         options={{
                                             preset: "islands#blueCircleIcon",
-                                            iconColor: getUniqueColor(i),
+                                            iconColor: getUniqueColor(order.id),
                                         }}
                                     />
                                 ))}
@@ -133,6 +136,7 @@ export default function YandexMapView() {
                                     <Polyline
                                         geometry={routesGeometry[route.id]}
                                         options={{
+                                            strokeColor: getUniqueColor(index),
                                             strokeWidth: 5,
                                             strokeOpacity: 0.85,
                                         }}

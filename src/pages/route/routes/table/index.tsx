@@ -22,7 +22,7 @@ import AddOrderList from "./modal/add-order"
 
 export const CarsTable = () => {
     const search = useSearch({ from: "/_main/route/" })
-    const { page_tabs, ...params } = search
+    const { page_tabs, order_id, tabs, route_id, ...params } = search
     const { data } = useGet<ListResponse<CarsTypeInOrders>>(ROUTE_VEHICLES, {
         params,
     })

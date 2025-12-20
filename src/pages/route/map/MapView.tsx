@@ -89,7 +89,7 @@ export default function YandexMapView() {
         loadRoutes()
     }, [isSuccess, data])
 
-    console.log(routesGeometry)
+
 
     return (
         <YMaps
@@ -99,7 +99,7 @@ export default function YandexMapView() {
                 load: "package.full",
             }}
         >
-            <div style={{ height: "600px", width: "100%" }}>
+            <div style={{ height: "700px", width: "100%" }}>
                 <Map defaultState={defaultState} width="100%" height="100%">
                     <RouteButton options={{ float: "right" }} />
 

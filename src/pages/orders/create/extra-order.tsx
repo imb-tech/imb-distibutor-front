@@ -1,20 +1,20 @@
+import Modal from "@/components/custom/modal"
 import { FormCombobox } from "@/components/form/combobox"
 import { FormDatePicker } from "@/components/form/date-picker"
 import FormInput from "@/components/form/input"
 import { FormNumberInput } from "@/components/form/number-input"
-import { UseFormReturn } from "react-hook-form"
-import { useGet } from "@/hooks/useGet"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
 import {
     SETTINGS_CUSTOMERS,
     SETTINGS_PAYMENT_TYPES,
 } from "@/constants/api-endpoints"
-import Modal from "@/components/custom/modal"
-import { MapComponent } from "./map"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+import { useGet } from "@/hooks/useGet"
+import { useModal } from "@/hooks/useModal"
 import { Map, MapPin } from "lucide-react"
 import { useCallback } from "react"
-import { useModal } from "@/hooks/useModal"
+import { UseFormReturn } from "react-hook-form"
+import { MapComponent } from "./map"
 
 type Props = {
     form: UseFormReturn<any>
@@ -28,9 +28,12 @@ type PaymentMethod = {
 export const ExtraOrders = ({ form }: Props) => {
     const { control, watch, setValue } = form
 
-    const { data: clientsData } =useGet<ListResponse<CustomersType>>(SETTINGS_CUSTOMERS)
+    const { data: clientsData } =
+        useGet<ListResponse<CustomersType>>(SETTINGS_CUSTOMERS)
 
-    const { data: paymentsData } =  useGet<ListResponse<PaymentMethod>>(SETTINGS_PAYMENT_TYPES)
+    const { data: paymentsData } = useGet<ListResponse<PaymentMethod>>(
+        SETTINGS_PAYMENT_TYPES,
+    )
 
     const { openModal: openMap, closeModal: closeMap } = useModal("map")
 
@@ -73,19 +76,19 @@ export const ExtraOrders = ({ form }: Props) => {
         [setValue],
     )
 
-    /** ---------------- UI ---------------- */
     return (
         <div className="space-y-6">
-            {/* ORDER INFO */}
             <div className="grid grid-cols-4 gap-4 items-center">
                 <FormInput
+                    label="Buyurtma ID"
                     methods={form}
                     name="code"
-                    placeholder="Buyurtma ID"
+                    placeholder="Buyurtma raqami"
                     className="max-w-sm"
                 />
 
                 <FormDatePicker
+                    label="Yetkazib berish sanasi"
                     className="!w-full"
                     control={control}
                     name="scheduled_delivery_date"
@@ -99,60 +102,66 @@ export const ExtraOrders = ({ form }: Props) => {
 
                 <div className="grid grid-cols-2 gap-4">
                     <FormCombobox
-                        placeholder="Xaridor"
+                        label="Xaridor"
                         required
                         options={clientsData?.results}
                         name="client"
                         control={control}
                         className="w-full"
+                        placeholder="Xaridorni tanlang"
                     />
 
                     <FormCombobox
-                        placeholder="Ustuvor transport"
+                        label="Ustuvor transport"
                         required
                         options={[
-                            { name: "Truck", id: 1 },
-                            { name: "Van", id: 2 },
-                            { name: "Box", id: 3 },
+                            { name: "Yuk mashinasi", id: 1 },
+                            { name: "Furgon", id: 2 },
+                            { name: "Konteyner", id: 3 },
                         ]}
                         name="priority_vehicle"
                         control={control}
                         className="w-full"
+                        placeholder="Transport turini tanlang"
                     />
 
                     <FormCombobox
-                        placeholder="To'lov turi"
+                        label="To'lov turi"
                         required
                         options={paymentsData?.results}
                         name="payment_type"
                         control={control}
                         className="w-full"
+                        placeholder="To'lov turini tanlang"
                     />
 
                     <FormInput
+                        label="Izoh"
                         methods={form}
                         name="note"
-                        placeholder="Eslatma"
+                        placeholder="Qo'shimcha izoh"
                     />
                 </div>
             </div>
 
             <div className="space-y-3">
-                <h2 className="font-medium">Yuk tafsilotlari</h2>
+                <h2 className="font-medium">Yuk Tafsilotlari</h2>
 
                 <div className="grid grid-cols-2 gap-4">
                     <FormNumberInput
+                        label="Og'irligi (kg)"
                         thousandSeparator=" "
                         control={control}
                         name="weight"
-                        placeholder="Og‘irligi (kg)"
+                        placeholder="Og'irlik kiriting"
                     />
 
                     <FormNumberInput
+                        label="Hajm (m³)"
                         thousandSeparator=" "
                         control={control}
                         name="volume"
-                        placeholder="Hajm (m³)"
+                        placeholder="Hajm kiriting"
                     />
 
                     {/* MAP CARD */}
@@ -165,38 +174,44 @@ export const ExtraOrders = ({ form }: Props) => {
                                     </div>
 
                                     <div className="flex-1 space-y-2">
-                                        {currentAddress ? (
+                                        {currentAddress ?
                                             <>
                                                 <p className="text-sm font-medium">
                                                     {currentAddress}
                                                 </p>
                                                 <div className="flex gap-4 text-xs text-muted-foreground">
                                                     <span>
-                                                        Kenglik: {Number(coordinates.lat).toFixed(6)}
+                                                        Kenglik:{" "}
+                                                        {Number(
+                                                            coordinates.lat,
+                                                        ).toFixed(6)}
                                                     </span>
                                                     <span>
-                                                        Uzunlik: {
-                                                            Number(coordinates.lng).toFixed(6)
-                                                        }
+                                                        Uzunlik:{" "}
+                                                        {Number(
+                                                            coordinates.lng,
+                                                        ).toFixed(6)}
                                                     </span>
                                                 </div>
                                             </>
-                                        ) : (
-                                            <div className="space-y-1">
+                                        :   <div className="space-y-1">
                                                 <p className="text-sm font-medium">
                                                     Joylashuv tanlanmagan
                                                 </p>
                                                 <p className="text-xs text-muted-foreground">
-                                                    Xaritadan joylashuvni tanlang
+                                                    Xaritadan joylashuvni
+                                                    tanlang
                                                 </p>
                                             </div>
-                                        )}
+                                        }
                                     </div>
                                 </div>
 
                                 <Button
                                     type="button"
-                                    variant={currentAddress ? "outline" : "default"}
+                                    variant={
+                                        currentAddress ? "outline" : "default"
+                                    }
                                     onClick={handleMapOpen}
                                 >
                                     <Map className="w-4 h-4 mr-2" />
@@ -213,11 +228,7 @@ export const ExtraOrders = ({ form }: Props) => {
                 <FormNumberInput control={control} name="location.1" />
             </div>
 
-            <Modal
-                size="max-w-4xl"
-                title="Xaritada belgilash"
-                modalKey="map"
-            >
+            <Modal size="max-w-4xl" title="Xaritada belgilash" modalKey="map">
                 <MapComponent
                     coordinates={coordinates}
                     onCoordinatesChange={handleCoordinatesChange}

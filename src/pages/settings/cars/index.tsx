@@ -54,7 +54,7 @@ const Cars = () => {
             />
             <DeleteModal path={SETTINGS_CARS} id={item?.uuid} />
             <Modal
-                size="max-w-2xl"
+                size="max-w-3xl"
                 title={`Avtomobil ${item?.uuid ? "tahrirlash" : "qo'shish"}`}
                 modalKey="create"
             >

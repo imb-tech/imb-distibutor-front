@@ -9,12 +9,7 @@ export const useAdditionColumns = () => {
     const { type } = search
 
     return useMemo<ColumnDef<RouteAddition>[]>(() => [
-        {
-            header: "ID",
-            accessorKey: "orderId",
-            enableSorting: true,
-            cell: ({ row }) => CopyButton(row.original.orderId),
-        },
+   
         {
                 header: "Sana",
                 accessorKey: "scheduled_delivery_date",

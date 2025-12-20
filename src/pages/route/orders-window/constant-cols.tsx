@@ -9,12 +9,7 @@ export const useConstantColumns = () => {
 
     return useMemo<ColumnDef<RouteConstant>[]>(
         () => [
-            {
-                header: "ID",
-                accessorKey: "orderId",
-                enableSorting: true,
-                cell: ({ row }) => CopyButton(row.original.orderId),
-            },
+         
             {
                 header: "Sana",
                 accessorKey: "scheduled_delivery_date",

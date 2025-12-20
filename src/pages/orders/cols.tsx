@@ -301,7 +301,7 @@ export const cols = () => {
             },
             {
                 header: "Elektron pochta",
-                accessorKey: "client_data.email", // Using client email
+                accessorKey: "client_data.email",  
                 enableSorting: true,
                 cell: ({ row }) => (
                     <div className="min-w-[200]">

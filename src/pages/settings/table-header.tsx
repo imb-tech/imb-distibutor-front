@@ -26,7 +26,7 @@ const TableHeader = ({ fileName, storeKey }: TableHeaderProps) => {
         <div className="flex items-center justify-between gap-3 mb-3">
             <ParamInput fullWidth />
             <div className="flex items-center gap-3">
-                <DownloadAsExcel url={"settings_url"} name={`${fileName}`} />
+                {/* <DownloadAsExcel url={"settings_url"} name={`${fileName}`} /> */}
 
                 <Button
                     className="text-white bg-primary hover:bg-primary/90"

@@ -65,6 +65,7 @@ function RoutesMain() {
                     wrapperClassName="px-0"
                     selecteds_row={true}
                     onSelectedRowsChange={handleRowSelectionChange}
+                    paginationProps={{ totalPages: ordersData?.total_pages }}
                 />
 
                 <Modal

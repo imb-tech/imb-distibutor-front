@@ -1,4 +1,8 @@
 type RouteConstant = {
+    payment_type: any
+    weight: any
+    volume: any
+    time_to_drop: any
     scheduled_delivery_date: any
     depot_name:string
     client_data: any
@@ -27,6 +31,11 @@ type RouteConstant = {
 }
 
 type RouteAddition = {
+    payment_type: any
+    volume: any
+    weight: any
+    vehicle_name: any
+    driver_name: any
     uuid(uuid: any): any
     client_data: any
     type: number

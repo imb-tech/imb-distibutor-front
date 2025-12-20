@@ -1,4 +1,5 @@
 type OrderRow = {
+  reject_reason: any;
   end_time: string;
   shipper: string;
   vehicle_number: string;

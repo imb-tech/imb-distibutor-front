@@ -1,4 +1,3 @@
-import { CopyButton } from "@/lib/copy-button"
 import { useSearch } from "@tanstack/react-router"
 import { ColumnDef } from "@tanstack/react-table"
 import { useMemo } from "react"
@@ -9,17 +8,17 @@ export const useConstantColumns = () => {
 
     return useMemo<ColumnDef<RouteConstant>[]>(
         () => [
-         
             {
                 header: "Sana",
                 accessorKey: "scheduled_delivery_date",
                 enableSorting: true,
                 cell: ({ row: { original } }) => (
                     <span className="whitespace-nowrap">
-                        {original.scheduled_delivery_date
-                            ? new Date(original.scheduled_delivery_date).toLocaleDateString()
-                            : "-"
-                        }
+                        {original.scheduled_delivery_date ?
+                            new Date(
+                                original.scheduled_delivery_date,
+                            ).toLocaleDateString()
+                        :   "-"}
                     </span>
                 ),
             },
@@ -37,7 +36,8 @@ export const useConstantColumns = () => {
                 enableSorting: true,
                 cell: ({ row: { original } }) => (
                     <div>
-                        {original.client_data?.name} ({original.client_data?.company_name})
+                        {original.client_data?.name} (
+                        {original.client_data?.company_name})
                     </div>
                 ),
             },
@@ -46,9 +46,7 @@ export const useConstantColumns = () => {
                 accessorKey: "phone",
                 enableSorting: true,
                 cell: ({ row: { original } }) => (
-                    <div>
-                        {original.client_data?.phone_number}
-                    </div>
+                    <div>{original.client_data?.phone_number}</div>
                 ),
             },
             {
@@ -70,21 +68,37 @@ export const useConstantColumns = () => {
                 header: "Yetkazib berish vaqti",
                 accessorKey: "time_to_drop",
                 enableSorting: true,
+                cell: ({ row }) => {
+                    const value = row.original.time_to_drop
+                    return value ? value : (
+                            <span className="text-muted-foreground">-</span>
+                        )
+                },
             },
-            {
+        {
                 header: "Ustuvorlik",
                 accessorKey: "priority",
                 enableSorting: true,
+                cell: ({ getValue }) => {
+                    const priority = getValue<number>()
+                    const priorityMap: Record<number, string> = {
+                        1: "Past",
+                        2: "Oʻrta",
+                        3: "Yuqori",
+                    }
+                    return priorityMap[priority] || "Noma'lum"
+                },
             },
             {
                 header: "To'lov turi",
-                accessorKey: "type",
+                accessorKey: "payment_type",
                 enableSorting: true,
-                cell: ({ row: { original } }) => (
-                    <div>
-                        {original.type === 1 ? "COD" : "Other"}
-                    </div>
-                ),
+                 cell: ({ row }) => {
+                    const value = row.original.payment_type
+                    return value ? value : (
+                            <span className="text-muted-foreground">-</span>
+                        )
+                },
             },
             {
                 header: "To'lov summasi",
@@ -92,7 +106,9 @@ export const useConstantColumns = () => {
                 enableSorting: true,
                 cell: ({ row: { original } }) => (
                     <div>
-                        {original.cod ? `${parseFloat(original.cod).toLocaleString()} UZS` : "-"}
+                        {original.cod ?
+                            `${parseFloat(original.cod).toLocaleString()} UZS`
+                        :   "-"}
                     </div>
                 ),
             },
@@ -100,11 +116,23 @@ export const useConstantColumns = () => {
                 header: "Og'irlik (kg)",
                 accessorKey: "weight",
                 enableSorting: true,
+                      cell: ({ row }) => {
+                    const value = row.original.weight
+                    return value ? value : (
+                            <span className="text-muted-foreground">-</span>
+                        )
+                },
             },
             {
                 header: "Hajm (m3)",
                 accessorKey: "volume",
                 enableSorting: true,
+                cell: ({ row }) => {
+                    const value = row.original.volume
+                    return value ? value : (
+                            <span className="text-muted-foreground">-</span>
+                        )
+                },
             },
             {
                 header: "Mahsulot soni",
@@ -116,9 +144,7 @@ export const useConstantColumns = () => {
                 accessorKey: "driver_name",
                 enableSorting: true,
                 cell: ({ row: { original } }) => (
-                    <div>
-                        {original.driver_name || "-"}
-                    </div>
+                    <div>{original.driver_name || "-"}</div>
                 ),
             },
             {
@@ -126,15 +152,22 @@ export const useConstantColumns = () => {
                 accessorKey: "vehicle_name",
                 enableSorting: true,
                 cell: ({ row: { original } }) => (
-                    <div>
-                        {original.vehicle_name || "-"}
-                    </div>
+                    <div>{original.vehicle_name || "-"}</div>
                 ),
             },
             {
-                header: "Ustuvor transport",
+                header: "Ustuvorlik",
                 accessorKey: "priority_vehicle",
                 enableSorting: true,
+                cell: ({ getValue }) => {
+                    const priority = getValue<number>()
+                    const priorityMap: Record<number, string> = {
+                        1: "Past",
+                        2: "Oʻrta",
+                        3: "Yuqori",
+                    }
+                    return priorityMap[priority] || "Noma'lum"
+                },
             },
             {
                 header: "ETA",
@@ -142,7 +175,9 @@ export const useConstantColumns = () => {
                 enableSorting: true,
                 cell: ({ row: { original } }) => (
                     <div>
-                        {original.eta ? new Date(original.eta).toLocaleString() : "-"}
+                        {original.eta ?
+                            new Date(original.eta).toLocaleString()
+                        :   "-"}
                     </div>
                 ),
             },

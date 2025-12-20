@@ -37,6 +37,12 @@ export const useColumnsLogisticiansTable = () => {
                 accessorKey: "phone",
                 header: "Telefon raqami",
                 enableSorting: true,
+                      cell: ({ row }) => {
+                    const value = row.original.phone
+                    return value ? value : (
+                            <span className="text-muted-foreground">-</span>
+                        )
+                },
             },
             {
                 accessorKey: "depot",

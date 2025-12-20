@@ -1,40 +1,35 @@
+import { Skeleton } from "@/components/ui/skeleton"
+import { SETTINGS_SHIPPERS } from "@/constants/api-endpoints"
+import { useGet } from "@/hooks/useGet"
 import { formatMoney } from "@/lib/format-money"
 import { formatPhoneNumber } from "@/lib/format-phone-number"
 import { ColumnDef } from "@tanstack/react-table"
 import { format } from "date-fns"
 import { useMemo } from "react"
-import { useGet } from "@/hooks/useGet"
-import { SETTINGS_SHIPPERS } from "@/constants/api-endpoints"
-import { Skeleton } from "@/components/ui/skeleton"
 
 export const cols = () => {
+    const { data: shippersData, isLoading: isLoadingShippers } =
+        useGet<ListResponse<ShippersType>>(SETTINGS_SHIPPERS)
 
-        const { data: shippersData, isLoading: isLoadingShippers } =
-            useGet<ListResponse<ShippersType>>(SETTINGS_SHIPPERS)
-    
-        const shippers = useMemo(() => {
-            if (!shippersData?.results) return {}
-    
-            return shippersData.results.reduce(
-                (acc: Record<string, string>, shipper: ShippersType) => {
-                    acc[shipper.id] = shipper.name
-                    return acc
-                },
-                {},
-            )
-        }, [shippersData])
+    const shippers = useMemo(() => {
+        if (!shippersData?.results) return {}
+
+        return shippersData.results.reduce(
+            (acc: Record<string, string>, shipper: ShippersType) => {
+                acc[shipper.id] = shipper.name
+                return acc
+            },
+            {},
+        )
+    }, [shippersData])
     return useMemo<ColumnDef<OrderRow>[]>(
         () => [
-
-
             {
                 header: "ID buyurtma",
                 accessorKey: "id",
                 enableSorting: false,
                 cell: ({ row }) => (
-                    <div className="min-w-[140px] ">
-                        {row.original.id}
-                    </div>
+                    <div className="min-w-[140px] ">{row.original.id}</div>
                 ),
             },
             {
@@ -113,7 +108,7 @@ export const cols = () => {
                         2: "In Progress",
                         3: "Partly Delivered",
                         4: "Delivered",
-                        5: "Not Delivered"
+                        5: "Not Delivered",
                     }
                     return (
                         <div className="whitespace-nowrap">
@@ -150,6 +145,12 @@ export const cols = () => {
                 header: "Rad etish sababi",
                 accessorKey: "reject_reason",
                 enableSorting: true,
+                cell: ({ row }) => {
+                    const value = row.original.reject_reason
+                    return value ? value : (
+                            <span className="text-muted-foreground">-</span>
+                        )
+                },
             },
             {
                 header: "Ogʼirlik kg",
@@ -157,17 +158,22 @@ export const cols = () => {
                 enableSorting: true,
             },
 
-          
             {
                 header: "Yuk tushirish vaqti",
                 accessorKey: "time_to_drop",
                 enableSorting: true,
+                cell: ({ row }) => {
+                    const value = row.original.time_to_drop
+                    return value ? value : (
+                            <span className="text-muted-foreground">-</span>
+                        )
+                },
             },
             {
                 header: "Yuk jo'natuvchi",
                 accessorKey: "shipper",
                 enableSorting: false,
-                          cell: ({ row }) => {
+                cell: ({ row }) => {
                     const shipperId = row.getValue("shipper")
 
                     if (isLoadingShippers) {
@@ -176,8 +182,8 @@ export const cols = () => {
 
                     if (!shipperId && shipperId !== 0) return "-"
 
-                    const  shipperName = shippers[shipperId.toString()]
-                    return  shipperName || shipperId
+                    const shipperName = shippers[shipperId.toString()]
+                    return shipperName || shipperId
                 },
             },
             {
@@ -192,20 +198,22 @@ export const cols = () => {
 
             {
                 header: "Uzunlik (Longitude)",
-                accessorKey: "client_data.coordinates", // asl manba
+                accessorKey: "client_data.coordinates",
                 enableSorting: true,
                 sortingFn: (rowA, rowB) => {
-                    const coordA = rowA.original.client_data.coordinates?.[0] ?? 0;
-                    const coordB = rowB.original.client_data.coordinates?.[0] ?? 0;
-                    return coordA - coordB;
+                    const coordA =
+                        rowA.original.client_data.coordinates?.[0] ?? 0
+                    const coordB =
+                        rowB.original.client_data.coordinates?.[0] ?? 0
+                    return coordA - coordB
                 },
                 cell: ({ row }) => {
-                    const longitude = row.original.client_data.coordinates?.[0];
+                    const longitude = row.original.client_data.coordinates?.[0]
                     return (
                         <div className="whitespace-nowrap font-medium">
                             {longitude ? longitude.toFixed(6) : "-"}
                         </div>
-                    );
+                    )
                 },
             },
             {
@@ -213,23 +221,31 @@ export const cols = () => {
                 accessorKey: "client_data.coordinates",
                 enableSorting: true,
                 sortingFn: (rowA, rowB) => {
-                    const coordA = rowA.original.client_data.coordinates?.[1] ?? 0;
-                    const coordB = rowB.original.client_data.coordinates?.[1] ?? 0;
-                    return coordA - coordB;
+                    const coordA =
+                        rowA.original.client_data.coordinates?.[1] ?? 0
+                    const coordB =
+                        rowB.original.client_data.coordinates?.[1] ?? 0
+                    return coordA - coordB
                 },
                 cell: ({ row }) => {
-                    const latitude = row.original.client_data.coordinates?.[1];
+                    const latitude = row.original.client_data.coordinates?.[1]
                     return (
                         <div className="whitespace-nowrap font-medium">
                             {latitude ? latitude.toFixed(6) : "-"}
                         </div>
-                    );
+                    )
                 },
             },
-               {
+            {
                 header: "Reys hududi",
                 accessorKey: "client_data.address_zone",
                 enableSorting: true,
+                cell: ({ row }) => {
+                    const value = row.original.client_data.address_zone
+                    return value ? value : (
+                            <span className="text-muted-foreground">-</span>
+                        )
+                },
             },
             {
                 header: "Toʼlov naqd summasi",
@@ -241,6 +257,12 @@ export const cols = () => {
                 header: "Hajm m3",
                 accessorKey: "volume",
                 enableSorting: true,
+                cell: ({ row }) => {
+                    const value = row.original.volume
+                    return value ? value : (
+                            <span className="text-muted-foreground">-</span>
+                        )
+                },
             },
             {
                 header: "Yetkazib beruvchi",
@@ -248,17 +270,17 @@ export const cols = () => {
                 enableSorting: true,
                 cell: ({ row }) => (
                     <div className="min-w-[200px] ">
-                        {row.original.client_data.company_name}
+                        {row.original.client_data.company_name || "-"}
                     </div>
                 ),
             },
-   {
+            {
                 header: "Yetib keldi",
                 accessorKey: "end_time",
                 enableSorting: true,
                 cell: ({ row }) => (
                     <div className="min-w-[200px] ">
-                        {row.original.end_time}
+                        {row.original.end_time || "-"}
                     </div>
                 ),
             },
@@ -301,7 +323,7 @@ export const cols = () => {
             },
             {
                 header: "Elektron pochta",
-                accessorKey: "client_data.email",  
+                accessorKey: "client_data.email",
                 enableSorting: true,
                 cell: ({ row }) => (
                     <div className="min-w-[200]">
@@ -320,6 +342,6 @@ export const cols = () => {
                 ),
             },
         ],
-        [shippers,isLoadingShippers],
+        [shippers, isLoadingShippers],
     )
 }

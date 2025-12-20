@@ -23,6 +23,12 @@ export const useoColumns = () => {
                 accessorKey: "description",
                 header: "Eslatma",
                 enableSorting: true,
+                cell: ({ row }) => {
+                    const value = row.original.description
+                    return value ? value : (
+                            <span className="text-muted-foreground">-</span>
+                        )
+                },
             },
             {
                 accessorKey: "unit",

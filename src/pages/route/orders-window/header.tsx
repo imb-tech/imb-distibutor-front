@@ -72,10 +72,10 @@ const HeaderRoute = () => {
                             { id: "2", name: "Qo'shimcha" },
                         ]}
                     />
-                    <DownloadAsExcel
+                    {/* <DownloadAsExcel
                         name="Yuklab olish"
                         url="/excel"
-                    />
+                    /> */}
                 </div>
             </div>
         </div>

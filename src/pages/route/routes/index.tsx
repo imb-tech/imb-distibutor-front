@@ -12,7 +12,7 @@ const RouteOrderMain = () => {
                         <h1 className="text-xl">Marshrutlar</h1>
                         <ParamInput fullWidth />
                     </div>
-                    <div className="flex items-center gap-2">
+                    {/* <div className="flex items-center gap-2">
                         <ParamCombobox
                             paramName="doimiy"
                             label="doimiy"
@@ -23,7 +23,7 @@ const RouteOrderMain = () => {
                             label="excel"
                             options={[]}
                         />
-                    </div>
+                    </div> */}
                 </div>
 
                 <div className="rounded-md border overflow-hidden">

@@ -84,7 +84,7 @@ type RouteTypes = {
 type OrderRoutesType = {
     id: number
     client_address: string
-    client_coordination: number[]
+    client_coordinates: number[]
     number: number
     order_uuid:  string
     order: number

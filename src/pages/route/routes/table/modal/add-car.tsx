@@ -90,57 +90,61 @@ const AddVehiclesModal = () => {
 
     const handleSelectionChange = (selectedRows: OrderRoutesType[]) => {
         const newSelectedIds = selectedRows.map((row) => row.order)
-
         setSelectedOrderIds(newSelectedIds)
     }
 
     return (
         <form
             onSubmit={handleSubmit(onSubmit)}
-            className="space-y-4 w-full overflow-hidden p-1"
+            className="flex flex-col h-[70vh] w-full"
         >
-            <div className="grid md:grid-cols-2 gap-5">
-                <FormInput
-                    required
-                    name="name"
-                    label="Yo'l"
-                    methods={form}
-                    maxLength={20}
-                    placeholder="Misol: 01 A 123 AA"
-                />
-                <FormCombobox
-                    required
-                    name="driver"
-                    control={form.control}
-                    label="Haydovchi"
-                    options={driverOptions}
-                    labelKey="label"
-                    valueKey="value"
-                />
-                <FormCombobox
-                    required
-                    name="vehicle"
-                    control={form.control}
-                    label="Avtomobil"
-                    options={vehiclesOptions}
-                    labelKey="label"
-                    valueKey="value"
-                />
-                <FormDatePicker
-                    required
-                    name="start_date"
-                    label="Boshlanish sanasi"
-                    control={form.control}
-                    className={"w-full"}
+            {/* Form qismi - fixed height */}
+            <div className="space-y-4 flex-shrink-0 pb-4">
+                <div className="grid md:grid-cols-2 gap-5">
+                    <FormInput
+                        required
+                        name="name"
+                        label="Yo'l"
+                        methods={form}
+                        maxLength={20}
+                        placeholder="Misol: 01 A 123 AA"
+                    />
+                    <FormCombobox
+                        required
+                        name="driver"
+                        control={form.control}
+                        label="Haydovchi"
+                        options={driverOptions}
+                        labelKey="label"
+                        valueKey="value"
+                    />
+                    <FormCombobox
+                        required
+                        name="vehicle"
+                        control={form.control}
+                        label="Avtomobil"
+                        options={vehiclesOptions}
+                        labelKey="label"
+                        valueKey="value"
+                    />
+                    <FormDatePicker
+                        required
+                        name="start_date"
+                        label="Boshlanish sanasi"
+                        control={form.control}
+                        className={"w-full"}
+                    />
+                </div>
+            </div>
+
+            <div className="flex-1 min-h-0 ">
+                <ModalOrderTable
+                    routes={routes?.order_routes || []}
+                    onSelectedRowsChange={handleSelectionChange}
                 />
             </div>
 
-            <ModalOrderTable
-                routes={routes?.order_routes || []}
-                onSelectedRowsChange={handleSelectionChange}
-            />
-
-            <div className="flex justify-end ">
+            <div className="flex justify-end flex-shrink-0 pt-4   mt-4">
                 <Button
                     loading={isPending}
                     type="submit"

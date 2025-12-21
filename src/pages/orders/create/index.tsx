@@ -102,6 +102,7 @@ export const AddOrder = () => {
                         className={"grid grid-cols-2"}
                         classNameItem={"border rounded-lg p-3"}
                         itemClassName="w-full"
+                        
                         options={[
                             { id: 1, name: "Doimiy" },
                             { id: 2, name: "Qo'shimcha" },

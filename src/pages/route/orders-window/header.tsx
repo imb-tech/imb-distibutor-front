@@ -1,7 +1,6 @@
 import { ParamCombobox } from "@/components/as-params/combobox"
 import ParamDatePicker from "@/components/as-params/date-picker"
 import ParamInput from "@/components/as-params/input"
-import DownloadAsExcel from "@/components/download-as-excel"
 import { Button } from "@/components/ui/button"
 import { SELECTED_ORDER_IDS } from "@/constants/api-endpoints"
 import { useModal } from "@/hooks/useModal"
@@ -25,8 +24,6 @@ const HeaderRoute = () => {
     }
 
     const selectedOrderIds = getData<string[]>(SELECTED_ORDER_IDS) || []
-
- 
 
     return (
         <div className="space-y-2">
@@ -59,7 +56,6 @@ const HeaderRoute = () => {
                 </div>
             </div>
 
-
             <div className="flex items-center gap-3">
                 <ParamInput fullWidth />
                 <div className="flex items-center gap-3">
@@ -71,6 +67,7 @@ const HeaderRoute = () => {
                             { id: "1", name: "Doimiy" },
                             { id: "2", name: "Qo'shimcha" },
                         ]}
+                        isSearch={false}
                     />
                     {/* <DownloadAsExcel
                         name="Yuklab olish"

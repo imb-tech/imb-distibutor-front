@@ -1,4 +1,12 @@
+import SeeMap from "@/components/custom/see-map"
+import { Button } from "@/components/ui/button"
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover"
 import { ColumnDef } from "@tanstack/react-table"
+import { MapPin } from "lucide-react"
 import { useMemo } from "react"
 
 export const useColumnsCustomersTable = () => {
@@ -34,24 +42,41 @@ export const useColumnsCustomersTable = () => {
                     </div>
                 ),
             },
-            // {
-            //     accessorKey: "loading_coordinates",
-            //     header: "Yuk olish koordinatalari",
-            //     enableSorting: false,
-            //     cell: ({ row }) => {
-            //         const coords = row.original.loading_coordinates as number[]
-            //         if (!coords || coords.length !== 2) return "-"
-            //         return `${coords[0]?.toFixed(6)},${coords[1]?.toFixed(6)}`
-            //     },
-            // },
+
             {
                 accessorKey: "coordinates",
                 header: "Koordinatalar",
                 enableSorting: false,
                 cell: ({ row }) => {
-                    const coords = row.original.coordinates as number[]
-                    if (!coords || coords.length !== 2) return "-"
-                    return `${coords[0]?.toFixed(6)}, ${coords[1]?.toFixed(6)}`
+                    return (
+                        <div className="flex items-center">
+                            <Popover>
+                                <PopoverTrigger
+                                    className="!text-primary"
+                                    asChild
+                                >
+                                    <div className="flex items-center gap-1 ">
+                                        <Button
+                                            type="button"
+                                            icon={<MapPin width={20} />}
+                                        />
+                                    </div>
+                                </PopoverTrigger>
+                                <PopoverContent className="p-0 w-[300px] h-[400px] sm:w-[600px] aspect-[3/2]">
+                                    <SeeMap
+                                        lat={
+                                            +row.original.coordinates[0] ||
+                                            41.2775
+                                        }
+                                        long={
+                                            +row.original.coordinates[1] ||
+                                            69.2853
+                                        }
+                                    />
+                                </PopoverContent>
+                            </Popover>
+                        </div>
+                    )
                 },
             },
             {

@@ -1,8 +1,8 @@
 import { ParamCombobox } from "@/components/as-params/combobox"
 import ParamInput from "@/components/as-params/input"
+import DownloadAsExcel from "@/components/download-as-excel"
 import { Card, CardContent } from "@/components/ui/card"
 import { CarsTable } from "./table"
-import DownloadAsExcel from "@/components/download-as-excel"
 
 const RouteOrderMain = () => {
     return (
@@ -22,9 +22,10 @@ const RouteOrderMain = () => {
                                 { id: "1", name: "Doimiy" },
                                 { id: "2", name: "Qo'shimcha" },
                             ]}
+                            isSearch={false}
                         />
                     </div>
-                    <DownloadAsExcel url="/" name="routes"/>
+                    <DownloadAsExcel url="/" name="routes" />
                 </div>
 
                 <div className="rounded-md border ">

@@ -14,7 +14,7 @@ type ProductsSectionProps = {
 export const ProductsSection = ({ form }: ProductsSectionProps) => {
     const { watch, control } = form
 
-    const { fields, append, remove, update, replace, insert } = useFieldArray({
+    const { fields, append, remove, insert } = useFieldArray({
         control,
         name: "loads",
     })
@@ -44,14 +44,14 @@ export const ProductsSection = ({ form }: ProductsSectionProps) => {
         append({
             id: `load-${Date.now()}`,
             product: 0,
-            quantity: 1,
+            quantity: 0,
             price: "0",
             order: fields.length + 1,
             product_name: "",
             description: "",
-            unit: 0,
+            unit: 100,
             unit_name: "Dona",
-            currency: 1,
+            currency: 0,
             total_amount: 0,
         })
     }

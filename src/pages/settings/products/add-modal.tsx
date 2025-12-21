@@ -106,7 +106,6 @@ const AddProductModal = () => {
                     />
 
                     <FormInput
-                        required
                         name="description"
                         label="Eslatma"
                         methods={form}

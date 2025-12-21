@@ -7,8 +7,9 @@ import {
     RouteButton,
     YMaps,
 } from "@pbe/react-yandex-maps"
+import { useSearch } from "@tanstack/react-router"
 import axios from "axios"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 const getUniqueColor = (index: number): string => {
     const r = (index * 123) % 256
@@ -52,8 +53,13 @@ const getDrivingRoute = async (points: number[][]): Promise<number[][]> => {
 }
 
 export default function YandexMapView() {
-    const { isSuccess, data } = useGet<RouteMaps[]>(ROUTE_MAPS)
+    const { route_id } = useSearch({ from: "/_main/route/" })
+    const { isSuccess, data } = useGet<RouteMaps[]>(ROUTE_MAPS, {
+        params: { uuid: route_id },
+    })
 
+    const mapRef = useRef<any>(null)
+    const containerRef = useRef<HTMLDivElement>(null)
     const [routesGeometry, setRoutesGeometry] = useState<
         Record<number, number[][]>
     >({})
@@ -62,6 +68,27 @@ export default function YandexMapView() {
         center: [41.2995, 69.2401],
         zoom: 12,
     }
+
+    useEffect(() => {
+        if (!mapRef.current) return
+
+        const resizeObserver = new ResizeObserver(() => {
+            // Kichik kechikish bilan container to'liq o'zgarishini kutish
+            setTimeout(() => {
+                if (mapRef.current) {
+                    mapRef.current.container.fitToViewport()
+                }
+            }, 100)
+        })
+
+        if (containerRef.current) {
+            resizeObserver.observe(containerRef.current)
+        }
+
+        return () => {
+            resizeObserver.disconnect()
+        }
+    }, [mapRef.current])
 
     useEffect(() => {
         if (!isSuccess || !data) return
@@ -89,8 +116,6 @@ export default function YandexMapView() {
         loadRoutes()
     }, [isSuccess, data])
 
-
-
     return (
         <YMaps
             query={{
@@ -99,14 +124,27 @@ export default function YandexMapView() {
                 load: "package.full",
             }}
         >
-            <div style={{ height: "700px", width: "100%" }}>
-                <Map defaultState={defaultState} width="100%" height="100%">
+            <div
+                ref={containerRef}
+                style={{
+                    height: "700px",
+                    width: "100%",
+                }}
+            >
+                <Map
+                    defaultState={defaultState}
+                    width="100%"
+                    height="100%"
+                    instanceRef={(ref) => {
+                        mapRef.current = ref
+                    }}
+                >
                     <RouteButton options={{ float: "right" }} />
 
                     {isSuccess &&
-                        data.map((route, index) => (
+                        data.map((route) => (
                             <div key={route.id}>
-                                {/* Do‘konlar */}
+                                {/* Do'konlar */}
                                 {route.order_routes.map((order, i) => (
                                     <Placemark
                                         key={order.id}
@@ -126,17 +164,23 @@ export default function YandexMapView() {
                                         }}
                                         options={{
                                             preset: "islands#blueCircleIcon",
-                                            iconColor: getUniqueColor(order.id),
+                                            iconColor:
+                                                !route_id ?
+                                                    getUniqueColor(order.id)
+                                                :   undefined,
                                         }}
                                     />
                                 ))}
 
-                                {/* DRIVER YO‘LI */}
+                                {/* DRIVER YO'LI */}
                                 {routesGeometry[route.id] && (
                                     <Polyline
                                         geometry={routesGeometry[route.id]}
                                         options={{
-                                            strokeColor: getUniqueColor(index),
+                                            strokeColor:
+                                                !route_id ?
+                                                    getUniqueColor(route.id)
+                                                :   undefined,
                                             strokeWidth: 5,
                                             strokeOpacity: 0.85,
                                         }}

@@ -38,6 +38,7 @@ const Products = () => {
     return (
         <div>
             <DataTable
+                numeration
                 loading={isLoading}
                 data={data?.results}
                 columns={columns}

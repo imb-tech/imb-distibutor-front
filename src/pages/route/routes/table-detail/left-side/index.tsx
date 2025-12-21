@@ -97,7 +97,7 @@ export const LeftSideCars = () => {
                     <div className="flex items-center justify-between"></div>
                 </div>
 
-                <div className="flex-1 overflow-y-auto space-y-1">
+                <div className="flex-1 overflow-y-auto space-y-2">
                     {orderRoutes.map((route: any, index: number) => {
                         const isActive = index === activeOrderIndex
                         const isCompleted = completedSteps.has(index)
@@ -106,7 +106,7 @@ export const LeftSideCars = () => {
                             <div
                                 key={route.order_uuid}
                                 className={cn(
-                                    "relative flex items-start gap-3 pb-5 cursor-pointer hover:bg-accent/30 p-2 rounded-lg transition-all",
+                                    "relative flex items-center gap-3 pb-5 cursor-pointer hover:bg-accent/30 p-2 rounded-lg transition-all",
                                     isActive && "bg-accent/20",
                                 )}
                                 onClick={() =>
@@ -126,7 +126,7 @@ export const LeftSideCars = () => {
                                     </div>
                                 )}
 
-                                <div className="relative z-10 mt-1">
+                                <div className="relative z-10 ">
                                     <div
                                         className={cn(
                                             "flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 transition-all",
@@ -149,7 +149,7 @@ export const LeftSideCars = () => {
                                     )}
                                 </div>
 
-                                <div className="pt-0.5 flex-1 min-w-0">
+                                <div className="flex-1">
                                     <h3
                                         className={cn(
                                             "font-medium text-sm leading-tight line-clamp-2",

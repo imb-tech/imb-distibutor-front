@@ -44,9 +44,10 @@ const getUnitById = (id: number) => {
         { id: 4, name: "Liter", short_name: "l" },
         { id: 5, name: "Cubic meter", short_name: "m³" },
         { id: 6, name: "Gallon", short_name: "gal" },
+        { id: 100, name: "-", short_name: "-" },
     ]
 
-    return units.find((u) => u.id === id) || units[0]
+    return units.find((u) => u.id === id) || units[100]
 }
 
 const getCurrencySymbol = (currencyId: number) => {
@@ -62,7 +63,7 @@ const getCurrencySymbol = (currencyId: number) => {
         case 4:
             return "$"
         default:
-            return "-"
+            return ""
     }
 }
 
@@ -115,7 +116,7 @@ export const ProductsTable = ({
             header: "Birlik",
             cell: ({ row }) => {
                 const index = row.index
-                const currentUnit = loads[index]?.unit || 0
+                const currentUnit = loads[index]?.unit || 100
                 const unit = getUnitById(currentUnit)
 
                 return <div className="min-w-24">{unit.name}</div>
@@ -133,7 +134,7 @@ export const ProductsTable = ({
                             methods={form}
                             name={`loads.${index}.quantity`}
                             placeholder="1"
-                            className="w-20"
+                            className="w-full"
                             required
                         />
                     </div>
@@ -151,7 +152,7 @@ export const ProductsTable = ({
                         <FormInput
                             methods={form}
                             name={`loads.${index}.price`}
-                            placeholder="0.00"
+                            placeholder="0"
                             className="w-full"
                         />
                     </div>
@@ -189,7 +190,7 @@ export const ProductsTable = ({
                 const currencySymbol = getCurrencySymbol(currentCurrency)
 
                 return (
-                    <div className="font-medium text-sm text-center pr-2 min-w-32">
+                    <div className="font-medium text-sm  pr-2 min-w-32">
                         {formatMoney(total)} {currencySymbol}
                     </div>
                 )

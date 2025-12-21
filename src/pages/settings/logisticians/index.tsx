@@ -44,7 +44,10 @@ const Logisticians = () => {
                 data={data?.results}
                 onDelete={handleDelete}
                 onEdit={({ original }) => handleEdit(original)}
-                numeration={true}
+              numeration
+                paginationProps={{
+                    totalPages: data?.total_pages,
+                }}
                 head={
                     <TableHeader
                         fileName="Logistlar"

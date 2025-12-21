@@ -20,11 +20,6 @@ export const useoColumns = () => {
                 enableSorting: true,
             },
             {
-                accessorKey: "description",
-                header: "Eslatma",
-                enableSorting: true,
-            },
-            {
                 accessorKey: "unit",
                 header: "O'lchov turi",
                 enableSorting: true,
@@ -65,6 +60,15 @@ export const useoColumns = () => {
                 enableSorting: true,
                 cell: ({ row: { original } }) => (
                     <span>{formatMoney(original.price)}</span>
+                ),
+            },
+
+            {
+                accessorKey: "description",
+                header: "Eslatma",
+                enableSorting: true,
+                cell: ({ row }) => (
+                    <span>{row.original.description || "-"}</span>
                 ),
             },
         ],

@@ -39,11 +39,15 @@ const Drivers = () => {
     return (
         <>
             <DataTable
+                numeration
                 loading={isLoading}
                 columns={columns}
                 data={data?.results}
                 onDelete={handleDelete}
                 onEdit={({ original }) => handleEdit(original)}
+                paginationProps={{
+                    totalPages: data?.total_pages,
+                }}
                 head={
                     <TableHeader
                         fileName="Haydovchilar"
@@ -52,7 +56,11 @@ const Drivers = () => {
                     />
                 }
             />
-            <DeleteModal path={SETTINGS_DRIVERS_UPDATE} refetchKeys={[SETTINGS_DRIVERS]} id={item?.uuid} />
+            <DeleteModal
+                path={SETTINGS_DRIVERS_UPDATE}
+                refetchKeys={[SETTINGS_DRIVERS]}
+                id={item?.uuid}
+            />
             <Modal
                 size="max-w-2xl"
                 title={

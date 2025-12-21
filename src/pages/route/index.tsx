@@ -13,11 +13,18 @@ const RouteMain = () => {
                 options={paramOptions}
                 className={"mb-2 bg-background"}
             />
-            <div className="grid lg:grid-cols-2 gap-3">
-                <FleetDashboard />
-                {page_tabs === "routes" ?
-                    <RouteOrderMain />
-                :   <RoutesMain />}
+            <div className="flex gap-3 h-[calc(100vh-120px)]">
+                {/* MAP — QOTIB TURADI */}
+                <div className="w-1/2 sticky top-[64px] ">
+                    <FleetDashboard />
+                </div>
+
+                {/* CONTENT — SCROLL BO‘LADI */}
+                <div className="w-1/2 overflow-y-auto ">
+                    {page_tabs === "routes" ?
+                        <RouteOrderMain />
+                    :   <RoutesMain />}
+                </div>
             </div>
         </div>
     )

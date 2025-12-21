@@ -1,6 +1,3 @@
-import { Skeleton } from "@/components/ui/skeleton"
-import { SETTINGS_DRIVERS, SETTINGS_WAREHOUSE } from "@/constants/api-endpoints"
-import { useGet } from "@/hooks/useGet"
 import { ColumnDef } from "@tanstack/react-table"
 import { format } from "date-fns"
 import { Check, X } from "lucide-react"
@@ -15,46 +12,8 @@ const FUEL_TYPES: Record<number, string> = {
     6: "Propan",
 }
 
-const VEHICLE_TYPES: Record<number, string> = {
-    1: "Yengil avtomobil",
-    2: "Yuk avtomobili",
-    3: "Avtobus",
-    4: "Treyler",
-    5: "Maxsus texnika",
-}
 
 export const useColumnsCarsTable = () => {
-    const { data: warehousesData, isLoading: isLoadingWarehouses } = useGet<{
-        results: WarehouseType[]
-    }>(SETTINGS_WAREHOUSE)
-
-    const { data: driversData, isLoading: isLoadingDrivers } =
-        useGet<ListResponse<DriversType>>(SETTINGS_DRIVERS)
-
-    const warehouseMap = useMemo(() => {
-        if (!warehousesData?.results) return {}
-
-        return warehousesData.results.reduce(
-            (acc: Record<string, string>, warehouse: WarehouseType) => {
-                acc[warehouse.id] = warehouse.name
-                return acc
-            },
-            {},
-        )
-    }, [warehousesData])
-
-    const driverMap = useMemo(() => {
-        if (!driversData?.results) return {}
-
-        return driversData?.results.reduce(
-            (acc: Record<string, string>, driver: DriversType) => {
-                acc[driver.id] = driver.full_name
-                return acc
-            },
-            {},
-        )
-    }, [driversData])
-
     return useMemo<ColumnDef<CarsType>[]>(
         () => [
             {
@@ -66,30 +25,14 @@ export const useColumnsCarsTable = () => {
                 ),
             },
             {
-                accessorKey: "type",
+                accessorKey: "type_name",
                 header: "Avtomobil turi",
                 enableSorting: true,
-                cell: ({ row }) => {
-                    const typeId = row.original.type
-                    return <span>{VEHICLE_TYPES[typeId] || `${typeId}`}</span>
-                },
             },
             {
                 header: "Haydovchi",
-                accessorKey: "driver",
+                accessorKey: "driver_name",
                 enableSorting: true,
-                cell: ({ row }) => {
-                    const driverId = row.getValue("driver")
-
-                    if (isLoadingWarehouses) {
-                        return <Skeleton className="h-4 w-20" />
-                    }
-
-                    if (!driverId && driverId !== 0) return "-"
-
-                    const driverName = driverMap[driverId.toString()]
-                    return driverName || driverId
-                },
             },
             {
                 accessorKey: "license",
@@ -155,23 +98,11 @@ export const useColumnsCarsTable = () => {
                 },
             },
             {
-                accessorKey: "depot",
+                accessorKey: "depot_name",
                 header: "Ombor",
                 enableSorting: true,
-                cell: ({ row }) => {
-                    const depotId = row.getValue("depot")
-
-                    if (isLoadingWarehouses) {
-                        return <Skeleton className="h-4 w-20" />
-                    }
-
-                    if (!depotId && depotId !== 0) return "-"
-
-                    const driverName = warehouseMap[depotId.toString()]
-                    return driverName || depotId
-                },
             },
         ],
-        [warehouseMap, isLoadingWarehouses, driverMap, isLoadingDrivers],
+        [],
     )
 }

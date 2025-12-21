@@ -38,7 +38,7 @@ const Cars = () => {
                 loading={isLoading}
                 columns={columns}
                 data={data?.results}
-                numeration={true}
+                numeration
                 onDelete={handleDelete}
                 paginationProps={{
                     totalPages: data?.total_pages,

@@ -104,12 +104,12 @@ export default function YandexMapView() {
 
                 const fullPoints = [startPoint, ...shopPoints]
 
-                // const geometry = await getDrivingRoute(fullPoints)
+                const geometry = await getDrivingRoute(fullPoints)
 
-                // setRoutesGeometry((prev) => ({
-                //     ...prev,
-                //     [route.id]: geometry,
-                // }))
+                setRoutesGeometry((prev) => ({
+                    ...prev,
+                    [route.id]: geometry,
+                }))
             }
         }
 

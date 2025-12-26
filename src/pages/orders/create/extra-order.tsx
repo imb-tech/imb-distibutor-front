@@ -76,10 +76,14 @@ export const ExtraOrders = ({ form }: Props) => {
         [setValue],
     )
 
+    const orderType = watch("type")
+    const inputRequired = Number(orderType) === 2 ? true : false
+
     return (
         <div className="space-y-6">
             <div className="grid grid-cols-4 gap-4 items-center">
                 <FormInput
+                required={inputRequired}
                     label="Buyurtma ID"
                     methods={form}
                     name="code"
@@ -93,6 +97,7 @@ export const ExtraOrders = ({ form }: Props) => {
                     control={control}
                     name="scheduled_delivery_date"
                     placeholder="Sanani tanlang"
+                     required={inputRequired}
                 />
             </div>
 
@@ -103,7 +108,7 @@ export const ExtraOrders = ({ form }: Props) => {
                 <div className="grid grid-cols-2 gap-4">
                     <FormCombobox
                         label="Xaridor"
-                        required
+                         required={inputRequired}
                         options={clientsData?.results}
                         name="client"
                         control={control}
@@ -113,7 +118,7 @@ export const ExtraOrders = ({ form }: Props) => {
 
                     <FormCombobox
                         label="Ustuvor transport"
-                        required
+                         required={inputRequired}
                         options={[
                             { name: "Yuk mashinasi", id: 1 },
                             { name: "Furgon", id: 2 },
@@ -127,7 +132,7 @@ export const ExtraOrders = ({ form }: Props) => {
 
                     <FormCombobox
                         label="To'lov turi"
-                        required
+                         required={inputRequired}
                         options={paymentsData?.results}
                         name="payment_type"
                         control={control}
@@ -154,6 +159,7 @@ export const ExtraOrders = ({ form }: Props) => {
                         control={control}
                         name="weight"
                         placeholder="Og'irlik kiriting"
+                         required={inputRequired}
                     />
 
                     <FormNumberInput
@@ -162,6 +168,7 @@ export const ExtraOrders = ({ form }: Props) => {
                         control={control}
                         name="volume"
                         placeholder="Hajm kiriting"
+                         required={inputRequired}
                     />
 
                     {/* MAP CARD */}

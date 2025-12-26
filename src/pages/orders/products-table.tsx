@@ -6,7 +6,7 @@ import { DataTable } from "@/components/ui/datatable"
 import { formatMoney } from "@/lib/format-money"
 import { ColumnDef } from "@tanstack/react-table"
 import { Copy, X } from "lucide-react"
-import { UseFormReturn, useWatch } from "react-hook-form"
+import { UseFormReturn } from "react-hook-form"
 
 type LoadRow = {
     id?: string
@@ -60,7 +60,7 @@ const getCurrencySymbol = (currencyId: number) => {
             return "€"
         case 4:
             return "£"
-        case 4:
+        case 5:
             return "$"
         default:
             return ""
@@ -76,6 +76,8 @@ export const ProductsTable = ({
 }: ProductsTableProps) => {
     const { control, watch, setValue } = form
     const loads = watch("loads") || []
+
+    console.log(loads)
 
     const columns: ColumnDef<LoadRow>[] = [
         {
@@ -98,8 +100,14 @@ export const ProductsTable = ({
                             className="w-full"
                             handleItem={(item) => {
                                 setValue(`loads.${index}.product`, item.id)
-                                setValue(`loads.${index}.unit`, item.unit)
-                                setValue(`loads.${index}.price`, item.price)
+                                setValue(
+                                    `loads.${index}.unit`,
+                                    Number(item.unit),
+                                )
+                                setValue(
+                                    `loads.${index}.price`,
+                                    Number(item.price),
+                                )
                                 setValue(
                                     `loads.${index}.currency`,
                                     item.currency,
@@ -116,9 +124,8 @@ export const ProductsTable = ({
             header: "Birlik",
             cell: ({ row }) => {
                 const index = row.index
-                const currentUnit = loads[index]?.unit || 100
+                const currentUnit = loads[index]?.unit
                 const unit = getUnitById(currentUnit)
-
                 return <div className="min-w-24">{unit.name}</div>
             },
         },
@@ -161,36 +168,19 @@ export const ProductsTable = ({
         },
 
         {
-            id: "total_amount",
-            accessorKey: "total_amount",
             header: "Jami",
             cell: ({ row }) => {
                 const index = row.index
-                const quantity = useWatch({
-                    control,
-                    name: `loads.${index}.quantity`,
-                    defaultValue: 0,
-                })
 
-                const price = useWatch({
-                    control,
-                    name: `loads.${index}.price`,
-                    defaultValue: 0,
-                })
+                const quantity = Number(loads[index]?.quantity || 1)
+                const price = Number(loads[index]?.price || 1)
+                const currency = loads[index]?.currency
 
-                const currentCurrency = useWatch({
-                    control,
-                    name: `loads.${index}.currency`,
-                    defaultValue: 1,
-                })
-
-                const quantityNum = parseFloat(quantity?.toString() || "0")
-                const priceNum = parseFloat(price?.toString() || "0")
-                const total = quantityNum * priceNum
-                const currencySymbol = getCurrencySymbol(currentCurrency)
+                const total = quantity * price
+                const currencySymbol = getCurrencySymbol(currency)
 
                 return (
-                    <div className="font-medium text-sm  pr-2 min-w-32">
+                    <div className="min-w-32 font-medium">
                         {formatMoney(total)} {currencySymbol}
                     </div>
                 )

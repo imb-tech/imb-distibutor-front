@@ -18,7 +18,10 @@ const AddProductModal = () => {
 
     const currentProduct = getData<ProductsType>(SETTINGS_PRODUCTS)
     const form = useForm<ProductsType>({
-        defaultValues: currentProduct,
+        defaultValues: {
+            ...currentProduct,
+            unit: String(currentProduct?.unit),
+        },
     })
 
     const CURRENCY_OPTIONS = [
@@ -31,13 +34,13 @@ const AddProductModal = () => {
     ]
 
     const UNIT_OPTIONS = [
-        { value: 0, label: "Pieces" },
-        { value: 1, label: "Kg" },
-        { value: 2, label: "Pound" },
-        { value: 3, label: "Square meter" },
-        { value: 4, label: "Liter" },
-        { value: 5, label: "Cubic meter" },
-        { value: 6, label: "Gallon" },
+        { value: "0", label: "Pieces" },
+        { value: "1", label: "Kg" },
+        { value: "2", label: "Pound" },
+        { value: "3", label: "Square meter" },
+        { value: "4", label: "Liter" },
+        { value: "5", label: "Cubic meter" },
+        { value: "6", label: "Gallon" },
     ]
 
     const { handleSubmit, reset, setError } = form
@@ -90,6 +93,7 @@ const AddProductModal = () => {
             postMutate(SETTINGS_PRODUCTS, values)
         }
     }
+
     return (
         <>
             <div className="w-full max-w-4xl mx-auto p-1">

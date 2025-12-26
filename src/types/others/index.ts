@@ -30,7 +30,7 @@ type ProductsType = {
     id: number
     uuid: string
     name: string
-    unit: number
+    unit: string
     price: string
     description: string
     currency: number

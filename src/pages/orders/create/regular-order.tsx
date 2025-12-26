@@ -4,9 +4,9 @@ import { FormInput } from "@/components/form/input"
 import { FormNumberInput } from "@/components/form/number-input"
 import { SETTINGS_CUSTOMERS } from "@/constants/api-endpoints"
 import { useGet } from "@/hooks/useGet"
+import { Clock } from "lucide-react"
 import { UseFormReturn } from "react-hook-form"
 import { ProductsSection } from "./add-products"
-import { Clock } from "lucide-react"
 
 type Props = {
     form: UseFormReturn<any>
@@ -27,10 +27,15 @@ export const RegularOrders = ({ form }: Props) => {
     const { data: clientsData } =
         useGet<ListResponse<CustomersType>>(SETTINGS_CUSTOMERS)
 
+    const orderType = form.watch("type")
+
+    const inputRequired = Number(orderType) === 1 ? true : false
+
     return (
         <div className="space-y-6">
             <div className="grid grid-cols-4 gap-4">
                 <FormInput
+                    required={inputRequired}
                     label="Buyurtma ID"
                     methods={form}
                     name="code"
@@ -40,7 +45,6 @@ export const RegularOrders = ({ form }: Props) => {
                 <FormCombobox
                     label="Ustuvorlik"
                     placeholder="Ustuvorlik darajasini tanlang"
-                    required
                     options={[
                         { name: "Yuqori", id: 3 },
                         { name: "O'rtacha", id: 2 },
@@ -48,6 +52,7 @@ export const RegularOrders = ({ form }: Props) => {
                     ]}
                     name="priority"
                     control={form.control}
+                    required={inputRequired}
                 />
 
                 <FormDatePicker
@@ -56,13 +61,13 @@ export const RegularOrders = ({ form }: Props) => {
                     control={form.control}
                     name="scheduled_delivery_date"
                     placeholder="Sanani tanlang"
-                    required
+                    required={inputRequired}
                 />
 
                 <FormCombobox
                     label="Ombor"
                     placeholder="Omborni tanlang"
-                    required
+                    required={inputRequired}
                     options={[
                         { name: "Asosiy ombor", id: 1 },
                         { name: "B ombori", id: 2 },
@@ -77,7 +82,7 @@ export const RegularOrders = ({ form }: Props) => {
                     <FormCombobox
                         label="Xaridor"
                         placeholder="Xaridorni tanlang"
-                        required
+                        required={inputRequired}
                         options={clientsData?.results}
                         name="client"
                         control={form.control}
@@ -100,7 +105,7 @@ export const RegularOrders = ({ form }: Props) => {
                             name="priority_vehicle"
                             control={form.control}
                             className="w-full"
-                            required
+                            required={inputRequired}
                         />
                     </div>
                 </div>
@@ -112,18 +117,15 @@ export const RegularOrders = ({ form }: Props) => {
                         control={form.control}
                         name="cod"
                         placeholder="Naqd to'lov miqdori"
-                        required
+                        required={inputRequired}
                     />
                     <FormInput
                         label="Yetkazish vaqti"
-                        prefixIcon={
-                            <Clock className="h-4 w-4" />
-                        }
+                        prefixIcon={<Clock className="h-4 w-4" />}
                         methods={form}
                         name="time_to_drop"
                         type="time"
                         className="w-full"
-                        required
                     />
                 </div>
             </div>
@@ -135,7 +137,7 @@ export const RegularOrders = ({ form }: Props) => {
                     control={form.control}
                     name="weight"
                     placeholder="Og'irlikni kiriting"
-                    required
+                    required={inputRequired}
                 />
                 <FormNumberInput
                     label="Mahsulot soni"
@@ -143,7 +145,7 @@ export const RegularOrders = ({ form }: Props) => {
                     control={form.control}
                     name="product_count"
                     placeholder="Mahsulotlar soni"
-                    required
+                    required={inputRequired}
                 />
                 <FormNumberInput
                     label="Hajm (m³)"
@@ -151,7 +153,7 @@ export const RegularOrders = ({ form }: Props) => {
                     control={form.control}
                     name="volume"
                     placeholder="Hajmni kiriting"
-                    required
+                    required={inputRequired}
                 />
             </div>
 

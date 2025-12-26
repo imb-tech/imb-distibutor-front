@@ -1,5 +1,4 @@
 import axios from "axios"
-import { toast } from "sonner"
 
 export const baseURL = import.meta.env.VITE_DEFAULT_URL
 
@@ -24,31 +23,25 @@ axiosInstance.interceptors.request.use(
 
 axiosInstance.interceptors.response.use(
     (response) => response,
-
-    async (error) => {
-        const originalRequest = error.config
+    (error) => {
         const status = error.response?.status
-        
-        const isLoginPage = window.location.pathname === '/auth';
-        if (isLoginPage && (status === 401 || status === 403)) {
-            return Promise.reject(error);
+        const isLoginPage = window.location.pathname === "/auth"
+
+        if (isLoginPage) {
+            return Promise.reject(error)
         }
 
-        if (status === 401 && originalRequest._retry) {
-            originalRequest._retry = true
+        if (status === 401 || status === 403) {
+            localStorage.removeItem("token")
+            sessionStorage.clear()
 
-            try {
-                return axiosInstance(originalRequest)
-            } catch (refreshError) {
-                location.href = "/auth"
-                return Promise.reject(refreshError)
-            }
+            window.location.href = "/auth"
+            return Promise.reject(error)
         }
-        if (status === 403) {
-            toast.error("Sizga ruxsat berilmagan" + ": " + error?.config?.url)
-        }
+
         return Promise.reject(error)
-    },
+    }
 )
+
 
 export default axiosInstance

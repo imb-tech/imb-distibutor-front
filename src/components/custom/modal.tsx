@@ -59,8 +59,7 @@ const Modal = ({
         <Dialog open={isOpen} onOpenChange={handleClose}>
             {isOpen && (
                 <DialogContent
-                    onOpenAutoFocus={(e) => e.preventDefault()}
-                    onCloseAutoFocus={(e) => e.preventDefault()}
+                   
                     onInteractOutside={(e) => {
                         closable && e.preventDefault()
                     }}

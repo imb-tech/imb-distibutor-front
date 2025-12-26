@@ -1,3 +1,4 @@
+import { FormCombobox } from "@/components/form/combobox"
 import FormRadioGroup from "@/components/form/radio-group"
 import { Button } from "@/components/ui/button"
 import { ORDERS, SHIPPERS } from "@/constants/api-endpoints"
@@ -7,13 +8,10 @@ import { usePatch } from "@/hooks/usePatch"
 import { usePost } from "@/hooks/usePost"
 import { useGlobalStore } from "@/store/global-store"
 import { useQueryClient } from "@tanstack/react-query"
-import { useForm } from "react-hook-form"
+import { Control, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { ExtraOrders } from "./extra-order"
 import { RegularOrders } from "./regular-order"
-import { FormCombobox } from "@/components/form/combobox"
-import { Control } from "react-hook-form"
-
 
 type ShipperType = {
     name: string
@@ -41,13 +39,15 @@ export const AddOrder = () => {
     const currentOrder = getData<Delivery>(ORDERS)
 
     const form = useForm<Delivery>({
-        defaultValues: { ...currentOrder, type: currentOrder?.type ? String(currentOrder?.type) : "1" }
+        defaultValues: {
+            ...currentOrder,
+            type: currentOrder?.type ? String(currentOrder?.type) : "1",
+        },
     })
 
     const { handleSubmit, reset, watch } = form
 
     const orderType = watch("type")
-
 
     const onSuccess = () => {
         toast.success(
@@ -71,25 +71,27 @@ export const AddOrder = () => {
 
     const isPending = isPendingCreate || isPendingUpdate
 
-  const onSubmit = (values: Delivery) => {
-  const cleanedValues = Object.fromEntries(
-    Object.entries(values).filter(
-      ([_, value]) => value !== "" && value !== undefined
-    )
-  )
+    const onSubmit = (values: Delivery) => {
+        const cleanedValues = Object.fromEntries(
+            Object.entries(values).filter(
+                ([_, value]) => value !== "" && value !== undefined,
+            ),
+        )
 
-  const orderRow: OrderRow = {
-    ...cleanedValues,
-    type: Number(values.type),
-  }
+        const orderRow: OrderRow = {
+            ...cleanedValues,
+            type: Number(values.type),
+        }
 
-  if (currentOrder?.uuid) {
-    updateMutate(`${ORDERS}/${currentOrder.uuid}`, orderRow)
-  } else {
-    postMutate(ORDERS, orderRow)
-  }
-}
+        if (currentOrder?.uuid) {
+            updateMutate(`${ORDERS}/${currentOrder.uuid}`, orderRow)
+        } else {
+            postMutate(ORDERS, orderRow)
+        }
+    }
 
+    console.log(form.formState.errors);
+    
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -102,7 +104,6 @@ export const AddOrder = () => {
                         className={"grid grid-cols-2"}
                         classNameItem={"border rounded-lg p-3"}
                         itemClassName="w-full"
-                        
                         options={[
                             { id: 1, name: "Doimiy" },
                             { id: 2, name: "Qo'shimcha" },
@@ -113,7 +114,6 @@ export const AddOrder = () => {
                 <div className="sm:col-span-2">
                     <FormCombobox
                         required
-                       
                         name="shipper"
                         placeholder="Yetqazuvchi tanlash"
                         control={form.control as Control<any>}
@@ -122,8 +122,8 @@ export const AddOrder = () => {
                 </div>
             </div>
 
-            {orderType == 2 && <ExtraOrders form={form} />}
-            {orderType == 1 && <RegularOrders form={form} />}
+            {Number(orderType) === 2 && <ExtraOrders form={form} />}
+            {Number(orderType) === 1 && <RegularOrders form={form} />}
 
             <div className="flex items-center justify-end pt-2">
                 <Button
